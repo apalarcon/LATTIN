@@ -33,7 +33,7 @@ or
 
   *  python 3 and the required modules on a cluster
 
-* The main packages required to run HAMSTER are:
+The main packages required to run HAMSTER are:
   
 ```
 - netCDF4
