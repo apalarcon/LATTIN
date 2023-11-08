@@ -235,14 +235,14 @@ moisture_linear_adjustment  = 'True'/'False'               -> Apply linear adjus
 ```
 Please note that we provide an example of LATTIN namelist input file. You can modifiy this or create a new one based on the description above
 
-# Tracking methodologies
+## Tracking methodologies
 
-## Heat Tracking
+### Heat Tracking
    * SCH19: <a href="https://doi.org/10.1038/s41561-019-0431-6" target="blank"> Schumacher et al. (2019)</a>
    * SCH20: <a href="https://doi.org/10.1111/nyas.14357 " target="blank"> Schumacher et al. (2020) </a>
    * JK22:  <a href="https://doi.org/10.5194/gmd-15-1875-2022" target="blank">  Keune et al. (2022) </a>
 
-## Moisture tracking
+### Moisture tracking
    * SJ05:  <a href="https://doi.org/10.1175/JHM470.1" target="blank"> Stohl and James (2004, 2005) </a>
    * SOD08: <a href="https://doi.org/10.1029/2007JD008503" target="blank"> Sodemann et al. (2008) </a>
    * FAS19: <a href="https://doi.org/10.5194/hess-23-2525-2019" target="blank"> Freme and Sodemann (2019) </a>
@@ -250,21 +250,39 @@ Please note that we provide an example of LATTIN namelist input file. You can mo
    * APA22: <a href="https://doi.org/10.1175/JHM-D-21-0117.1" target="blank"> Pérez-Alarcón et al. (2022) </a>
 
 
-# Input data
+## Input data
 
 LATTIN can read files from  FLEXPARTv9+ (Piso et al., 2019) and  FLEXPART-WRFv3.3.2 (Brioude et al., 2013) outputs in binary file format.
 
 Mask of target region for moisture and heat tracking in netCDF format
 
-# LATTIN outputs
+## LATTIN outputs
 A netCDF file cointing the spatial distribution of moisture and heat sources
 
 
-# Contact and Support
+## Running LATTIN
+
+1 - By using run_lattin.py
+```
+python run_lattin.py input_file
+```
+```
+mpirun -n N_proc python run_lattin.py input_file
+```
+2 - You can import lattin package in you own code
+```
+import lattin as lt
+
+lt.lattin_main(input_file)
+
+```
+
+
+## Contact and Support
 - Albenis Pérez Alarcón: apalarcon1991[a]gmail.com; albenis.perez.alarcon[a]uvigo.es
 
 
-# LICENSE
+## LICENSE
 Copyright 2023 Albenis Pérez-Alarcón, Patricia Coll-Hidalgo, José C. Fernández-Alvarez, Raquel Nieto and Luis Gimeno
 
 This software is published under the GPLv3 license. This means: 
