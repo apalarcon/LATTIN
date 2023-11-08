@@ -204,30 +204,30 @@ moisture_tracking_method    =  "SOD08"                    -> Misture tracking me
                                                              time_step=360 minutes
 
 
-filter_dqdt_parcels          = 'True' /'True'             -> Only track precipitating parcesl within the target region
-filter_pbl_dq_parcels        = 'True'/'False'             -> Filter parcels within the target region within the PBL
-moist_custom_limits_highs    = [lower_limit, upper_limit] -> Custom limits for filtering parcel within the target region [m]
-                                                            Set moist_custom_limits_highs = [0,0] to use PBL highs for filtering.
-                                                            Only it works if filter_pbl_dq_parcels=True
+filter_dqdt_parcels         = 'True' /'True'              -> Only track precipitating parcesl within the target region
+filter_pbl_dq_parcels       = 'True'/'False'              -> Filter parcels within the target region within the PBL
+moist_custom_limits_highs   = [lower_limit, upper_limit]  -> Custom limits for filtering parcel within the target region [m]
+                                                             Set moist_custom_limits_highs = [0,0] to use PBL highs for filtering.
+                                                             Only it works if filter_pbl_dq_parcels=True
 
-dqdt_threshold                = value                     -> Change in specific humidity for considering that a precipitation
-                                                             event occurred within the target region.
-                                                             Only needed if filter_dqdt_parcels=True
+dqdt_threshold              = value                        -> Change in specific humidity for considering that a precipitation
+                                                              event occurred within the target region.
+                                                              Only needed if filter_dqdt_parcels=True
 
-precip_minrh                  = 80                        -> Minumim relative humidity to account for precipitation  [%]             
-                                                             Set precip_minrh=0 to do not apply
+precip_minrh                = 80                           -> Minumim relative humidity to account for precipitation  [%]             
+                                                              Set precip_minrh=0 to do not apply
 
-dqpblcheck                    = value                     -> checking PBL condition along the parcels trajectories
-                                                            0: no PBL check, use everything
-                                                            1: at least one location within the PBL
-                                                            2: both locations within the PBL
+dqpblcheck                  = value                        -> checking PBL condition along the parcels trajectories
+                                                             0: no PBL check, use everything
+                                                             1: at least one location within the PBL
+                                                             2: both locations within the PBL
 
-dqpbl_method                  = 'maxval'                  -> PBL method for PBL check [maxval, meanval, actualval] 
-trkdq_rh_check                = 'True'/'False'            -> Check relative humidity 
-dqrh_threshold                = value                     -> Allowed relative humidity changes
-                                                             Only needed if trkdq_rh_check=True
-mindq_gain                    = value                     -> Minimun change in specific humidity to be considered an uptake 
-moisture_linear_adjustment    = 'True'/'False'            -> Apply linear adjusment to detected uptakes
+dqpbl_method                = 'maxval'                     -> PBL method for PBL check [maxval, meanval, actualval] 
+trkdq_rh_check              = 'True'/'False'               -> Check relative humidity 
+dqrh_threshold              = value                        -> Allowed relative humidity changes
+                                                              Only needed if trkdq_rh_check=True
+mindq_gain                  = value                        -> Minimun change in specific humidity to be considered an uptake 
+moisture_linear_adjustment  = 'True'/'False'               -> Apply linear adjusment to detected uptakes
 
 ===========================================================================================================
                                         - CLOSE CONFIGURATION FILE -
