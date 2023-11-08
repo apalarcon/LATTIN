@@ -68,6 +68,9 @@ https://github.com/apalarcon/LATTIN.git
 3 - Enter the lattin/ directory and run  buid_lattin_so.sh,  which will compile LATTIN subroutines in FORTRAN 90.
 
 4 - Copy the lattin directory to your Anaconda instalation
+```
+cp -r lattin path_to_anaconda_installation/lib/python3.x/site-packages/
+````
 
 * Second Method
 
