@@ -95,5 +95,22 @@ cp -r lattin path_to_anaconda_installation/lib/python3.x/site-packages/
 ===========================================================================================================
                                         - OPEN CONFIGURATION FILE -
 ===========================================================================================================
+Parameter                        Value                          Description
+verbose                    =  'True'/'False'                 -> Print run logs
+runID                      =  "Experimental"                 -> Run name
 
+==========================================================================================
+      - PATHS -
+==========================================================================================
+raw_partposit_path         = "path"                          -> Directory containing input data
+file_gz                    = 'True' / 'False'                -> Checking if model data is compresssed in gz format
+output_path                = "path"                          -> Directory to save LATTIN outputs
+
+
+==========================================================================================
+    - MODEL DETAILS -
+==========================================================================================
+model                      = 'FLEXPART'/'FLEXPART-WRF'       -> Lagrangian model
+total_emited_mass          = value                           -> Total emited mass in model simulation
+total_release_parcels      = value                           -> Total number of released parcels in model simulation
 ```
