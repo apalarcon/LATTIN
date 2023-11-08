@@ -308,7 +308,15 @@ sbatch run_lattin.sh
 
 
 # Contact and Support
-- Albenis Pérez Alarcón: apalarcon1991[a]gmail.com; albenis.perez.alarcon[a]uvigo.es
+
+* This code is not bug-free. Please report any bugs through 'Issues': https://github.com/apalarcon/LATTIN/issues
+
+or
+
+* Contact to
+- Albenis Pérez Alarcón:
+  apalarcon1991[a]gmail.com
+  albenis.perez.alarcon[a]uvigo.es
 
 
 # LICENSE
