@@ -9,10 +9,10 @@
 ||                    ++       ++        ++    ++          ++      [~~]   ++    ++ ++                     ||
 ||                    +++++++ ++          ++   ++          ++      [~~]  ++++   ++++++                    ||
 ||               <<======================================================================>>               ||
+||                                   LAgrangian moisTure and heaT trackINg                                ||
 ===========================================================================================================
 ```
-# LATTIN: LAgrangian moisTure and heaT trackINg
-It is a Python-based tool for Lagrangian moisture and heat tracking
+LATTIN is a Python-based tool for Lagrangian moisture and heat tracking
 
 # What do I need to get and run LATTIN?
 
