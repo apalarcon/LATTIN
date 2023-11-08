@@ -156,21 +156,25 @@ lat_lower_left             = -90                         -> Latitude in lower le
 tracking_heat              = 'True'/'False'              -> Activate heat tracking
 
 heat_tracking_method       = 'SCH19'                     -> Heat tracking method [SCH19, SCH20, JK22, CUSTOM].
-* If you select one of this method [SCH19, SCH20, JK22], you do not to specify the next parameters.
-* WARNING: The default values inly work for time_step=360 minutes
+                                                            If you select one of this method [SCH19, SCH20, JK22],
+                                                            you do not to specify the next parameters.
+                                                            WARNING: The default values inly work for
+                                                            time_step=360 minutes
 
 var_heat_track             = 'potTemp'/'dse'             -> Variable for heat tracking
-* dse: Dry static energy
-* potTemp: Potential Temperature  
+                                                            dse: Dry static energy
+                                                            potTemp: Potential Temperature  
 
 dvarheatthreshold          = value                       -> Minimun change in tracking var to be considered an uptake
-* If tracking var is potential temperature, dvarheatthreshold is in Kelvin
-* If tracking var is dry static energy, dvarheatthreshold is in kJ/kg
+                                                            If tracking var is potential temperature,
+                                                            dvarheatthreshold is in Kelvin
+                                                            If tracking var is dry static energy,
+                                                            dvarheatthreshold is in kJ
 
 filter_pbl_parcels         = 'True'/'False'              -> Filter parcels within the target region within the PBL
 heat_custom_limits_highs   = [lower_limit, upper_limit]  -> Custom limits for filtering parcel within the target [m]
-* Set heat_custom_limits_highs = [0,0] to use PBL highs for filtering.
-* Only it works if filter_pbl_parcels=True
+                                                            Set heat_custom_limits_highs = [0,0] to use PBL highs for filtering.
+                                                            Only it works if filter_pbl_parcels=True
 
 pblcheck                   =  int value                   -> hecking PBL condition along the parcels trajectories
                                                              0: no PBL check, use everything
