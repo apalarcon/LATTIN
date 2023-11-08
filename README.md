@@ -15,10 +15,6 @@ It is a Python-based tool for Lagrangian moisture and heat tracking
 </thead>
 <tbody>
 <tr>
-<td>Python2</td>
-<td> tested</td>
-</tr>
-<tr>
 <td>Python3</td>
 <td> tested</td>
 </tr>
