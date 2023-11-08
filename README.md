@@ -271,11 +271,12 @@ A netCDF file containg the spatial distribution of moisture and heat sources
 ```
 python run_lattin.py input_file
 ```
+* Using MPI
 ```
 mpirun -n N_proc python run_lattin.py input_file
 ```
 
-2 - You can import lattin package in you own code
+2 - You can import lattin package in your code
 ```
 import lattin as lt
 
@@ -303,7 +304,7 @@ conda activate envname
 
 srun -n $SLURM_NTASKS  --mpi=pmi2 python run_lattin.py input_file
   ``` 
-2 - Submit the run script
+2 - Submit run script
 
 ```
 sbatch run_lattin.sh
