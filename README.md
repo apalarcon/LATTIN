@@ -3,9 +3,6 @@ It is a Python-based tool for Lagrangian moisture and heat tracking
 
 # What do I need to get and run LATTIN?
 
-* LATTIN requirements
-
-
 <table>
 <thead>
 <tr>
@@ -21,6 +18,8 @@ It is a Python-based tool for Lagrangian moisture and heat tracking
 </tbody>
 </table>
 
+* LATTIN requirements
+  
 ```
 - netCDF4
 - numpy 
