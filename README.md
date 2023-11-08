@@ -44,9 +44,18 @@ It is a Python-based tool for Lagrangian moisture and heat tracking
 # Installation
 
 * First Method
-* 
+  
 1 - Clone LATTIN repository
 
   ```
 https://github.com/apalarcon/LATTIN.git
   ```
+2 - Verify you have installed all packages requiered for LATTIN (see LATTIN requirements section). If you use an Anaconda environment, please be sure you have activate the environment
+3 - Enter the lattin/ directory and run  buid_lattin_so.sh,  which will compile LATTIN subroutines in FORTRAN 90.
+4 - Copy the lattin directory to your Anaconda instalation
+
+* Second Method
+
+1 - Clone LATTIN repository
+2 - Verify you have installed all packages requiered for LATTIN (see LATTIN requirements section). If you use an Anaconda environment, please be sure you have activate the environment.
+3 - run install_lattin.sh
