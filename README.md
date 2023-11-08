@@ -248,3 +248,11 @@ Please note that we provide an example of LATTIN namelist input file. You can mo
    * FAS19: <a href="https://doi.org/10.5194/hess-23-2525-2019" target="blank"> Freme and Sodemann (2019) </a>
    * JK22:  <a href="https://doi.org/10.5194/gmd-15-1875-2022" target="blank">  Keune et al. (2022) </a>
    * APA22: <a href="https://doi.org/10.1175/JHM-D-21-0117.1" target="blank"> Pérez-Alarcón et al. (2022) </a>
+
+
+# Input data
+
+LATTIN can read files from  FLEXPARTv9+ (Piso et al., 2019) and  FLEXPART-WRFv3.3.2 (Brioude et al., 2013) outputs in binary file format
+Mask of target region for moisture and heat tracking in netCDF format
+
+
