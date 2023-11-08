@@ -257,7 +257,7 @@ LATTIN can read files from  FLEXPARTv9+ (Piso et al., 2019) and  FLEXPART-WRFv3.
 Mask of target region for moisture and heat tracking in netCDF format
 
 # LATTIN outputs
-A netCDF file cointing the spatial distribution of moisture and heat sources
+A netCDF file containg the spatial distribution of moisture and heat sources
 
 
 # Running LATTIN
