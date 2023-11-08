@@ -334,5 +334,13 @@ This software is published under the GPLv3 license. This means:
 8. This software is provided without warranty.
 9. The software author or license can not be held liable for any damages inflicted by the software.
 
-
+# References
+* Brioude, J., Arnold, D., Stohl, A., Cassiani, M., Morton, D., Seibert, P., et al. 2013. The Lagrangian particle dispersion model FLEXPART-WRF version 3.1. Geosci. Model Dev., 6(6), 1889-1904. https://doi.org/10.5194/gmd-6-1889-2013.
+* Keune, J., Schumacher, D.L., Miralles, D.G. 2022. A unified framework to estimate the origins of atmospheric moisture and heat using Lagrangian models. Geoscientific Model Development, 15(5), 1875-1898. Geosci. Model Dev., 15, 1875–1898. https://doi.org/10.5194/gmd-15-1875-2022
+* Pérez-Alarcón, A., Sorí, R., Fernández-Alvarez, J.C., Nieto, R., Gimeno, L. 2022. Where does the moisture for North Atlantic tropical cyclones come from? J. Hydrometeorol., 23(3), 457–472. https://doi.org/10.1175/JHM-D-21-0117.1 
+* Pisso, I., Sollum, E., Grythe, H., Kristiansen, N. I., Cassiani, M., Eckhardt, S., et al. 2019. The Lagrangian particle dispersion model FLEXPART version 10.4. Geosci. Model Dev., 12(12), 4955-4997. https://doi.org/10.5194/gmd-12-4955-2019
+* Schumacher, D.L., Keune, J., Van Heerwaarden, C.C., Vilà-Guerau de Arellano, J., Teuling, A.J.,  Miralles, D.G. 2019. Amplification of mega-heatwaves through heat torrents fuelled by upwind drought. Nat. Geosci., 12, 712–717. https://doi.org/10.1038/s41561-019-0431-6.
+* Schumacher, D. L., Keune, J.,  Miralles, D. G. 2020. Atmospheric heat and moisture transport to energy‐and water‐limited ecosystems. Ann. NY Acad. Sci., 1472, 123–138. https://doi.org/10.1111/nyas.14357
+* Sodemann H, Schwierz C, Wernli H. Interannual variability of Greenland winter precipitation sources: Lagrangian moisture diagnostic and North Atlantic Oscillation influence. J. Geophys. Res.-Atmos. 2008; 113:D03107. https://doi.org/10.1029/2007JD008503. 
+* Stohl, A., James, P. 2005. A Lagrangian analysis of the atmospheric branch of the global water cycle. Part II: Moisture transports between Earth’s ocean basins and river catchments. J. Hydrometeorol. 6(6), 961-984. https://doi.org/10.1175/JHM470.1
 
