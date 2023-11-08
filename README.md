@@ -19,6 +19,22 @@ It is a Python-based tool for Lagrangian moisture and heat tracking
 </table>
 
 * LATTIN requirements
+
+To run LATTIN, you need
+
+```
+    python 3
+    git
+```
+and
+```
+    anaconda (or similar to manage python packages)
+```
+or
+```
+    python 3 and the required modules on a cluster
+```
+* The main packages required to run HAMSTER are:
   
 ```
 - netCDF4
