@@ -56,6 +56,6 @@ https://github.com/apalarcon/LATTIN.git
 
 * Second Method
 
-1 - Clone LATTIN repository
+1 - Clone LATTIN repository.
 2 - Verify you have installed all packages requiered for LATTIN (see LATTIN requirements section). If you use an Anaconda environment, please be sure you have activate the environment.
-3 - run install_lattin.sh
+3 - run install_lattin.sh.
