@@ -238,9 +238,9 @@ Please note that we provide an example of LATTIN namelist input file. You can mo
 # Tracking methodologies
 
 ## Heat Tracking
-   * SCH19: Schumacher et al. (2019)
-   * SCH20: Schumacher et al. (2020)
-   * JK22:  Keune et al. (2022)
+   * SCH19: <a href="https://doi.org/10.1038/s41561-019-0431-6" target="blank"> Schumacher et al. (2019)</a>
+   * SCH20: <a href="https://doi.org/10.1111/nyas.14357 " target="blank" Schumacher et al. (2020) </a>
+   * JK22:  <a href="https://doi.org/10.5194/gmd-15-1875-2022" target="blank" Keune et al. (2022) </a>
 
 ## Moisture tracking
    * SJ05:  Stohl and James (2004, 2005)
