@@ -18,9 +18,7 @@ It is a Python-based tool for Lagrangian moisture and heat tracking
 </tbody>
 </table>
 
-## LATTIN requirements
-
-### To run LATTIN, you need
+## To run LATTIN, you need
 
    * python 3
    * git
@@ -33,7 +31,7 @@ or
 
   *  python 3 and the required modules on a cluster
 
-## The main packages required to run LATTIN are:
+## The packages required to run LATTIN are:
   
 ```
 - netCDF4
