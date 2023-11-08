@@ -256,4 +256,27 @@ LATTIN can read files from  FLEXPARTv9+ (Piso et al., 2019) and  FLEXPART-WRFv3.
 
 Mask of target region for moisture and heat tracking in netCDF format
 
+# LATTIN outputs
+A netCDF file cointing the spatial distribution of moisture and heat sources
+
+
+# Contact and Support
+- Albenis Pérez Alarcón: apalarcon1991[a]gmail.com; albenis.perez.alarcon[a]uvigo.es
+
+
+# LICENSE
+Copyright 2023 Albenis Pérez-Alarcón, Patricia Coll-Hidalgo, José C. Fernández-Alvarez, Raquel Nieto and Luis Gimeno
+
+This software is published under the GPLv3 license. This means: 
+1. Anyone can copy, modify and distribute this software. 
+2. You have to include the license and copyright notice with each and every distribution.
+3. You can use this software privately.
+4. You can use this software for commercial purposes.
+5. If you dare build your business solely from this code, you risk open-sourcing the whole code base.
+6. If you modify it, you have to indicate changes made to the code.
+7. Any modifications of this code base MUST be distributed with the same license, GPLv3.
+8. This software is provided without warranty.
+9. The software author or license can not be held liable for any damages inflicted by the software.
+
+
 
