@@ -150,6 +150,54 @@ numPdY                     = 360                              -> Number of grid 
 lon_lower_left             = -180                             -> Longitude in lower left corner
 lat_lower_left             = -90                              -> Latitude in lower left corner
 
+==========================================================================================
+    - SPECIFIC FOR HEAT TRACKING -
+==========================================================================================
+tracking_heat              = 'True'/'False'                   -> Activate heat tracking
+heat_tracking_method       = 'SCH19'                          -> Heat tracking method [SCH19, SCH20, JK22, CUSTOM]. 
+                                                                 If you select one of this method [SCH19, SCH20, JK22], you do not to specify the next parameters.  WARNING: The default values inly work for time_step=360 minutes
 
+
+#Variable for heat tracking [str]. ['sde'/'potTemp']. sde: Dry static energy, potTemp: Potential Temperature
+var_heat_track="potTemp"  
+
+#Minimun change in tracking var  (dvar/dt) to be considered an uptake [float].
+#If tracking var is potential temperature, dvarheatthreshold is in Kelvin
+#If tracking var is dry static energy, dvarheatthreshold is in kJ/kg
+dvarheatthreshold=1
+
+#Filter parcels within the target region above the Planetary Boudnary Layer (PBL) 
+filter_pbl_parcels=True
+
+#Custom limits for filtering parcel within the target region instead of use PBL high [float] [m].
+#heat_custom_limits_highs=[lower_limit, upper_limit].
+#Set heat_custom_limits_highs = [0,0] to use PBL highs for filtering.
+#Only it works if filter_pbl_parcels=True
+heat_custom_limits_highs=[0, 0]
+
+
+#Checking PBL condition along the parcels trajectories [int]  [0,1,2]
+#0: no PBL check, use everything
+#1: at least one location within the PBL
+#2: both locations within the PBL
+pblcheck=2
+
+#PBL method for PBL check [str] [maxval, meanval, actualval]
+pbl_method="maxval" 
+
+#Check relative humidity ['True'/'False']
+trk_rh_check=True
+
+#Allowed relative humidity changes [float]. Only needed if trk_rh_check=True
+rh_threshold=10
+
+#Checking changes in specific humidty along the parcels trajectory ['True'/'False']
+dqcheck=True 
+
+#Allowed changes in specific humidity [float]. Only needed if dqcheck=True
+dqthreshold=0.1
+
+#Apply linear adjusment of detected uptakes ['True'/'False']
+heat_linear_adjustment=True
 
 ```
