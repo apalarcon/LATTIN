@@ -314,6 +314,7 @@ sbatch run_lattin.sh
 or
 
 * Contact to Albenis Pérez Alarcón:
+  
   apalarcon1991[a]gmail.com
   
   albenis.perez.alarcon[a]uvigo.es
