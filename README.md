@@ -252,7 +252,8 @@ Please note that we provide an example of LATTIN namelist input file. You can mo
 
 # Input data
 
-LATTIN can read files from  FLEXPARTv9+ (Piso et al., 2019) and  FLEXPART-WRFv3.3.2 (Brioude et al., 2013) outputs in binary file format
+LATTIN can read files from  FLEXPARTv9+ (Piso et al., 2019) and  FLEXPART-WRFv3.3.2 (Brioude et al., 2013) outputs in binary file format.
+
 Mask of target region for moisture and heat tracking in netCDF format
 
 
