@@ -233,3 +233,18 @@ moisture_linear_adjustment  = 'True'/'False'               -> Apply linear adjus
                                         - CLOSE CONFIGURATION FILE -
 ===========================================================================================================
 ```
+Please note that we provide an example of LATTIN namelist input file. You can modifiy this or create a new one based on the description above
+
+# Tracking methodologies
+
+## Heat Tracking
+   * SCH19: Schumacher et al. (2019)
+   * SCH20: Schumacher et al. (2020)
+   * JK22:  Keune et al. (2022)
+
+## Moisture tracking
+   * SJ05:  Stohl and James (2004, 2005)
+   * SOD08: Sodemann et al. (2008)
+   * FAS19: Freme and Sodemann (2019)
+   * JK22:  Keune et al. (2022)
+   * APA22: Pérez-Alarcón et al. (2022)
