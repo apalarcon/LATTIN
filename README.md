@@ -24,8 +24,24 @@ It is a Python-based tool for Lagrangian moisture and heat tracking
 </tr>
 </tbody>
 </table>
-
+```
 *  netCDF4
 *  numpy 
 *  scipy 
 *  mpi4py
+*  numpy 
+*  time
+*  struct
+*  datetime
+*  functools
+*  pathlib 
+*  gzip
+*  shutil
+*  math 
+*  fnmatch
+*  sys
+*  os
+*  matplotlib
+*  imp
+*  FORTRAN 90 Compiler
+```
