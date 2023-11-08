@@ -76,7 +76,7 @@ or
   ```
 https://github.com/apalarcon/LATTIN.git
   ```
-2 - Verify you have installed all packages requiered for LATTIN (see LATTIN requirements section). If you use an Anaconda environment, please be sure you have activate the environment
+2 - Verify you have installed all packages requiered for LATTIN (see LATTIN requirements section). If you use an Anaconda environment, please be sure you have activated the environment
 
 3 - Enter the lattin/ directory and run  buid_lattin_so.sh,  which will compile LATTIN subroutines in FORTRAN 90.
 
@@ -89,7 +89,7 @@ cp -r lattin path_to_anaconda_installation/lib/python3.x/site-packages/
 
 1 - Clone LATTIN repository.
 
-2 - Verify you have installed all packages requiered for LATTIN (see LATTIN requirements section). If you use an Anaconda environment, please be sure you have activate the environment.
+2 - Verify you have installed all packages requiered for LATTIN (see LATTIN requirements section). If you use an Anaconda environment, please be sure you have activated the environment.
 
 3 - run install_lattin.sh.
 
