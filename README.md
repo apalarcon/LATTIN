@@ -56,7 +56,7 @@ or
 ```
 # Installation
 
-* First Method
+### First Method
   
 1 - Clone LATTIN repository
 
@@ -72,7 +72,7 @@ https://github.com/apalarcon/LATTIN.git
 cp -r lattin path_to_anaconda_installation/lib/python3.x/site-packages/
 ````
 
-* Second Method
+### Second Method
 
 1 - Clone LATTIN repository.
 
