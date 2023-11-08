@@ -41,3 +41,10 @@ It is a Python-based tool for Lagrangian moisture and heat tracking
 - imp
 - FORTRAN 90 Compiler
 ```
+# Installation
+* First Method
+1 - Clone LATTIN repository
+
+  ```
+git clone https://github.com/tramo-ephyslab/TROVA-master.git
+  ```
