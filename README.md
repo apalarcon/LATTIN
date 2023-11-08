@@ -95,39 +95,39 @@ cp -r lattin path_to_anaconda_installation/lib/python3.x/site-packages/
 ===========================================================================================================
                                         - OPEN CONFIGURATION FILE -
 ===========================================================================================================
-Parameter                        Value                          Description
-verbose                    =  'True'/'False'                 -> Print run logs
-runID                      =  "Experimental"                 -> Run name
+Parameter                        Value                      Description
+verbose                    =  'True'/'False'             -> Print run logs
+runID                      =  "Experimental"             -> Run name
 
 ==========================================================================================
       - PATHS -
 ==========================================================================================
-raw_partposit_path         = "path"                          -> Directory containing input data
-file_gz                    = 'True' / 'False'                -> Checking if model data is compresssed in gz format
-output_path                = "path"                          -> Directory to save LATTIN outputs
+raw_partposit_path         = "path"                      -> Directory containing input data
+file_gz                    = 'True' / 'False'            -> Checking if model data is compresssed in gz format
+output_path                = "path"                      -> Directory to save LATTIN outputs
 
 
 ==========================================================================================
     - MODEL DETAILS -
 ==========================================================================================
-model                      = 'FLEXPART'/'FLEXPART-WRF'       -> Lagrangian model
-total_emited_mass          = value                           -> Total emited mass in model simulation
-total_release_parcels      = value                           -> Total number of released parcels in model simulation
+model                      = 'FLEXPART'/'FLEXPART-WRF'  -> Lagrangian model
+total_emited_mass          = value                      -> Total emited mass in model simulation
+total_release_parcels      = value                      -> Total number of released parcels in model simulation
 
 ==========================================================================================
     - LATTIN RUN CONFIGURATION-
 ==========================================================================================
-mode                       = "backward"                      -> Run mode  
-year                       = int value  or list              -> Start year. E.g. year=2015 or year=[2015,2016,2017] 
-month                      = int value or list               -> Start month. E.g. month=1 or month=[1,7,3]. 
-day                        = int value or list               -> Start day. E.g. day=1 or day=[1,2,3]. 
-hour                       = int value or list               -> Start hour. E.g. hour=0 or day=[0,6,12]. 
-minutes                    = int value or list               -> Start minutes. E.g. minutes=0 or minutes=[0,10,20].
-ndays                      = int value                       -> Number of continuos days to start the simulation.
-time_step                  = int value                       -> Temporal resolution of input data [minutes]
-tracking_time              = int value                       -> Total simulation time for tracking [minutes]
+mode                       = "backward"                  -> Run mode  
+year                       = int value  or list          -> Start year. E.g. year=2015 or year=[2015,2016,2017] 
+month                      = int value or list           -> Start month. E.g. month=1 or month=[1,7,3]. 
+day                        = int value or list           -> Start day. E.g. day=1 or day=[1,2,3]. 
+hour                       = int value or list           -> Start hour. E.g. hour=0 or day=[0,6,12]. 
+minutes                    = int value or list           -> Start minutes. E.g. minutes=0 or minutes=[0,10,20].
+ndays                      = int value                   -> Number of continuos days to start the simulation.
+time_step                  = int value                   -> Temporal resolution of input data [minutes]
+tracking_time              = int value                   -> Total simulation time for tracking [minutes]
 
-lon_left_lower_corner      = value                          -> Domain limits for regional partposit files.
+lon_left_lower_corner      = value                       -> Domain limits for regional partposit files.
 lat_left_lower_corner      = value
 lon_right_upper_corner     = value
 lat_right_upper_corner     = value
@@ -135,69 +135,57 @@ lat_right_upper_corner     = value
 ==========================================================================================
     - MASK FILE DETAILS -
 ==========================================================================================
-file_mask                  = 'path'                         -> Path to mask file (netcdf format)  
-maskname                   = 'mask'                         -> Name of mask variable in the mask file 
-maskvar_lat                = 'lat'                          -> Latitude variable name in the mask file 
-maskvar_lon                = 'lon'                          -> Longitude variable name in the mask file
-mask_value                 = value                          -> Mask value for filterirng parcels in the target region
+file_mask                  = 'path'                      -> Path to mask file (netcdf format)  
+maskname                   = 'mask'                      -> Name of mask variable in the mask file 
+maskvar_lat                = 'lat'                       -> Latitude variable name in the mask file 
+maskvar_lon                = 'lon'                       -> Longitude variable name in the mask file
+mask_value                 = value                       -> Mask value for filterirng parcels in the target region
 
 ==========================================================================================
     - OUTPUT DOMAIN RESOLUTION -
 ==========================================================================================
-resolution                 = 0.5                              -> Output resolutiom
-numPdX                     = 720                              -> Number of grid points in x-direction
-numPdY                     = 360                              -> Number of grid points in y-direction
-lon_lower_left             = -180                             -> Longitude in lower left corner
-lat_lower_left             = -90                              -> Latitude in lower left corner
+resolution                 = 0.5                         -> Output resolutiom
+numPdX                     = 720                         -> Number of grid points in x-direction
+numPdY                     = 360                         -> Number of grid points in y-direction
+lon_lower_left             = -180                        -> Longitude in lower left corner
+lat_lower_left             = -90                         -> Latitude in lower left corner
 
 ==========================================================================================
     - SPECIFIC FOR HEAT TRACKING -
 ==========================================================================================
-tracking_heat              = 'True'/'False'                   -> Activate heat tracking
-heat_tracking_method       = 'SCH19'                          -> Heat tracking method [SCH19, SCH20, JK22, CUSTOM]. 
-                                                                 If you select one of this method [SCH19, SCH20, JK22], you do not to specify the next parameters.  WARNING: The default values inly work for time_step=360 minutes
+tracking_heat              = 'True'/'False'              -> Activate heat tracking
 
+heat_tracking_method       = 'SCH19'                     -> Heat tracking method [SCH19, SCH20, JK22, CUSTOM].
+* If you select one of this method [SCH19, SCH20, JK22], you do not to specify the next parameters.
+* WARNING: The default values inly work for time_step=360 minutes
 
-#Variable for heat tracking [str]. ['sde'/'potTemp']. sde: Dry static energy, potTemp: Potential Temperature
-var_heat_track="potTemp"  
+var_heat_track             = 'potTemp'/'dse'             -> Variable for heat tracking
+* dse: Dry static energy
+* potTemp: Potential Temperature  
 
-#Minimun change in tracking var  (dvar/dt) to be considered an uptake [float].
-#If tracking var is potential temperature, dvarheatthreshold is in Kelvin
-#If tracking var is dry static energy, dvarheatthreshold is in kJ/kg
-dvarheatthreshold=1
+dvarheatthreshold          = value                       -> Minimun change in tracking var to be considered an uptake
+* If tracking var is potential temperature, dvarheatthreshold is in Kelvin
+* If tracking var is dry static energy, dvarheatthreshold is in kJ/kg
 
-#Filter parcels within the target region above the Planetary Boudnary Layer (PBL) 
-filter_pbl_parcels=True
+filter_pbl_parcels         = 'True'/'False'              -> Filter parcels within the target region within the PBL
+heat_custom_limits_highs   = [lower_limit, upper_limit]  -> Custom limits for filtering parcel within the target [m]
+* Set heat_custom_limits_highs = [0,0] to use PBL highs for filtering.
+* Only it works if filter_pbl_parcels=True
 
-#Custom limits for filtering parcel within the target region instead of use PBL high [float] [m].
-#heat_custom_limits_highs=[lower_limit, upper_limit].
-#Set heat_custom_limits_highs = [0,0] to use PBL highs for filtering.
-#Only it works if filter_pbl_parcels=True
-heat_custom_limits_highs=[0, 0]
+pblcheck                   =  int value                   -> hecking PBL condition along the parcels trajectories
+                                                             0: no PBL check, use everything
+                                                             1: at least one location within the PBL
+                                                             2: both locations within the PBL
 
+pbl_method                 = "maxval"                     -> PBL method for PBL check. [maxval, meanval, actualval] 
+trk_rh_check               = 'True'/'False'               -> Check relative humidity
+rh_threshold               = value                        -> Allowed relative humidity changes.
+                                                             Only needed if trk_rh_check=True
 
-#Checking PBL condition along the parcels trajectories [int]  [0,1,2]
-#0: no PBL check, use everything
-#1: at least one location within the PBL
-#2: both locations within the PBL
-pblcheck=2
+dqcheck                    = 'True'/'False'               -> Checking changes in specific humidty along the parcels trajectory.
+dqthreshold                = value                        -> Allowed changes in specific humidity.
+                                                             Only needed if dqcheck=True
 
-#PBL method for PBL check [str] [maxval, meanval, actualval]
-pbl_method="maxval" 
-
-#Check relative humidity ['True'/'False']
-trk_rh_check=True
-
-#Allowed relative humidity changes [float]. Only needed if trk_rh_check=True
-rh_threshold=10
-
-#Checking changes in specific humidty along the parcels trajectory ['True'/'False']
-dqcheck=True 
-
-#Allowed changes in specific humidity [float]. Only needed if dqcheck=True
-dqthreshold=0.1
-
-#Apply linear adjusment of detected uptakes ['True'/'False']
-heat_linear_adjustment=True
+heat_linear_adjustment     = 'True'/'False'               -> Apply linear adjusment of detected uptakes
 
 ```
