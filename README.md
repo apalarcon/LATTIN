@@ -80,7 +80,7 @@ cp -r lattin path_to_anaconda_installation/lib/python3.x/site-packages/
 
 3 - run install_lattin.sh.
 
-## LATTIN namelist file configuration
+# LATTIN namelist file configuration
 ```
 ===========================================================================================================
 ||                    ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  ~ ~ ~ _                                      ||
@@ -250,17 +250,17 @@ Please note that we provide an example of LATTIN namelist input file. You can mo
    * APA22: <a href="https://doi.org/10.1175/JHM-D-21-0117.1" target="blank"> Pérez-Alarcón et al. (2022) </a>
 
 
-## Input data
+# Input data
 
 LATTIN can read files from  FLEXPARTv9+ (Piso et al., 2019) and  FLEXPART-WRFv3.3.2 (Brioude et al., 2013) outputs in binary file format.
 
 Mask of target region for moisture and heat tracking in netCDF format
 
-## LATTIN outputs
+# LATTIN outputs
 A netCDF file cointing the spatial distribution of moisture and heat sources
 
 
-## Running LATTIN
+# Running LATTIN
 
 * On Linux PC
   
@@ -307,11 +307,11 @@ sbatch run_lattin.sh
 ```
 
 
-## Contact and Support
+# Contact and Support
 - Albenis Pérez Alarcón: apalarcon1991[a]gmail.com; albenis.perez.alarcon[a]uvigo.es
 
 
-## LICENSE
+# LICENSE
 Copyright 2023 Albenis Pérez-Alarcón, Patricia Coll-Hidalgo, José C. Fernández-Alvarez, Raquel Nieto and Luis Gimeno
 
 This software is published under the GPLv3 license. This means: 
