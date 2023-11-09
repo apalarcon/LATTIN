@@ -14,35 +14,22 @@
 ```
 LATTIN is a Python-based tool for Lagrangian moisture and heat tracking
 
-# What do I need to get and run LATTIN?
+[![License: GPLv3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-<table>
-<thead>
-<tr>
-<th>python</th>
-<th>status</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Python3</td>
-<td> tested</td>
-</tr>
-</tbody>
-</table>
+# What do I need to get and run LATTIN?
 
 ## To run LATTIN, you need
 
-   * python 3
-   * git
+   * [![python](https://img.shields.io/badge/Python-3-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
+   * [![Git: ](https://img.shields.io/badge/Git--blue)](https://git-scm.com/)
 
 and
 
-  *  anaconda (or similar to manage python packages)
+  *  [![Git: ](https://img.shields.io/badge/Anaconda--blue)](https://www.anaconda.com/) (or similar to manage python packages)
 
 or
 
-  *  python 3 and the required modules on a cluster
+  *  [![python](https://img.shields.io/badge/Python-3-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org) and the required modules on a cluster
 
 ## The packages required to run LATTIN are:
   
