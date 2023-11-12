@@ -116,6 +116,8 @@ minutes                    = int value or list           -> Start minutes. E.g. 
 ndays                      = int value                   -> Number of continuos days to start the simulation.
 time_step                  = int value                   -> Temporal resolution of input data [minutes]
 tracking_time              = int value                   -> Total simulation time for tracking [minutes]
+calendar                   = '365d'/'366d'               -> Calendar type.
+                                                            Use calendar="365d" to discard Feb 29 in leap years
 
 lon_left_lower_corner      = value                       -> Domain limits for regional partposit files.
 lat_left_lower_corner      = value
