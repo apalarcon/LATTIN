@@ -56,7 +56,20 @@ or
 # Installation
 
 ### First Method
-  
+```
+conda install -c apa_py lattin
+```
+
+If you install LATTIN using ```conda```, the first time you import lattin, it automatically will compile the FORTRAN subroutines. 
+Therefore, we strongly recommend typing the following sentences in terminal after the LATTIN installation.
+
+```
+$ python
+>> import lattin
+```
+
+
+### Second Method 
 1 - Clone LATTIN repository
 
   ```
@@ -71,7 +84,7 @@ https://github.com/apalarcon/LATTIN.git
 cp -r lattin path_to_anaconda_installation/lib/python3.x/site-packages/
 ````
 
-### Second Method
+### Third Method
 
 1 - Clone LATTIN repository.
 
