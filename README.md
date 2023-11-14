@@ -38,7 +38,6 @@ or
 - numpy 
 - scipy 
 - mpi4py
-- numpy 
 - time
 - struct
 - datetime
