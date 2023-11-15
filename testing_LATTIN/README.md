@@ -22,7 +22,7 @@ cp -r moisture ~/testing_LATTIN/DATA/
 
 6 - Download ``` input_heat.cfg ``` and ``` input_moisture.cfg ``` files and copy them to ``` ~/testing_LATTIN ```
 
-<b>NOTE:</b> You can create your directory tree for testing LATTIN but you will need to modify input_heat.cfg and input_moisture.cfg files.
+<b>NOTE:</b> You can create your directory tree for testing LATTIN but you will need to modify ```input_heat.cfg``` and ```input_moisture.cfg``` files.
 
 
 ## EXAMPLE: Atmospheric moisture tracking
