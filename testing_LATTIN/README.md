@@ -29,6 +29,7 @@ cp -r moisture ~/testing_LATTIN/DATA/
 ### Case: Extreme precipitation event in the Iberian Peninsula from 1 to 3 March 2001
 Here we provided an example of LATTIN runs for 2 March 2001 using the SOD08 approach.
 * Using the run_testing_latting.py file
-  ```
+  
+```
 mpirun -n 8 python run_testing_latting.py input_moisture.cfg
   ```
