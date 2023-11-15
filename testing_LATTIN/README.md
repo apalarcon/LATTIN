@@ -34,12 +34,11 @@ Here we provided an example of LATTIN runs for 2 March 2001 using the SOD08 appr
 mpirun -n 10 python run_testing_latting.py input_moisture.cfg
   ```
 * Results
-  You should obtain in ```~/testing_LATTIN/LATTIN_outs/TEST/``` four netCDF files
+  You should obtain in ```~/testing_LATTIN/LATTIN_outs/TEST/moisture_SOD08/``` four netCDF files
   ```
   lattin_backward_200103020000.nc
   lattin_backward_200103020600.nc
   lattin_backward_200103021200.nc
   lattin_backward_200103021800.nc
-  
   ```
 * The moisture source pattern for this example should look like the follwoing Figure.
