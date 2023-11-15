@@ -18,8 +18,9 @@ mkdir -p ~/testing_LATTIN/DATA/
 cp -r heat ~/testing_LATTIN/DATA/
 cp -r moisture ~/testing_LATTIN/DATA/
 ```
-5 - Download the IP_mask.nc file and copy it to ```~/testing_LATTIN```
+5 - Download the IP_mask.nc file and copy it to ```~/testing_LATTIN/mask/```
 
+6 - Download ```input_heat.cfg``` and ```input_moisture.cfg``` files and copy them to ```~/testing_LATTIN```
 
 <b>NOTE:</b> You can create your directory tree for testing LATTIN but you will need to modify input_heat.cfg and input_moisture.cfg files.
 
