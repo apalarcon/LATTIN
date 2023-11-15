@@ -1,7 +1,23 @@
 # Examples for testing LATTIN
 ## Steps
-1 - Download raw partposit data from  [![Zenodo: 10.5281/zenodo.10114851](https://img.shields.io/badge/Zenodo-10.5281/zenodo.10114851-blue)]([https://git-scm.com/](https://doi.org/10.5281/zenodo.10114851))
 
+1 - After install LATTIN, create a directory on your local PC: Example: ~/testing_LATTIN
+```
+mkdir ~/testing_LATTIN
+```
+2 - Create directory ~/testing_LATTIN/DATA/
+```
+mkdir -p ~/testing_LATTIN/DATA/
+```
+3 - Download raw partposit data for moisture and heat tracking from the Zenodo repository
+[![Zenodo: 10.5281/zenodo.10114851](https://img.shields.io/badge/Zenodo-10.5281/zenodo.10114851-blue)]([https://git-scm.com/](https://doi.org/10.5281/zenodo.10114851))
+
+4 - Unzip and copy data to  ```~/testing_LATTIN/DATA/```
+```
+cp -r heat ~/testing_LATTIN/DATA/
+cp -r moisture ~/testing_LATTIN/DATA/
+```
+<b> You can also create your directory tree for testing LATTIN but you will need to modified input_heat.cfg and input_moisture.cfg files </b>
 
 
 ## Atmospheric moisture tracking
