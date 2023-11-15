@@ -311,6 +311,9 @@ srun -n $SLURM_NTASKS  --mpi=pmi2 python run_lattin.py input_file
 sbatch run_lattin.sh
 ```
 
+# Testing LATTIN
+Please, follow the intructions in <a href="https://github.com/apalarcon/LATTIN/tree/main/testing_LATTIN" target=blank> Testing LATTIN </a>
+
 
 # Contact and Support
 
