@@ -1,4 +1,4 @@
-# Examples for testing LATTIN
+# Testing LATTIN
 ## Steps
 
 1 - After install LATTIN, create a directory on your local PC: Example: ~/testing_LATTIN
