@@ -31,5 +31,5 @@ Here we provided an example of LATTIN runs for 2 March 2001 using the SOD08 appr
 * Using the run_testing_latting.py file
   
 ```
-mpirun -n 8 python run_testing_latting.py input_moisture.cfg
+mpirun -n 10 python run_testing_latting.py input_moisture.cfg
   ```
