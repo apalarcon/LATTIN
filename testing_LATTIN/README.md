@@ -43,7 +43,7 @@ mpirun -n 10 python run_testing_latting.py input_moisture.cfg
   ```
 * The accumulated moisture source pattern for this example should look like the following Figure.
 
-![Screenshot](images/SOD08_moisture.png)
+![Screenshot](images/SOD08_moisture.png = 600x200)
 
 ## EXAMPLE: Atmospheric heat tracking
 ### Case: Extreme heat wave in the Iberian Peninsula from 27 June to 22 July 2015
