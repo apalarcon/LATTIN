@@ -41,4 +41,23 @@ mpirun -n 10 python run_testing_latting.py input_moisture.cfg
   lattin_backward_200103021200.nc
   lattin_backward_200103021800.nc
   ```
-* The moisture source pattern for this example should look like the follwoing Figure.
+* The accumulated moisture source pattern for this example should look like the following Figure.
+
+
+## EXAMPLE: Atmospheric heat tracking
+### Case: Extreme heat wave in the Iberian Peninsula from 27 June to 22 July 2015
+Here we provided an example of LATTIN runs for 5 July 2015 using the SCH20 approach.
+* Using the run_testing_latting.py file
+  
+```
+mpirun -n 10 python run_testing_latting.py input_heat.cfg
+  ```
+* Results
+  You should obtain in ```~/testing_LATTIN/LATTIN_outs/TEST/heat_SCH20/``` four netCDF files
+  ```
+  lattin_backward_201507050000.nc
+  lattin_backward_201507050600.nc
+  lattin_backward_201507051200.nc
+  lattin_backward_201507051800.nc
+  ```
+* The accumulated heat source pattern for this example should look like the following Figure.
