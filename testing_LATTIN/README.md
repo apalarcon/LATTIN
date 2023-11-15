@@ -41,9 +41,7 @@ mpirun -n 10 python run_testing_latting.py input_moisture.cfg
   lattin_backward_200103021200.nc
   lattin_backward_200103021800.nc
   ```
-* The accumulated moisture source pattern for this example should look like the following Figure.
 
-![Screenshot](images/SOD08_moisture.png = 600x200)
 
 ## EXAMPLE: Atmospheric heat tracking
 ### Case: Extreme heat wave in the Iberian Peninsula from 27 June to 22 July 2015
@@ -61,8 +59,6 @@ mpirun -n 10 python run_testing_latting.py input_heat.cfg
   lattin_backward_201507051200.nc
   lattin_backward_201507051800.nc
   ```
-* The accumulated heat source pattern for this example should look like the following Figure.
-![Screenshot](images/SCH20_heat.png)
 
 ### NOTE
 The full analysis for the moisture and heat sources for these extreme events can be found in 
