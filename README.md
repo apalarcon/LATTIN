@@ -57,7 +57,7 @@ or
 
 ### First Method
 ```
-conda install -c apa_py lattin
+conda install -c tramo-ephyslab lattin
 ```
 
 If you install LATTIN using ```conda```, the first time you import lattin, it automatically will compile the FORTRAN subroutines. 
