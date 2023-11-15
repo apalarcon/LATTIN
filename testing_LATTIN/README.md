@@ -20,9 +20,9 @@ cp -r moisture ~/testing_LATTIN/DATA/
 ```
 5 - Download the IP_mask.nc file and copy it to ```~/testing_LATTIN```
 
--------------------------------------------------------------------------------------------------------------
-<b> You can also create your directory tree for testing LATTIN but you will need to modify input_heat.cfg and input_moisture.cfg files </b>
-------------------------------------------------------------------------------------------------------------
+=============================================================================================================
+<b>NOTE:</b> You can also create your directory tree for testing LATTIN but you will need to modify input_heat.cfg and input_moisture.cfg files.
+=============================================================================================================
 
 ## EXAMPLE: Atmospheric moisture tracking
 ### Case: Extreme precipitation event in the Iberian Peninsula from 1 to 3 March 2001
