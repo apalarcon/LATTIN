@@ -1,6 +1,6 @@
 # Examples for testing LATTIN
 ## Steps
-1 - Download raw partposit data from  [![Zenodo: 10.5281/zenodo.10114851](https://img.shields.io/badge/Git--blue)]([https://git-scm.com/](https://doi.org/10.5281/zenodo.10114851))
+1 - Download raw partposit data from  [![Zenodo: 10.5281/zenodo.10114851](https://img.shields.io/badge/Zenodo- 10.5281/zenodo.10114851-blue)]([https://git-scm.com/](https://doi.org/10.5281/zenodo.10114851))
 
 
 
