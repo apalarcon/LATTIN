@@ -1,11 +1,11 @@
 # Testing LATTIN
 ## Steps
 
-1 - After install LATTIN, create a directory on your local PC: Example: ~/testing_LATTIN
+1 - After install LATTIN, create a directory on your local PC: Example: ```~/testing_LATTIN```
 ```
 mkdir ~/testing_LATTIN
 ```
-2 - Create directory ~/testing_LATTIN/DATA/
+2 - Create directory ```~/testing_LATTIN/DATA/```
 ```
 mkdir -p ~/testing_LATTIN/DATA/
 ```
@@ -18,9 +18,12 @@ mkdir -p ~/testing_LATTIN/DATA/
 cp -r heat ~/testing_LATTIN/DATA/
 cp -r moisture ~/testing_LATTIN/DATA/
 ```
-<b> You can also create your directory tree for testing LATTIN but you will need to modified input_heat.cfg and input_moisture.cfg files </b>
+5 - Download the IP_mask.nc file and copy it to ```~/testing_LATTIN```
 
+-------------------------------------------------------------------------------------------------------------
+<b> You can also create your directory tree for testing LATTIN but you will need to modify input_heat.cfg and input_moisture.cfg files </b>
+------------------------------------------------------------------------------------------------------------
 
-## Atmospheric moisture tracking
+## EXAMPLE: Atmospheric moisture tracking
 ### Case: Extreme precipitation event in the Iberian Peninsula from 1 to 3 March 2001
 Here we provided an example of LATTIN runs for 2 March 2001
