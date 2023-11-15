@@ -202,7 +202,7 @@ heat_linear_adjustment     = 'True'/'False'               -> Apply linear adjusm
 ==========================================================================================
 tracking_moisture           = 'True' /'False'             -> Activate moisture tracking
 moisture_tracking_method    =  "SOD08"                    -> Misture tracking method [SOD08, SJ05, FAS19, JK22, APA22, CUSTOM]
-                                                             If you select one of this method[SOD08, SJ05, FAS19, JK22],
+                                                             If you select one of this method[SOD08, SJ05, FAS19, JK22, APA22],
                                                              you do not to specify the next parameters.
                                                              WARNING: The default values only work for
                                                              time_step=360 minutes
