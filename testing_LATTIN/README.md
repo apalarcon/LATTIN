@@ -58,3 +58,8 @@ mpirun -n 10 python run_testing_latting.py input_heat.cfg
 
 ### NOTE
 The full analysis for the moisture and heat sources for these extreme events can be found in 
+
+## EXAMPLE: Reading partposit files compresed as gz.
+1 - Download data raw input data from 
+[![Zenodo: 10.5281/zenodo.6490365](https://img.shields.io/badge/Zenodo-10.5281/zenodo.6490365-blue)](https://doi.org/10.5281/zenodo.6490365))
+
