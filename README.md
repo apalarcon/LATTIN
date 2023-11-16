@@ -76,6 +76,15 @@ $ python
 
 
 ### Second Method 
+
+1 - Clone LATTIN repository.
+
+2 - Verify you have installed all packages requiered for LATTIN (see LATTIN requirements section). If you use an Anaconda environment, please be sure you have activated the environment.
+
+3 - run install_lattin.sh.
+
+### Third Method
+
 1 - Clone LATTIN repository
 
   ```
@@ -90,13 +99,7 @@ https://github.com/apalarcon/LATTIN.git
 cp -r lattin path_to_anaconda_installation/lib/python3.x/site-packages/
 ````
 
-### Third Method
 
-1 - Clone LATTIN repository.
-
-2 - Verify you have installed all packages requiered for LATTIN (see LATTIN requirements section). If you use an Anaconda environment, please be sure you have activated the environment.
-
-3 - run install_lattin.sh.
 
 # LATTIN namelist file configuration
 ```
