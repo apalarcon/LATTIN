@@ -77,6 +77,14 @@ If you have problems compiling FORTRAN subroutines when importing ```lattin``` t
 cd  patho_to_anaconda_installation/.../site-packages/lattin
 sh build_lattin_so.sh
 ```
+To knnow the exactly path of your Anaconda installation, you can follow this sentences
+
+```
+$python
+>>  from distutils.sysconfig import get_python_lib
+>>> print(get_python_lib())
+```
+
 
 ### Second Method 
 
