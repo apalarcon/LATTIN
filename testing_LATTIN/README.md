@@ -8,7 +8,7 @@ mkdir ~/testing_LATTIN
 
 2 - Download raw partposit data for atmospheric moisture and heat tracking from the Zenodo repository
 
-[![Zenodo: 10.5281/zenodo.10114851](https://img.shields.io/badge/Zenodo-10.5281/zenodo.10114851-blue)]([https://git-scm.com/](https://doi.org/10.5281/zenodo.10114851))
+[![Zenodo: 10.5281/zenodo.10114851](https://img.shields.io/badge/Zenodo-10.5281/zenodo.10114851-blue)]((https://doi.org/10.5281/zenodo.10114851))
 
 3 - Unzip and copy data to  ```~/testing_LATTIN/DATA/```
 ```
@@ -60,6 +60,8 @@ mpirun -n 10 python run_testing_latting.py input_heat.cfg
 The full analysis for the moisture and heat sources for these extreme events can be found in 
 
 ## EXAMPLE: Reading partposit files compresed as gz.
+
 1 - Download data raw input data from 
+
 [![Zenodo: 10.5281/zenodo.6490365](https://img.shields.io/badge/Zenodo-10.5281/zenodo.6490365-blue)](https://doi.org/10.5281/zenodo.6490365))
 
