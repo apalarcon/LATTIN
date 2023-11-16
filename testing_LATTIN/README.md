@@ -75,7 +75,8 @@ mpirun -n 10 python run_testing_latting.py input_heat_moisture_gz.cfg
   ```
 
 * Result
-  This example started at 17 October 2014 at 1800 UTC.  You should obtain a single netCDF in ```~/testing_LATTIN/LATTIN_outs/TEST/moisture_heat_gz/```
+  
+  This example was performed for 17 October 2014 at 1800 UTC.  You should obtain a single netCDF in ```~/testing_LATTIN/LATTIN_outs/TEST/moisture_heat_gz/```
   ```
   lattin_backward_201410171800.nc
   ```
