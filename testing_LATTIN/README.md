@@ -30,6 +30,7 @@ Here we provided an example of LATTIN runs for 2 March 2001 using the SOD08 appr
 mpirun -n 10 python run_testing_latting.py input_moisture.cfg
   ```
 * Results
+* 
   You should obtain four netCDF files in ```~/testing_LATTIN/LATTIN_outs/TEST/moisture_SOD08/```
   ```
   lattin_backward_200103020000.nc
@@ -48,6 +49,7 @@ Here we provided an example of LATTIN runs for 5 July 2015 using the SCH20 appro
 mpirun -n 10 python run_testing_latting.py input_heat.cfg
   ```
 * Results
+  
   You should obtain  four netCDF files in ```~/testing_LATTIN/LATTIN_outs/TEST/heat_SCH20/```
   ```
   lattin_backward_201507050000.nc
