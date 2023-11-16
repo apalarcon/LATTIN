@@ -11,7 +11,7 @@
 ||               <<======================================================================>>               ||
 ===========================================================================================================
 ```
-# Lagrangian Atmospheric moisTure and heaT trackINg 
+# <span style="color:red;"> L</a>agrangian Atmospheric moisTure and heaT trackINg 
 
 LATTIN is a Python-based tool for Lagrangian atmospheric moisture and heat tracking
 
