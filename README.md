@@ -60,11 +60,6 @@ or
 ```
 conda install -c tramo-ephyslab lattin
 ```
-or
-
-```
-conda install -c apa_py lattin
-```
 
 If you install LATTIN using ```conda```, the first time you import lattin, it automatically will compile the FORTRAN subroutines. 
 Therefore, we strongly recommend typing the following sentences in terminal after the LATTIN installation.
