@@ -61,7 +61,15 @@ The full analysis for the moisture and heat sources for these extreme events can
 
 ## EXAMPLE: Reading partposit files compresed as gz.
 
-1 - Download data raw input data from 
+1 - Download  raw input data from Zenodo repository
 
 [![Zenodo: 10.5281/zenodo.6490365](https://img.shields.io/badge/Zenodo-10.5281/zenodo.6490365-blue)](https://doi.org/10.5281/zenodo.6490365))
 
+2 - Copy *.gz files to ```~/testing_LATTIN/DATA/gzfiles/```
+```
+cp *.gz ~/testing_LATTIN/DATA/gzfiles/
+```
+3 - Using the run_testing_latting.py file
+```
+mpirun -n 10 python run_testing_latting.py input_heat_moisture_gz.cfg
+  ```
