@@ -312,8 +312,9 @@ sbatch run_lattin.sh
 ```
 
 # Testing LATTIN
-Please, follow the intructions in <a href="https://github.com/apalarcon/LATTIN/tree/main/testing_LATTIN" target=blank> Testing LATTIN </a>
+Please, follow the intructions in
 
+[![Git: Testing_LATTIN ](https://img.shields.io/badge/GitHub-Testing_LATTIN-blue)]([https://git-scm.com/](https://github.com/apalarcon/LATTIN/tree/main/testing_LATTIN))
 
 # Contact and Support
 
