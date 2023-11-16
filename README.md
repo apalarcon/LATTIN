@@ -314,8 +314,8 @@ sbatch run_lattin.sh
 # Testing LATTIN
 Please, follow the intructions in
 
-[![Git: Testing_LATTIN ](https://img.shields.io/badge/Testing-LATTIN-blue)](https://github.com/apalarcon/LATTIN/tree/main/testing_LATTIN)
-[![Git: ](https://img.shields.io/badge/Git--blue)](https://git-scm.com/)
+[![Git: Testing_LATTIN ](https://img.shields.io/badge/GitHub-Testing_LATTIN-blue)](https://github.com/apalarcon/LATTIN/tree/main/testing_LATTIN)
+
 # Contact and Support
 
 * This code is not bug-free. Please report any bugs through 'Issues': https://github.com/apalarcon/LATTIN/issues
