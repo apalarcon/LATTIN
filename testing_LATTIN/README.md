@@ -30,7 +30,7 @@ Here we provided an example of LATTIN runs for 2 March 2001 using the SOD08 appr
 mpirun -n 10 python run_testing_latting.py input_moisture.cfg
   ```
 * Results
-  You should obtain in ```~/testing_LATTIN/LATTIN_outs/TEST/moisture_SOD08/``` four netCDF files
+  You should obtain four netCDF files in ```~/testing_LATTIN/LATTIN_outs/TEST/moisture_SOD08/```
   ```
   lattin_backward_200103020000.nc
   lattin_backward_200103020600.nc
@@ -48,7 +48,7 @@ Here we provided an example of LATTIN runs for 5 July 2015 using the SCH20 appro
 mpirun -n 10 python run_testing_latting.py input_heat.cfg
   ```
 * Results
-  You should obtain in ```~/testing_LATTIN/LATTIN_outs/TEST/heat_SCH20/``` four netCDF files
+  You should obtain  four netCDF files in ```~/testing_LATTIN/LATTIN_outs/TEST/heat_SCH20/```
   ```
   lattin_backward_201507050000.nc
   lattin_backward_201507050600.nc
@@ -59,7 +59,7 @@ mpirun -n 10 python run_testing_latting.py input_heat.cfg
 ### NOTE
 The full analysis for the moisture and heat sources for these extreme events can be found in 
 
-## EXAMPLE: Reading compressed  parposit files as gz
+## EXAMPLE: Reading ```gz``` compressed  parposit files
 
 1 - Download  raw input data from Zenodo repository
 
@@ -73,3 +73,11 @@ cp *.gz ~/testing_LATTIN/DATA/gzfiles/
 ```
 mpirun -n 10 python run_testing_latting.py input_heat_moisture_gz.cfg
   ```
+
+* Result
+  This example started at 17 October 2014 at 1800 UTC.  You should obtain a single netCDF in ```~/testing_LATTIN/LATTIN_outs/TEST/moisture_heat_gz/```
+  ```
+  lattin_backward_201410171800.nc
+  ```
+
+*<b>NOTE</b>: This test also shows an example of how to perform an atmospheric moisture and heat tracking in the same simulation.
