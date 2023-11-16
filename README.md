@@ -71,7 +71,7 @@ Therefore, we strongly recommend typing the following sentences in terminal afte
 $ python
 >> import lattin
 ```
-If you have problems compiling FORTRAN subroutines when importing ```lattin``` the first time, you can manually compile these subroutines. Go to your Anaconda installation and run the build_lattion_so.sh script.
+If you have problems compiling FORTRAN subroutines when importing ```lattin``` the first time, you can manually compile these subroutines. Go to your Anaconda installation and run the build_lattin_so.sh script.
 
 ```
 cd  patho_to_anaconda_installation/.../site-packages/lattin
