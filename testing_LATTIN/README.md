@@ -8,7 +8,7 @@ mkdir ~/testing_LATTIN
 
 2 - Download raw partposit data for atmospheric moisture and heat tracking from the Zenodo repository
 
-[![Zenodo: 10.5281/zenodo.10114851](https://img.shields.io/badge/Zenodo-10.5281/zenodo.10114851-blue)]((https://doi.org/10.5281/zenodo.10114851))
+[![Zenodo: 10.5281/zenodo.10114851](https://img.shields.io/badge/Zenodo-10.5281/zenodo.10114851-blue)](https://doi.org/10.5281/zenodo.10114851)
 
 3 - Unzip and copy data to  ```~/testing_LATTIN/DATA/```
 ```
