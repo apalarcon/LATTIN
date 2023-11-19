@@ -374,6 +374,6 @@ This software is published under the GPLv3 license. This means:
 * Pisso, I., Sollum, E., Grythe, H., Kristiansen, N. I., Cassiani, M., Eckhardt, S., et al. 2019. The Lagrangian particle dispersion model FLEXPART version 10.4. Geosci. Model Dev., 12(12), 4955-4997. https://doi.org/10.5194/gmd-12-4955-2019
 * Schumacher, D.L., Keune, J., Van Heerwaarden, C.C., Vilà-Guerau de Arellano, J., Teuling, A.J.,  Miralles, D.G. 2019. Amplification of mega-heatwaves through heat torrents fuelled by upwind drought. Nat. Geosci., 12, 712–717. https://doi.org/10.1038/s41561-019-0431-6.
 * Schumacher, D. L., Keune, J.,  Miralles, D. G. 2020. Atmospheric heat and moisture transport to energy‐and water‐limited ecosystems. Ann. NY Acad. Sci., 1472, 123–138. https://doi.org/10.1111/nyas.14357
-* Sodemann H, Schwierz C, Wernli H. Interannual variability of Greenland winter precipitation sources: Lagrangian moisture diagnostic and North Atlantic Oscillation influence. J. Geophys. Res.-Atmos. 2008; 113:D03107. https://doi.org/10.1029/2007JD008503. 
+* Sodemann H, Schwierz C, Wernli H. 2008. Interannual variability of Greenland winter precipitation sources: Lagrangian moisture diagnostic and North Atlantic Oscillation influence. J. Geophys. Res.-Atmos., 113,D03107. https://doi.org/10.1029/2007JD008503. 
 * Stohl, A., James, P. 2005. A Lagrangian analysis of the atmospheric branch of the global water cycle. Part II: Moisture transports between Earth’s ocean basins and river catchments. J. Hydrometeorol. 6(6), 961-984. https://doi.org/10.1175/JHM470.1
 
