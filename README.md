@@ -261,7 +261,7 @@ moisture_linear_adjustment  = 'True'/'False'               -> Apply linear adjus
                                         - CLOSE CONFIGURATION FILE -
 ===========================================================================================================
 ```
-Please note that we provide an example of LATTIN namelist input file. You can modifiy this or create a new one based on the description above
+Please note that we provide examplea of LATTIN namelist input file in the ```testing_LATTIN folder```. You can modifiy this or create a new one based on the description above
 
 ## Tracking methodologies
 
