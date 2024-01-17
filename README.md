@@ -354,7 +354,6 @@ or
 
 
 # LICENSE
-Copyright 2023 Albenis Pérez-Alarcón, Patricia Coll-Hidalgo, José C. Fernández-Alvarez, Raquel Nieto and Luis Gimeno
 
 This software is published under the GPLv3 license. This means: 
 1. Anyone can copy, modify and distribute this software. 
