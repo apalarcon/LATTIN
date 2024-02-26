@@ -17,10 +17,7 @@ LATTIN is a Python-based tool for Lagrangian atmospheric moisture and heat track
 
 [![License: GPLv3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-
-[![Anaconda-Server Badge](https://anaconda.org/tramo-ephyslab/lattin/badges/version.svg)](https://anaconda.org/tramo-ephyslab/lattin)
-
- [![Version: ](https://img.shields.io/badge/Version-1.0.2-blue)](https://anaconda.org/tramo-ephyslab/lattin)
+ [![Current Version: ](https://img.shields.io/badge/Current_Version-1.0.2-blue)](https://anaconda.org/tramo-ephyslab/lattin)
 
 # What do I need to get and run LATTIN?
 
