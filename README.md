@@ -89,6 +89,10 @@ $python
 
 1 - Clone LATTIN repository.
 
+  ```
+https://github.com/apalarcon/LATTIN.git
+  ```
+
 2 - Verify you have installed all packages requiered for LATTIN (see LATTIN requirements section). If you use an Anaconda environment, please be sure you have activated the environment.
 
 3 - run install_lattin.sh.
