@@ -1,7 +1,7 @@
 # Testing LATTIN
 ## Steps
 
-1 - You can check the reproducile LATTIN capsule in Code Ocean
+1 - You can check the reproducible LATTIN capsule in Code Ocean
 
 [![Code Ocean: 10.24433/CO.4396135.v1](https://img.shields.io/badge/CodeOcean-10.24433/CO.4396135.v1-blue)](https://doi.org/10.24433/CO.4396135.v1)
 
