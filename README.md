@@ -335,7 +335,9 @@ sbatch run_lattin.sh
 ```
 
 # Testing LATTIN
-Please, follow the intructions in
+Please, follow the intructions at
+
+[![Code Ocean: 10.24433/CO.4396135.v1](https://img.shields.io/badge/CodeOcean-10.24433/CO.4396135.v1-blue)](https://doi.org/10.24433/CO.4396135.v1)
 
 [![Git: Testing_LATTIN ](https://img.shields.io/badge/GitHub-Testing_LATTIN-blue)](https://github.com/apalarcon/LATTIN/tree/main/testing_LATTIN)
 
