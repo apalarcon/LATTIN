@@ -112,7 +112,21 @@ git clone https://github.com/apalarcon/LATTIN.git
 cp -r lattin path_to_anaconda_installation/.../site-packages/
 ````
 
+## NOTE
+If you have a problem with the mpi4py library, try these steps:
 
+* Remove the ```mpi4py``` library ```conda remove mpi4py```
+* Install the ```openmpi``` library ```conda install conda-forge::openmpi ```
+* Install again the ```mpi4py``` library ```conda install mpi4py ```
+
+If the problem continue (frequently the problem is related with the ```libmpi.so.12 ``` or similar), you can also try
+* Search the mising library on system and link it to your Anaconda environment.
+  ```
+  ln -s path_to_missing_library/libmpi.so.12 patho_to_anaconda_installation/lib
+  ```
+or 
+
+* Contact your system administrator
 
 # LATTIN namelist file configuration
 ```
