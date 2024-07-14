@@ -19,8 +19,9 @@ import sys
 import os
 from datetime import datetime, timedelta
 from lattin.fmodules import read_binary_file as RBF
+from lattin.fmodules import readbinid as RBFid
 from lattin.fmodules import determined_id as D_id
-from lattin.fmodules import search_row as sRow
+#from lattin.fmodules import search_row as sRow
 from lattin.fmodules import len_file as lf
 from lattin.fmodules import compute_grid_integrated_heat as compute_grid_integrated_heat
 from lattin.fmodules import compute_grid_integrated_moist as compute_grid_integrated_moist
@@ -66,8 +67,8 @@ def disclaimer():
 	print("||                    +++++++ ++          ++   ++          ++      [~~]  ++++   ++++++                    ||")
 	print("||               <<======================================================================>>               ||")
 	print("||                         " + program_fullname() +" (v" +str(get_currentversion())+")                     ||")
-	print("||                                        Last Update :  " +  get_lsatupdate() +"                                       ||" )
-	print("||                                             Copyright 2023                                             ||")
+	print("||                                        Last Update:  " +  get_lsatupdate() +"                                        ||" )
+	print("||                                             Copyright 2024                                             ||")
 	print("||                                                                                                        ||")
 	print("||                                                                                                        ||")
 	print("||                " +program_name() + " Version " +str(get_currentversion())+ " is free under the terms of GNU General Public license V3           ||")
@@ -113,6 +114,22 @@ def str2boolean(arg):
 		raise argparse.ArgumentTypeError("Boolean value expected.")
 
 
+
+def check_init_parms(verbose, file_gz, save_full_parts_position):
+	if save_full_parts_position =="" or save_full_parts_position==None:
+		save_full_parts_position=False
+
+	if verbose=="" or verbose==None:
+		verbose=True
+	
+	if file_gz=="" or file_gz==None:
+		file_gz=False
+	
+	
+		
+	return verbose, file_gz, save_full_parts_position
+
+
 def heat_tracking_parms(heat_tracking_method,
 						trk_rh_check,
 						rh_threshold,
@@ -125,7 +142,8 @@ def heat_tracking_parms(heat_tracking_method,
 						dvarheatthreshold,
 						heat_linear_adjustment,
 						dtime,
-						heat_custom_limits_highs
+						heat_custom_limits_highs,
+						save_heat_parts_position
 						):
 	errors_found=False
 	errors=""
@@ -206,10 +224,13 @@ def heat_tracking_parms(heat_tracking_method,
 			errors_found=True	
 			
 		
-	return trk_rh_check,rh_threshold,pblcheck, dqcheck, pbl_method,var_heat_track,dqthreshold, filter_pbl_parcels,dvarheatthreshold,heat_linear_adjustment,heat_tracking_method,heat_custom_limits_highs, errors, errors_found
+	if save_heat_parts_position=="" or save_heat_parts_position==None:
+		save_heat_parts_position = True
+		
+	return trk_rh_check,rh_threshold,pblcheck, dqcheck, pbl_method,var_heat_track,dqthreshold, filter_pbl_parcels,dvarheatthreshold,heat_linear_adjustment,heat_tracking_method,heat_custom_limits_highs, errors, errors_found, save_heat_parts_position
 
 
-def moisture_tracking_parms(moisture_tracking_method, filter_dqdt_parcels, dqdt_threshold, mindq_gain, dqpbl_method, moisture_linear_adjustment,dqpblcheck, trkdq_rh_check, dqrh_threshold, dtime, filter_pbl_dq_parcels, 	moist_custom_limits_highs, precip_minrh):
+def moisture_tracking_parms(moisture_tracking_method, filter_dqdt_parcels, dqdt_threshold, mindq_gain, dqpbl_method, moisture_linear_adjustment,dqpblcheck, trkdq_rh_check, dqrh_threshold, dtime, filter_pbl_dq_parcels, 	moist_custom_limits_highs, precip_minrh, save_moist_parts_position):
 	
 	errors_found=False
 	errors=""
@@ -217,7 +238,7 @@ def moisture_tracking_parms(moisture_tracking_method, filter_dqdt_parcels, dqdt_
 		filter_dqdt_parcels=True
 		dqdt_threshold=-0.0002
 		mindq_gain=0.0002
-		dqpbl_method="maxval"
+		dqpbl_method="meanval"
 		moisture_linear_adjustment=True
 		dqpblcheck=1
 		trkdq_rh_check=False
@@ -309,8 +330,11 @@ def moisture_tracking_parms(moisture_tracking_method, filter_dqdt_parcels, dqdt_
 			errors = errors + "(**) ERROR: moist_custom_limits_highs is missing or lower_high in moist_custom_limits_highs parameter in input file is higher than upper_high"
 			errors_found=True
 
+	if save_moist_parts_position=="" or save_moist_parts_position==None:
+		save_moist_parts_position=True
 	
-	return filter_dqdt_parcels, dqdt_threshold, mindq_gain, dqpbl_method, moisture_linear_adjustment,dqpblcheck, trkdq_rh_check, dqrh_threshold,moisture_tracking_method, filter_pbl_dq_parcels, 	moist_custom_limits_highs, precip_minrh, errors, errors_found
+	
+	return filter_dqdt_parcels, dqdt_threshold, mindq_gain, dqpbl_method, moisture_linear_adjustment,dqpblcheck, trkdq_rh_check, dqrh_threshold,moisture_tracking_method, filter_pbl_dq_parcels, 	moist_custom_limits_highs, precip_minrh, errors, errors_found, save_moist_parts_position
 
 
 
@@ -327,11 +351,12 @@ def checking_input_parameters(size,
 							latgrid, 
 							longrid,
 							ndays,
+							cenlon,
 							):
 	errors=""
 	errors_found=False
 	if (totalfiles)%size!=0:
-		errors="(**) ERROR: The number of processors must exactly divide the number of partposit files to process (trackin_time/time_step).\n     From your input file, the recommended number of processors is " + str(int(totaltime/dtime))+"\n"
+		errors="(**) ERROR: The number of processors must exactly divide the number of partposit files to process (tracking_time/time_step).\n     From your input file, the recommended number of processors is " + str(int(totaltime/dtime))+"\n"
 		errors_found=True
 	
 		
@@ -358,9 +383,17 @@ def checking_input_parameters(size,
 	if latgrid.min()<-90 or latgrid.max()>90:
 		errors = errors + "(**) ERROR:  Latitudes for output grid are incorrect \n"
 		errors_found=True
-	if longrid.min()<-180 or longrid.max()>180:
-		errors = errors + "(**) ERROR:  Longitudes for output grid are incorrect \n"
-		errors_found=True
+		
+
+	if cenlon=="0":
+		if longrid.min()<-180 or longrid.max()>180:
+			errors = errors + "(**) ERROR:  Longitudes for output grid are incorrect \n"
+			errors_found=True
+	elif cenlon=="180":
+		if longrid.min()<-0 or longrid.max()>360:
+			errors = errors + "(**) ERROR:  Longitudes for output grid are incorrect \n"
+			errors_found=True
+		
 	if ndays<1:
 		errors = errors + "(**) ERROR:  ndays = " + str(int(ndays)) + " is incorrect. Parameter ndays must be higher than 0  \n"
 		errors_found=True
@@ -423,11 +456,18 @@ def printting_run_information(verbose,
 							  moist_custom_limits_highs,
 							  precip_minrh,
 							  calendar,
+							  runID,
+							  save_heat_parts_position,
+							  save_moist_parts_position, 
+							  save_full_parts_position,
+							  cenlon
 							  ):
 	
 	#print("-------------------------------------------------------------------------------------------------------------\n")
 	if verbose:
 		print("RUNNING PARAMETERS")
+		print("-------------------------------------------------------------------------------------------------------------")
+		print("->  | RunID                                      :", runID)
 		print("-------------------------------------------------------------------------------------------------------------")
 		print("   -> Model                                      :", model)
 		print("   -> Mask file                                  :", file_mask)
@@ -441,6 +481,8 @@ def printting_run_information(verbose,
 		print("   -> Simulation starts at                       :", list_year[0]+list_month[0]+list_day[0]+" "+list_hour[0]+":"+list_min[0]+":00")
 		print("   -> Simulation ends at                         :", list_year[-1]+list_month[-1]+list_day[-1]+" "+list_hour[-1]+":"+list_min[-1]+":00")
 		print("   -> Calendar                                   :", calendar)
+		print("   -> Saving full parcels data                   :", save_full_parts_position)
+		print("   -> Central longitude of the out grid          :", cenlon)
 
 		if tracking_heat:
 			
@@ -459,7 +501,7 @@ def printting_run_information(verbose,
 				pblcheck_="both locations within the PBL"
 				
 			if heat_custom_limits_highs[0]==0 and heat_custom_limits_highs[1]==0:
-				filterhigh="(Not Apply)"
+				filterhigh="(Not Applied)"
 			else:
 				filterhigh=""
 
@@ -479,6 +521,7 @@ def printting_run_information(verbose,
 				print("    + Relative humidity change                   :", "<=", rh_threshold, "%")
 			print("    + Linear adjustment                          :", heat_linear_adjustment)
 			print("    + Lower and upper limits for filter parcels  :", heat_custom_limits_highs, 'meters', filterhigh)
+			print("    + Saving heat parcels data                   :", save_heat_parts_position)
 				
 		if tracking_moisture:		
 			print("\n   -------------  Moisture Tracking Information  -------------")
@@ -490,7 +533,7 @@ def printting_run_information(verbose,
 			print("    + Filter parcels within PBL                  :", filter_pbl_dq_parcels) 
 			
 			if moist_custom_limits_highs[0]==0 and moist_custom_limits_highs[1]==0:
-				mfilterhigh="(Not Apply)"
+				mfilterhigh="(Not Applied)"
 			else:
 				mfilterhigh=""
 			if filter_pbl_dq_parcels:
@@ -512,6 +555,8 @@ def printting_run_information(verbose,
 				print("    + Relative humidity change                    :", "<=", dqrh_threshold, "%")
 			print("    + Linear adjustment                          :", moisture_linear_adjustment)
 			print("    + Minimum RH to account for precipitation    :", ">",precip_minrh, "%")
+			print("    + Lower and upper limits for filter parcels  :", moist_custom_limits_highs, 'meters', mfilterhigh)
+			print("    + Saving moisture parcels data               :", save_moist_parts_position)
 		print("-------------------------------------------------------------------------------------------------------------")
 		
 		
@@ -535,7 +580,10 @@ def writing_netcdf(latitude,
 				   moisture_tracking_method,
 					heat_tracking_method,
 					moisture_linear_adjustment,
-				   filename
+				   filename,
+				   save_heat_parts_position, 
+				   save_moist_parts_position, 
+				   save_full_parts_position,
 				   ):
 	
 	try:
@@ -585,9 +633,9 @@ def writing_netcdf(latitude,
 	lon.units = 'degrees'
 	lon.axis = 'X'
 
-
-	parcels_position = ncout.createVariable('raw_parcels_postion', 'f8', ("time","ntime",'nparcels', "nvars"),zlib=True)
-	parcels_position.standard_name = 'Raw parcels position at each time step. Only parcels within the target region at time t0'
+	if save_full_parts_position:
+		parcels_position = ncout.createVariable('raw_parcels_postion', 'f8', ("time","ntime",'nparcels', "nvars"),zlib=True)
+		parcels_position.standard_name = 'Raw parcels position at each time step. Only parcels within the target region at time t0'
 
 
 
@@ -615,12 +663,13 @@ def writing_netcdf(latitude,
 		heat.standard_name = 'Integrated Surface Sensible Heat Flux'
 		heat.units ="W/m2"
 		
-		heat_parcels = ncout.createVariable('heat_parcels_position', 'f8', ("time","heat_time",'heat_parcels', "heat_vars"),zlib=True)
-		heat_parcels.standard_name = 'Parcels position for heat tracking'
-		if var_heat_track=="sde":
-			heat_parcels.units ="J/kg per " + str(int(dtime)) + " minutes"
-		elif var_heat_track=="potTemp":
-			heat_parcels.units ="K per " + str(int(dtime)) + " minutes" 
+		if save_heat_parts_position:
+			heat_parcels = ncout.createVariable('heat_parcels_position', 'f8', ("time","heat_time",'heat_parcels', "heat_vars"),zlib=True)
+			heat_parcels.standard_name = 'Parcels position for heat tracking'
+			if var_heat_track=="sde":
+				heat_parcels.units ="J/kg per " + str(int(dtime)) + " minutes"
+			elif var_heat_track=="potTemp":
+				heat_parcels.units ="K per " + str(int(dtime)) + " minutes" 
 	
 	if tracking_moisture:
 		
@@ -638,12 +687,13 @@ def writing_netcdf(latitude,
 		moistd.units ="mm/day"
 
 		moist = ncout.createVariable('moisture_integrated', 'f8', ("time",'lat', "lon"),zlib=True)
-		moist.standard_name = 'Integrated Surface Sensible Heat Flux'
+		moist.standard_name = 'Integrated moisture uptake'
 		moist.units ="mm/day"
 		
-		moist_parcels = ncout.createVariable('moisture_parcels_position', 'f8', ("time","moisture_time",'moisture_parcels', "moisture_vars"),zlib=True)
-		moist_parcels.long_name = 'Parcels position for moisture tracking'
-		moist_parcels.units ="kg/kg per " + str(int(dtime)) + " minutes"
+		if save_moist_parts_position:
+			moist_parcels = ncout.createVariable('moisture_parcels_position', 'f8', ("time","moisture_time",'moisture_parcels', "moisture_vars"),zlib=True)
+			moist_parcels.long_name = 'Parcels position for moisture tracking'
+			moist_parcels.units ="kg/kg per " + str(int(dtime)) + " minutes"
 	
 		#if moisture_linear_adjustment:
 		#	moistCRd = ncout.createVariable('moisture_contribution_days', 'f8', ("time",'tracking_days','lat', "lon"),zlib=True)
@@ -658,7 +708,14 @@ def writing_netcdf(latitude,
 	
 	lon[:] = longitude[:]
 	lat[:]= latitude[:]
-	parcels_position[0,:]=tensor_org[:]
+	
+	tensor_description = ""
+	if save_full_parts_position:
+		parcels_position[0,:]=tensor_org[:]
+		tensor_description="nvars[0]-particle id, nvars[1]-longitude, nvars[2]-latitude, nvars[3]-specific humidity(kg/kg), nvars[4]-parcel high (m), nvars[5]-topography high [m], nvar[6]-parcel density (kg/m3), nvar[7]-PBL high [m], nvar[8]-tropopause high [m], nvar[9]-parcel Temperature [K], nvar[10]-parcel mass [kg], nvar[11]-heat tracking var, nvar[12]-reltive humidity[%]"
+
+		
+		
 	time[:]=date2num(datetime(int(run_date.split(" ")[0].split("-")[0]),int(run_date.split(" ")[0].split("-")[1]),int(run_date.split(" ")[0].split("-")[2]),int(run_date.split(" ")[1].split(":")[0]),int(run_date.split(" ")[1].split(":")[1]),0   ), time.units, time.calendar)
 	
 	tracking_days[:]=track_days[:]
@@ -666,15 +723,22 @@ def writing_netcdf(latitude,
 	
 	ntime[:]=date2num(listdates, ntime.units, ntime.calendar)
 	
-	tensor_description="nvars[0]-particle id, nvars[1]-longitude, nvars[2], latitude, nvars[3]-specific humidity(kg/kg), nvars[4]-parcel high (m), nvars[5]-topography high [m], nvar[6]-parcel density (kg/m3), nvar[7]-PBL high [m], nvar[8]-tropopause high [m], nvar[9]-parcel Temperature [K], nvar[10]-parcel mass [kg], nvar[11]-heat tracking var, nvar[12]-reltive humidity[%]"
+	
+
 	
 	if tracking_heat:
 		heatd[0,:]=array_heat_day[:]
 		heat[0,:]=np.sum(array_heat_day, axis=0)
-		heat_parcels[0,:]=tensor_heat[:,:,:3]
+		
+		htensor_des=""
+		if save_heat_parts_position:
+			heat_parcels[0,:]=tensor_heat[:,:,:3]
+			htensor_des = " method. heat_vars[0] = longitude, heat_vars[1] = latitude, heat_vars[2] = d"+var_heat_track+"/dt" 
+			
+			
 		heat_time[:]=date2num(meantimes[1:], heat_time.units, heat_time.calendar)
 		
-		heat_description="Heat Tracking using " + heat_tracking_method + " method. heat_vars[0] = longitude, heat_vars[1] = latitude, heat_vars[2] = d"+var_heat_track+"/dt" 
+		heat_description="Heat Tracking using " + heat_tracking_method + htensor_des
 	else:
 		heat_description="Heat Tracking no applied"
 		
@@ -682,8 +746,13 @@ def writing_netcdf(latitude,
 	if tracking_moisture:
 		moistd[0,:]=array_moist_day[:]
 		moist[0,:]=np.sum(array_moist_day, axis=0)
-		moist_parcels[0,:]=tensor_moist[:,:,:3]
-
+		
+		mtensor_des=""
+		if save_moist_parts_position:
+			moist_parcels[0,:]=tensor_moist[:,:,:3]
+			mtensor_des = " method. moisture_vars[0] = longitude, moisture_vars[1] = latitude, moisture_vars[2] = dq/dt"
+	
+			
 		#if moisture_linear_adjustment:
 		#	moistCRd[0,:] = CR[:]
 		#	moistCR[0,:] = np.sum(CR, axis=0)
@@ -692,7 +761,7 @@ def writing_netcdf(latitude,
 
 		moisture_time=date2num(meantimes[:-1], moisture_time.units, moisture_time.calendar)
 
-		moist_description="Moisture Tracking using " + heat_tracking_method + " method. moisture_vars[0] = longitude, moisture_vars[1] = latitude, moisture_vars[2] = dq/dt"
+		moist_description="Moisture Tracking using " + moisture_tracking_method + mtensor_des
 	else:
 		moist_description="Moisture Tracking no applied"
 	
@@ -722,17 +791,28 @@ def saving_data(count_parcels,
 		fname,
 		save_moist_stats,
 		save_heat_stats,
+		ctime,
+		mode,
+		heat_tracking_method,
+		moist_tracking_method,
+		lwvrt,
+		moisture_linear_adjustment
 		):
 	f=open(fname, "w")
-	f.write("Run Date: " + rundates+"\n")
-	f.write("Number of parcels within the target region: " + str(int(count_parcels))+"\n")
+	f.write("+ Run Date: " + rundates+"\n")
+	f.write("+ Run Mode: " + mode+" in time \n")
+	f.write("+ Number of parcels within the target region: " + str(int(count_parcels))+"\n")
 	if save_heat_stats:
-		f.write("Number of filter parcels within the PBL at time t0 for heat tracking: " + str(int(heat_parcels))+ " ({:.2f}".format(100 * (heat_parcels) / (count_parcels))+"%)\n")	
+		f.write("+ Heat tracking method: " + heat_tracking_method+"\n")
+		f.write("Number of filtered parcels at time t0 for heat tracking: " + str(int(heat_parcels))+ " ({:.2f}".format(100 * (heat_parcels) / (count_parcels))+"%)\n")	
 		f.write("Number of parcels without heat uptake in the trajectory: " + str(int(no_heat_uptake_parcels))+ " ({:.2f}".format(100 * (no_heat_uptake_parcels) / (heat_parcels)) + "%)\n")	
 	if save_moist_stats:
-		f.write("Number of precipitating parcels within the target region at time t0: " + str(int(precipitating_parcels))+ " ({:.2f}".format(100 * (precipitating_parcels) / (count_parcels)) + "%)\n")
-		f.write("!Number of parcels without moisture uptake in the trajectory: " + str(int(no_evap_uptakes)) + " ({:.2f}".format(100 * (no_evap_uptakes) / (precipitating_parcels))+"%)\n")
-	
+		f.write("+ Moisture tracking method: " + moist_tracking_method+"\n")
+		f.write("Number of filtered parcels within the target region at time t0: " + str(int(precipitating_parcels))+ " ({:.2f}".format(100 * (precipitating_parcels) / (count_parcels)) + "%)\n")
+		f.write("Number of parcels without moisture uptake in the trajectory: " + str(int(no_evap_uptakes)) + " ({:.2f}".format(100 * (no_evap_uptakes) / (precipitating_parcels))+"%)\n")
+		if moisture_linear_adjustment:
+			f.write("Lagrangian mean water vapour residence time: " + str(lwvrt)[0:5] + " days\n")
+	f.write("+ Computing time: " + str(ctime)+" seconds\n")
 		
 def calc_A(resolution, lat, lon):
 
@@ -762,7 +842,15 @@ def grid_point (resolution, numPdX, numPdY, lon_lower_left,lat_lower_left):
 		lon_min=lon_min+resolution
 		lon_new= np.append(lon_new, lon_min)
 	lon, lat=np.meshgrid(lon_new, lat_new)
-	return lat, lon
+	
+	if lon.max()>180+resolution:
+		cenlon="180"
+		
+	else:
+		cenlon="0"
+	
+	
+	return lat, lon, cenlon
 
 def grid_plot_final(lat, lon):
 
@@ -861,7 +949,7 @@ def read_binaryFile_fortran(filename, type_file,lon_left_lower_corner,lat_left_l
         npart=struct.unpack('iiii', a[0:16])
         npart=npart[2]
         data= RBF(filename,npart,lon_left_lower_corner,lat_left_lower_corner, lon_right_upper_corner,lat_right_upper_corner)
-
+ 
     if type_file==2:
         len_a=lf(filename)
         npart=((len_a-12)/60)-1
@@ -869,7 +957,32 @@ def read_binaryFile_fortran(filename, type_file,lon_left_lower_corner,lat_left_l
     ind=np.where(data[:, 0]==-999)
     data=data[:int(ind[0][0]), :]
 
+
     return data
+
+def search_row_fortran(lista, matrix):
+
+    matrix_=np.array(sRow(matrix, lista, len(lista), len(matrix[:,0])), np.float64)
+
+    return matrix_
+
+def read_binaryFile_fortranID(filename, type_file,lon_left_lower_corner,lat_left_lower_corner,lon_right_upper_corner,lat_right_upper_corner,  idparts, fparts):
+
+    if type_file==1:
+        with open(filename,'rb') as inputfile:
+            a=b''.join([line for line in inputfile])
+        npart=struct.unpack('iiii', a[0:16])
+        npart=npart[2]
+        data= RBFid(filename,npart,lon_left_lower_corner,lat_left_lower_corner, lon_right_upper_corner,lat_right_upper_corner,  idparts, fparts)
+
+    if type_file==2:
+        len_a=lf(filename)
+        npart=((len_a-12)/60)-1
+               
+        data= RBFid(filename,npart, lon_left_lower_corner,lat_left_lower_corner, lon_right_upper_corner,lat_right_upper_corner,  idparts, fparts)
+
+    return data
+
 
 def load_mask_grid_NR(filename, maskname,maskvar_lon, maskvar_lat):
 
@@ -888,7 +1001,7 @@ def load_mask_grid_NR(filename, maskname,maskvar_lon, maskvar_lat):
           if lon[i,j]>180:
                 lon[i,j]=lon[i,j]-360
 
-    return lat, lon,mask
+    return lat, lon, mask
 
 def funtion_interpol_mascara (maskvar_lat, maskvar_lon, mascara, data):
 
@@ -903,6 +1016,8 @@ def funtion_interpol_mascara (maskvar_lat, maskvar_lon, mascara, data):
     result=prsInterpu(si)
     
     return result
+
+
 
 def desc_gz(name_file):
 
@@ -926,12 +1041,6 @@ def determine_id_binary_grid_NR_fortran(data, maskvar_lat, maskvar_lon, value_ma
             ind.append(ii)
     submatrix=np.reshape(submatrix,(len(ind), 11))
     return submatrix
-
-def search_row_fortran(lista, matrix):
-
-    matrix_=np.array(sRow(matrix, lista, len(lista), len(matrix[:,0])), np.float64)
-
-    return matrix_
 
 
 def time_calc(init_time,h_diff):
@@ -1050,17 +1159,25 @@ def read_proccesor(verbose, partpositfiles,submatrix, rank, lon_left_lower_corne
 			print ("Reading | " + model+" -> ",  partpositfiles[i])
 		if key_gz:
 			desc_gz(partpositfiles[i])
-			part_post_i=read_binaryFile_fortran(partpositfiles[i][:-3], type_file,lon_left_lower_corner,lat_left_lower_corner,
-				lon_right_upper_corner,lat_right_upper_corner)
+			matrix_i=read_binaryFile_fortranID(partpositfiles[i][:-3], type_file,lon_left_lower_corner,lat_left_lower_corner,
+				lon_right_upper_corner,lat_right_upper_corner, submatrix[:,0], len(submatrix[:,0]))
 			cmd_rm= "rm -rf "+partpositfiles[i][:-3]
 			os.system(cmd_rm)
 		else:
-			part_post_i=read_binaryFile_fortran(partpositfiles[i], type_file,lon_left_lower_corner,lat_left_lower_corner,
-				lon_right_upper_corner,lat_right_upper_corner)
-		matrix_i=search_row_fortran(submatrix[:,0],part_post_i)
+			matrix_i=read_binaryFile_fortranID(partpositfiles[i], type_file,lon_left_lower_corner,lat_left_lower_corner,
+				lon_right_upper_corner,lat_right_upper_corner, submatrix[:,0], len(submatrix[:,0]))
+			
+			#part_post_i=read_binaryFile_fortran(partpositfiles[-2], type_file, lon_left_lower_corner,lat_left_lower_corner,
+			#	lon_right_upper_corner,lat_right_upper_corner)
+	
+	
+
+		#matrix_i = matrix_i[np.argsort(matrix_i[:, 0])]
+		#print(submatrix[:,0] - matrix_i[:,0])
 			
 		tensor_local[i,:,:]=matrix_i
 	return tensor_local
+
 
 
 def get_vars_from_partposit(verbose, partpositfiles ,file_mask, maskname,maskvar_lon, maskvar_lat,lat_f, lon_f,rank,size, comm, type_file,
@@ -1081,8 +1198,6 @@ def get_vars_from_partposit(verbose, partpositfiles ,file_mask, maskname,maskvar
 		part_post=read_binaryFile_fortran(name_file, type_file, lon_left_lower_corner,lat_left_lower_corner,
 				lon_right_upper_corner,lat_right_upper_corner)
 
-	
-
 
 	lat_masked, lon_masked, mascara=load_mask_grid_NR(file_mask, maskname,maskvar_lon, maskvar_lat)
 
@@ -1098,18 +1213,61 @@ def get_vars_from_partposit(verbose, partpositfiles ,file_mask, maskname,maskvar
 
 	if key_gz:
 		desc_gz(partpositfiles[-2])
-		part_post_i=read_binaryFile_fortran(partpositfiles[-2][:-3], type_file, lon_left_lower_corner,lat_left_lower_corner,lon_right_upper_corner,lat_right_upper_corner)
+		matrix_i=read_binaryFile_fortranID(partpositfiles[-2][:-3], type_file, lon_left_lower_corner,lat_left_lower_corner,lon_right_upper_corner,lat_right_upper_corner, submatrix[:,0], len(submatrix[:,0]))
 		cmd_rm= "rm -rf "+partpositfiles[-2][:-3]
 		os.system(cmd_rm)
 	else:
-		part_post_i=read_binaryFile_fortran(partpositfiles[-2], type_file, lon_left_lower_corner,lat_left_lower_corner,lon_right_upper_corner,lat_right_upper_corner)
-	matrix_i=search_row_fortran(submatrix[:,0],part_post_i)
-
+		matrix_i=read_binaryFile_fortranID(partpositfiles[-2], type_file, lon_left_lower_corner,lat_left_lower_corner,lon_right_upper_corner,lat_right_upper_corner, submatrix[:,0], len(submatrix[:,0]))
+		
+		#part_post_i=read_binaryFile_fortran(partpositfiles[-2], type_file, lon_left_lower_corner,lat_left_lower_corner,
+		#		lon_right_upper_corner,lat_right_upper_corner)
+	
 	
 
+	#matrix_i = matrix_i[np.argsort(matrix_i[:, 0])]
 
+	
+	#matrix_i=search_row_fortran(submatrix[:,0],part_post_i)
+
+		
+	#print("khhgfhgdgfdfgdf")
+	#print(submatrix[:,0] - matrix_ii[:,0])
+	#print(submatrix[:,0] - matrix_i[:,0])
+	#tt2=matrix_i[:,0]
+	#print("==================", len(tt2[tt2>0]))
+	#print()
+	
+	
+	#matrix_i[matrix_i==-999]=-999.9
+	
+	
+	#print()
+	#print(matrix_i)
+	#print()
+	#print("....................................................")
+	#print()
+	#print(matrix_ii)
+	
+	
+	#print()
+	
+	#tt=matrix_ii[:,0]
+	#print("-------------------",len(tt[tt>0]))
+	#tt2=matrix_i[:,0]
+	#print("==================", len(tt2[tt2>0]))
+	
+	#a = matrix_i - matrix_ii
+	
+	#print(a)
+	
+	#print(a[:,0].min(), a[:,0].max())
+	
+	#print(matrix_i.shape)
+	#print(matrix_ii.shape)
+	#quit()
+	
+	
 	dimX, dimY=matrix_i.shape
-
 	tensor_org=np.ones((len(partpositfiles),dimX ,dimY ))*(-999.9)
 	tensor_org[-1,:,:]=submatrix
 	tensor_org[-2,:,:]=matrix_i
@@ -1258,10 +1416,11 @@ def compute_theta(rho_kgm3, q_kgkg, T_K):
 	
 	return theta
 
-def compute_var_integarated_day_heat(array, t, area, density, dtime, var_heat_track, lon,lat,numPdY,numPdX, varid):
+def compute_var_integarated_day_heat(array, t, area, density, dtime, var_heat_track, lon,lat,numPdY,numPdX, cenlon, varid):
 	dimX, dimY=lat.shape
 	array_day=np.empty((len(t)-1,dimX-1, dimY-1))
 	ndb=np.arange(len(t)-1,0,-1)
+
 	for ii in range(len(t)-1):
 		heatd=np.array(compute_grid_integrated_heat(array[t[ii]:t[ii+1],:,:],lon,lat,numPdY,numPdX,len(array[t[ii]:t[ii+1],0,0]),len(array[0,:,0])),dtype=np.float64)
 
@@ -1355,7 +1514,7 @@ def is_in_pbl(pblcheck, par_vals, pbl_vars, method, lendvar):
 
 
 	
-def processing_heat_track(tensor_org, pblcheck, filter_pbl_parcels, pbl_method, heat_custom_limits, trk_rh_check, rh_threshold, dqcheck, dqthreshold, dvar_threshold, var_heat_track, lag_times, area, density, dtime,heat_linear_adjustment, lon,lat, numPdY,numPdX, varid):
+def processing_heat_track_backward(tensor_org, pblcheck, filter_pbl_parcels, pbl_method, heat_custom_limits, trk_rh_check, rh_threshold, dqcheck, dqthreshold, dvar_threshold, var_heat_track, lag_times, area, density, dtime,heat_linear_adjustment, lon,lat, numPdY,numPdX, cenlon, varid, rank,size, comm):
 	
 	
 	if filter_pbl_parcels:
@@ -1377,13 +1536,100 @@ def processing_heat_track(tensor_org, pblcheck, filter_pbl_parcels, pbl_method, 
 	
 
 	matrix_heat_files=[ "lon", "lat", "dq", "ds", "rh", "FH"]
-	dmatrix=np.empty((tensor_heat.shape[0]-1, tensor_heat.shape[1], len(matrix_heat_files)))
-	uptakes_parts=0
+	dmatrix=np.empty((tensor_heat.shape[0]-1, tensor_heat.shape[1], len(matrix_heat_files)+1))
+	dmatrix[:]=0
+
+
+	#paralell_heat_process(dmatrix, tensor_heat, pblcheck, pbl_method, trk_rh_check, rh_threshold, dqcheck, dqthreshold, dvar_threshold, var_heat_track, heat_linear_adjustment)
+
+	n = tensor_heat.shape[1]
+	count = n // size
+	remainder_ = n % size
+	remainder=0
+
+	if rank < remainder:
+		start = rank * (count + 1)
+		stop = start + count + 1
+	else:
+		start = rank * count + remainder
+		stop = start + count
+
+	local_parts=tensor_heat[0,start:stop,0]
+	local_results = np.empty((dmatrix.shape[0],len(local_parts), dmatrix.shape[2]))
+	local_results[:,:,:]=0
+	
+	local_results = parallel_heat_process_backward(local_results, tensor_heat[:,start:stop,:],pblcheck, pbl_method, trk_rh_check, rh_threshold, dqcheck, dqthreshold, dvar_threshold, var_heat_track, heat_linear_adjustment,cenlon)
+	
+	if rank > 0:
+		comm.Send(local_results, dest=0, tag=14)
+	else:
+		i_start=[]
+		i_stop=[]
+		for i in range(size):
+			if i < remainder:
+				i_start = np.append(i_start,i * (count + 1))
+				i_stop = np.append(i_stop,i_start + count + 1)
+			else:
+				ii_start=i * count + remainder
+				ii_stop=ii_start + count
+				i_start = np.append(i_start,ii_start)
+				i_stop = np.append(i_stop, ii_stop)
+		
+		final_results = np.copy(local_results)
+		
+		dmatrix[:,int(i_start[0]):int(i_stop[0]),:]= final_results
+			
+		for i in range(1, size):
+	
+		
+			if i < remainder:
+				rank_size = count + 1
+			else:
+				rank_size = count
+				
+		
+				
+			tmp = np.empty((final_results.shape[0], rank_size, final_results.shape[2]), dtype=np.float64)
+					
+			comm.Recv(tmp, source=i, tag=14)
+		
+		
+			
+			dmatrix[:,int(i_start[i]):int(i_stop[i]),:] = tmp
+		
+			
+	comm.Bcast(dmatrix, root=0)
+
+	
+	
+	if remainder_>0:
+		dmatrix[:,count*size:] = parallel_heat_process_backward(dmatrix[:,count*size:], tensor_heat[:,count*size:,:],pblcheck, pbl_method, trk_rh_check, rh_threshold, dqcheck, dqthreshold, dvar_threshold, var_heat_track, heat_linear_adjustment, cenlon)
+	
+
+
+		
+	matrix_heat=np.copy(dmatrix[:,:,:-1])
+	matrix_heat[:,:,3][matrix_heat[:,:,3]==-999.9]=0
+	
+	parts_uptakes = dmatrix[0,:,6]
+
+	array_day=compute_var_integarated_day_heat(matrix_heat, lag_times, area, density, dtime, var_heat_track, lon,lat,numPdY,numPdX, cenlon, varid)
+		
+	counter_part=matrix_heat.shape[1]
+	no_uptakes_parts=counter_part-int(np.sum(parts_uptakes))
+
+	#return array_day/(lag_times[1]-lag_times[0]), counter_part
+	return array_day, matrix_heat, counter_part, int(no_uptakes_parts)
+		
+def parallel_heat_process_backward(dmatrix, tensor_heat, pblcheck, pbl_method, trk_rh_check, rh_threshold, dqcheck, dqthreshold, dvar_threshold, var_heat_track, heat_linear_adjustment, cenlon):
+	
+	
 	for i in range(0, tensor_heat.shape[1]):
 		
 		lons=tensor_heat[:,i, 1]
-		dlon=cal_track_diff(lons, "mean")
-			
+
+		dlon = compute_mean_lon(lons, cenlon)
+		
 		lats=tensor_heat[:,i, 2]
 		dlat=cal_track_diff(lats, "mean")
 		
@@ -1406,7 +1652,6 @@ def processing_heat_track(tensor_org, pblcheck, filter_pbl_parcels, pbl_method, 
 
 		trk_drh=np.ones((len(dlon)), dtype=bool)
 		
-		#trk_check_pbl=is_pbl_check(pblcheck, tensor_heat[:,i,4], tensor_heat[:,i,4], len(dlon))
 		trk_check_pbl=is_in_pbl(pblcheck, tensor_heat[:,i,4], tensor_heat[:,i,7], pbl_method, len(dlon))
 		
 			
@@ -1444,27 +1689,26 @@ def processing_heat_track(tensor_org, pblcheck, filter_pbl_parcels, pbl_method, 
 	
 		#print(dmatrix.max())
 	
-		dmatrix[np.isnan(dmatrix)]=-999
+		dmatrix[np.isnan(dmatrix)]=-999.9
 	
-		if len(valid[valid==True])>=1:
-			uptakes_parts = uptakes_parts + 1
-	
+		
 	
 		if heat_linear_adjustment:
 		
 			dmatrix[:,i,3] = compute_linear_discounted(dmatrix[:,i,3], valid)
+			
+			if np.sum((dmatrix[:,i,3]))>0:
+				dmatrix[:,i,6] = 1
+		else:
+			if len(valid[valid==True])>=1:
+				#uptakes_parts = uptakes_parts + 1
+				dmatrix[:,i,6] = 1
 	
-	matrix_heat=np.copy(dmatrix)
-	matrix_heat[:,:,3][matrix_heat[:,:,3]==-999]=0
-	
+	return dmatrix
 
-	array_day=compute_var_integarated_day_heat(matrix_heat, lag_times, area, density, dtime, var_heat_track, lon,lat,numPdY,numPdX, varid)
-		
-	counter_part=matrix_heat.shape[1]
-	no_uptakes_parts=counter_part-uptakes_parts
-	#return array_day/(lag_times[1]-lag_times[0]), counter_part
-	return array_day, matrix_heat, counter_part, no_uptakes_parts
-		
+
+
+
 
 ############ SPECIFIC FUNCTIONS FOR MOISTURE TRACKING  ################################
 
@@ -1499,13 +1743,12 @@ def	calc_dvar_moisture(matrixresult, tensorvar, slices, npp,dqdt_threshold):
 		matrixresult[i,:,5]=matrix[:,5]
 	return matrixresult
 
-def compute_var_integarated_day_moist(array, t, area, density, dtime, lon,lat,numPdY,numPdX, varid):
+def compute_var_integarated_day_moist(array, t, area, density, dtime, lon,lat,numPdY,numPdX,cenlon, varid):
 	dimX, dimY=lat.shape
 	array_day=np.empty((len(t)-1,dimX-1, dimY-1))
 
 	array_day_cr=np.empty((len(t)-1,dimX-1, dimY-1))
-
-	
+			
 	ndb=np.arange(len(t)-1,0,-1)
 	for ii in range(len(t)-1):
 		moistd=np.array(compute_grid_integrated_moist(array[t[ii]:t[ii+1],:,:],lon,lat,numPdY,numPdX,len(array[t[ii]:t[ii+1],0,0]),len(array[0,:,0])),dtype=np.float64)
@@ -1515,7 +1758,7 @@ def compute_var_integarated_day_moist(array, t, area, density, dtime, lon,lat,nu
 	return array_day, array_day_cr
 
 
-def processing_moisture_track(tensor_org, filter_dqdt_parcels, dqdt_threshold, 	filter_pbl_dq_parcels, moist_custom_limits_highs, dqpblcheck, dqpbl_method, trkdq_rh_check, dqrh_threshold, mindq_gain, lag_times, area, density, dtime, moisture_linear_adjustment, precip_minrh, lon,lat, numPdY,numPdX, varid):
+def processing_moisture_track_backward(tensor_org, filter_dqdt_parcels, dqdt_threshold, 	filter_pbl_dq_parcels, moist_custom_limits_highs, dqpblcheck, dqpbl_method, trkdq_rh_check, dqrh_threshold, mindq_gain, lag_times, area, density, dtime, moisture_linear_adjustment, precip_minrh, lon,lat, numPdY,numPdX, cenlon, varid, moisture_tracking_method, trackingtime_steps, rank,size, comm):
 	#filtering parcels using t=0  and t-6#
 	#tensor_moist_=np.copy(tensor_org)
 	if filter_dqdt_parcels:
@@ -1565,113 +1808,137 @@ def processing_moisture_track(tensor_org, filter_dqdt_parcels, dqdt_threshold, 	
 
 	precipvals=tensor_moist[-1,:,3]-tensor_moist[-2,:,3]
 	qt0=tensor_moist[-1,:,3]
+	qt0_=tensor_moist[-2,:,3]
 	Qt0_=np.sum(tensor_moist[-2,:,3])
 	
 	tensor_moist=tensor_moist[:-1,:,:]
 	Qt0_=np.sum(tensor_moist[-1,:,3])
 	
 	matrix_moist_files=[ "lon", "lat", "dq", "ds",'rh', "FH"]
-	dmatrix=np.ones((len(tensor_moist[:,0,0])-1, len(tensor_moist[0,:,0]),len(matrix_moist_files)))*(-999.9)
+	dmatrix=np.empty((len(tensor_moist[:,0,0])-1, len(tensor_moist[0,:,0]),len(matrix_moist_files)+5))
+	dmatrix[:,:,:]=0
 	
-	uptakes_parts_precip=0
-	sum_prec=0
-	partt=0
-	noprecip=0
-	for i in range(0, tensor_moist.shape[1]):
+	
+	if moisture_tracking_method=="testing":
 		
+		dmatrix = process_SJ05_backward(dmatrix, tensor_moist, qt0, precipvals,cenlon)
 		
+	else:
 		
-			
-		lons=tensor_moist[:,i, 1]
-		dlon=cal_track_diff(lons, "mean")
-		
-		lats=tensor_moist[:,i, 2]
-		dlat=cal_track_diff(lats, "mean")
-		
-		qs=tensor_moist[:,i, 3]
-		dq=cal_track_diff(qs, "diff")
-		
-		sum_prec= sum_prec + np.abs(precipvals[i])
-		
-		
-		var=tensor_moist[:,i, 11]
-		dvar=cal_track_diff(var, "diff")
+		n = tensor_moist.shape[1]
+		count = n // size
+		remainder_ = n % size
+		remainder=0
 
-		rh=tensor_moist[:,i, 12]
-		drh=cal_track_diff(rh, "diff")
+		if rank < remainder:
+			start = rank * (count + 1)
+			stop = start + count + 1
+		else:
+			start = rank * count + remainder
+			stop = start + count
 
-		dmatrix[:,i,0]=dlon
-		dmatrix[:,i,1]=dlat
-		dmatrix[:,i,2]=dq
-		dmatrix[:,i,3]=dvar
-		dmatrix[:,i,4]=drh
-		dmatrix[:,i,5]=0
+		local_parts=tensor_moist[0,start:stop,0]
+		local_results = np.empty((dmatrix.shape[0],len(local_parts), dmatrix.shape[2]))
+		local_results[:,:,:]=0
+
+
+		local_results = parallel_moisture_process_backward(local_results, tensor_moist[:,start:stop,:],dqpblcheck, dqpbl_method, trkdq_rh_check, dqrh_threshold, mindq_gain, moisture_linear_adjustment, precip_minrh, qt0[start:stop],qt0[start:stop], precipvals[start:stop],trackingtime_steps,cenlon)
+
+		if rank > 0:
+			comm.Send(local_results, dest=0, tag=14)
+
+		else:
+			i_start=[]
+			i_stop=[]
+			for i in range(size):
+				if i < remainder:
+					i_start = np.append(i_start,i * (count + 1))
+					i_stop = np.append(i_stop,i_start + count + 1)
+				else:
+					ii_start=i * count + remainder
+					ii_stop=ii_start + count
+					i_start = np.append(i_start,ii_start)
+					i_stop = np.append(i_stop, ii_stop)
+
+			final_results = np.copy(local_results)
+
+
+			dmatrix[:,int(i_start[0]):int(i_stop[0]),:]= final_results
+
+			for i in range(1, size):
+
+
+
+				if i < remainder:
+					rank_size = count + 1
+				else:
+					rank_size = count
+
+
+
+				tmp = np.empty((final_results.shape[0], rank_size, final_results.shape[2]), dtype=np.float64)
+
+
+
+				comm.Recv(tmp, source=i, tag=14)
+
+
+				dmatrix[:,int(i_start[i]):int(i_stop[i]),:]=tmp
+
+		comm.Bcast(dmatrix, root=0)
+
+
+		if remainder_>0:
+			dmatrix[:,count*size:] = parallel_moisture_process_backward(dmatrix[:,count*size:], tensor_moist[:,count*size:,:],dqpblcheck, dqpbl_method, trkdq_rh_check, dqrh_threshold, mindq_gain, moisture_linear_adjustment, precip_minrh, qt0[count*size:],qt0[count*size:], precipvals[count*size:],trackingtime_steps, cenlon)
+
+	matrix_moist=np.copy(dmatrix[:,:,:6])
+	
+	
+	matrix_moist[:,:,2][matrix_moist[:,:,2]==-999.9]=0
+	
+	sum_prec = dmatrix[0,:,6]
+	part_uptakes = dmatrix[0,:,7]
+	partt = dmatrix[0,:,8]
+	noprecip = dmatrix[0,:,9]
+	
+	lwvrt_ = dmatrix[0,:,10]
+
+	if moisture_linear_adjustment:
 		
-		#trk_check_pbl=is_pbl_check(dqpblcheck, tensor_moist[:,i,4], tensor_moist[:,i, 7], len(dlon))
-		
+		aux_lwvrt= lwvrt_[lwvrt_>0]
 				
-		trk_check_pbl=is_in_pbl(dqpblcheck, tensor_moist[:,i,4], tensor_moist[:,i,7], dqpbl_method, len(dlon))
+		lmrt = aux_lwvrt/(1440)
 		
-		check_dvar=np.ones((len(dlon)), dtype=bool)
-		check_dvar[dq>=mindq_gain]=True
-		check_dvar[dq<mindq_gain]=False
-		
-		trk_drh=np.ones((len(dlon)), dtype=bool)
-		if trkdq_rh_check:
-			
-			trk_drh[np.abs(drh)<=dqrh_threshold]=True
-			trk_drh[np.abs(drh)>dqrh_threshold]=False
-		
-		valid=trk_check_pbl&trk_drh&check_dvar
-		
-		dmatrix[:,i,5][valid==True]=1
-		dmatrix[:,i,5][valid==False]=0
-		
-		if len(valid[valid==True])>=1:
-			uptakes_parts_precip = uptakes_parts_precip + 1
-	
-		
-		dmatrix[np.isnan(dmatrix)]=-999
-		
-		if moisture_linear_adjustment:
-		
-			dmatrix[:,i,2] = compute_linear_discounted(dmatrix[:,i,2], valid)
-				
-			#adj_fac = dmatrix[:,i,2] / qs[-1]
-							
-			dmatrix[:,i,2]=dmatrix[:,i,2]
-			
-			partt+=np.sum(dmatrix[:,i,2])
-	
-		
-		noprecip+=qt0[i]
-	
-	
-	matrix_moist=np.copy(dmatrix)
-	
-	matrix_moist[:,:,2][matrix_moist[:,:,2]==-999]=0
+		lwvrt = np.mean(lmrt[np.isfinite(lmrt)])
+	else:
+		lwvrt = "not computed"
+
 	
 
-	array_day,moistd=compute_var_integarated_day_moist(matrix_moist, lag_times, area, density, dtime, lon,lat,numPdY,numPdX, varid)
+	array_day,moistd=compute_var_integarated_day_moist(matrix_moist, lag_times, area, density, dtime, lon,lat,numPdY,numPdX, cenlon, varid)
 	
-
 	counter_precip_part=matrix_moist.shape[1]
 		
-	no_evap_uptakes=matrix_moist.shape[1]-uptakes_parts_precip
-	
+	no_evap_uptakes=matrix_moist.shape[1]-int(np.sum(part_uptakes))
 	if moisture_linear_adjustment:
 		CR = (moistd/Qt0_)*100
 				
 	else:
 		CR=None
 
-	return array_day, matrix_moist, counter_precip_part, no_evap_uptakes, partt/sum_prec, CR
+	sum_prec_=np.sum(sum_prec)
+	if sum_prec_==0:
+		sum_prec_=1
+
+
+
+	return array_day, matrix_moist, counter_precip_part, no_evap_uptakes, np.sum(partt)/sum_prec_, CR, lwvrt
 
 
 
 def compute_linear_discounted(var, valid):
 	
-	var[var==-999]=0
+	var[var==-999.9]=0
 		
 	result_var=np.empty_like(var)
 	result_var[:]=0
@@ -1696,4 +1963,168 @@ def compute_linear_discounted(var, valid):
 		
 
 	return result_var
+
+
+def compute_mean_lon(lons, cenlon):
+    lons1 = np.array(lons[1:])
+    lons2 = np.array(lons[:-1])
+    mean = np.empty(len(lons1))
+
+    # Normalize longitudes to the range [-180, 180]
+    lons1 = np.where(lons1 >= 180, lons1 - 360, lons1)
+    lons2 = np.where(lons2 >= 180, lons2 - 360, lons2)
+
+    for i in range(len(lons1)):
+        if lons1[i] >= -180 and lons2[i] >= -180:
+            check = (np.abs(lons1[i]) + np.abs(lons2[i])) / 2
+
+            if lons1[i] > 0 and lons2[i] < 0 and np.abs(check - 180) < 90:
+                lons2[i] += 360
+            elif lons1[i] < 0 and lons2[i] > 0 and np.abs(check - 180) < 90:
+                lons1[i] += 360
+
+            val = (lons1[i] + lons2[i]) / 2
+            val = val - 360 if val >= 180 else val
+
+            mean[i] = val
+        elif lons1[i] < -180 <= lons2[i] <= 180:
+            mean[i] = lons2[i]
+        elif lons2[i] < -180 <= lons1[i] <= 180:
+            mean[i] = lons1[i]
+        else:
+            mean[i] = -999.9
+
+    return mean
+
+def process_SJ05_backward(dmatrix, tensor_moist, qt0, precipvals,cenlon):
+
+	tensor_moist[tensor_moist<-500]=np.nan
+
+	for i in range(0, tensor_moist.shape[1],cenlon):
+		dlon = compute_mean_lon(tensor_moist[:,i, 1])
+		dmatrix[:,i,0] = dlon
 	
+	
+	dmatrix[:,:,1] = (tensor_moist[1:,:, 2] + tensor_moist[:-1,:, 2])/2
+	dmatrix[:,:,2] = (tensor_moist[1:,:, 3] - tensor_moist[:-1,:, 3])
+	dmatrix[:,:,3] = (tensor_moist[1:,:, 11] - tensor_moist[:-1,:, 11])
+	dmatrix[:,:,4] = (tensor_moist[1:,:, 12] - tensor_moist[:-1,:, 12])
+
+	
+	dmatrix[:,:,5] = 1
+	dmatrix[:,:,6] = 1
+	dmatrix[:,:,7] = 1
+	dmatrix[:,:,8] = 1
+	dmatrix[:,:,9] = 1
+	dmatrix[:,:,10] = 0
+
+
+	return dmatrix
+
+def compute_lag_mwvrt(mtime, fc, qt0):
+	
+	fc[fc==-999.9]=0
+	
+	if np.sum(fc)>0:
+		wvrt = np.sum(mtime * fc/np.sum(fc))
+	else:
+		wvrt=-999.9
+	return np.abs(wvrt)
+
+
+
+def parallel_moisture_process_backward(dmatrix, tensor_moist, dqpblcheck, dqpbl_method, trkdq_rh_check, dqrh_threshold, mindq_gain, moisture_linear_adjustment, precip_minrh, qt0, Qt0_, precipvals, trackingtime_steps, cenlon):
+	#uptakes_parts_precip=0
+	#sum_prec=0
+	#partt=0
+	#noprecip=0
+	
+	trackingtime_steps = trackingtime_steps*(-1)
+	trackingtime_steps=trackingtime_steps[::-1]
+	mtime = (trackingtime_steps[1:] + trackingtime_steps[:-1])/2 
+	
+	
+	for i in range(0, tensor_moist.shape[1]):
+					
+		lons=tensor_moist[:,i, 1] 
+	
+		dlon = compute_mean_lon(lons, cenlon)
+		
+		if cenlon=="180":
+			dlon=(dlon + 360) % 360
+		
+			dlon[dlon<0]=-999.9
+		
+		lats=tensor_moist[:,i, 2]
+		dlat=cal_track_diff(lats, "mean")
+		
+		qs=tensor_moist[:,i, 3]
+		dq=cal_track_diff(qs, "diff")
+		
+		#sum_prec= sum_prec + np.abs(precipvals[i])
+		dmatrix[:,i,6] = np.abs(precipvals[i])
+		
+		
+		var=tensor_moist[:,i, 11]
+		dvar=cal_track_diff(var, "diff")
+
+		rh=tensor_moist[:,i, 12]
+		drh=cal_track_diff(rh, "diff")
+
+		dmatrix[:,i,0]=dlon
+		dmatrix[:,i,1]=dlat
+		dmatrix[:,i,2]=dq
+		dmatrix[:,i,3]=dvar
+		dmatrix[:,i,4]=drh
+		dmatrix[:,i,5]=0
+		
+		#trk_check_pbl=is_pbl_check(dqpblcheck, tensor_moist[:,i,4], tensor_moist[:,i, 7], len(dlon))
+		
+				
+		trk_check_pbl=is_in_pbl(dqpblcheck, tensor_moist[:,i,4], tensor_moist[:,i,7], dqpbl_method, len(dlon))
+		
+		l1=(dq>-mindq_gain)&(dq<mindq_gain)
+
+		dq[l1]=0
+	
+		check_dvar=np.ones((len(dlon)), dtype=bool)
+		check_dvar[dq>=mindq_gain]=True
+		check_dvar[dq<mindq_gain]=False
+		
+		trk_drh=np.ones((len(dlon)), dtype=bool)
+		if trkdq_rh_check:
+			
+			trk_drh[np.abs(drh)<=dqrh_threshold]=True
+			trk_drh[np.abs(drh)>dqrh_threshold]=False
+		
+		valid=trk_check_pbl&trk_drh&check_dvar
+		
+		dmatrix[:,i,5][valid==True]=1
+		dmatrix[:,i,5][valid==False]=0
+		
+			
+		
+		dmatrix[np.isnan(dmatrix)]=-999.9
+		
+		if moisture_linear_adjustment:
+		
+			dmatrix[:,i,2] = compute_linear_discounted(dmatrix[:,i,2], valid)
+				
+			#adj_fac = dmatrix[:,i,2] / qs[-1]
+			
+			if np.sum((dmatrix[:,i,2]))>0:
+				dmatrix[:,i,7] = 1
+			
+							
+			dmatrix[:,i,2]=dmatrix[:,i,2]
+			dmatrix[:,i,8] = np.sum(dmatrix[:,i,2])
+			
+			dmatrix[:,i,10] = compute_lag_mwvrt(mtime, dmatrix[:,i,2]*dmatrix[:,i,5], qt0[i])
+		else:
+			if len(valid[valid==True])>=1:
+				#uptakes_parts_precip = uptakes_parts_precip + 1
+				dmatrix[:,i,7] = 1
+			
+		#noprecip+=qt0[i]
+		dmatrix[:,i,9] = qt0[i]
+	return dmatrix

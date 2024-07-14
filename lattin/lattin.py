@@ -52,7 +52,7 @@ def lattin_main(pathfile):
 	dtime = check_paths(content, "time_step")
 	totaltime = check_paths(content, "tracking_time")
 	calendar = check_paths(content, "calendar")
-	
+	save_full_parts_position = check_paths(content, "save_full_parts_position")
 	
 	lon_left_lower_corner = check_paths(content, "lon_left_lower_corner")
 	lat_left_lower_corner = check_paths(content, "lat_left_lower_corner")
@@ -87,6 +87,7 @@ def lattin_main(pathfile):
 	dqthreshold = check_paths(content, "dqthreshold")
 	heat_linear_adjustment=check_paths(content, "heat_linear_adjustment")
 	heat_custom_limits_highs = check_paths(content, "heat_custom_limits_highs")
+	save_heat_parts_position = check_paths(content, "save_heat_parts_position")
 	
 	#Reading details for moisture tracking
 	tracking_moisture= check_paths(content, "tracking_moisture")
@@ -102,9 +103,16 @@ def lattin_main(pathfile):
 	filter_pbl_dq_parcels=check_paths(content, "filter_pbl_dq_parcels")
 	moist_custom_limits_highs=check_paths(content, "moist_custom_limits_highs")
 	precip_minrh = check_paths(content, "precip_minrh")
+	save_moist_parts_position = check_paths(content, "save_moisture_parts_position")
+
+
+	verbose, file_gz, save_full_parts_position = check_init_parms(verbose, file_gz, save_full_parts_position,
+																)
 
 	verbose=str2boolean(verbose)
 	file_gz=str2boolean(file_gz)
+	save_full_parts_position = str2boolean(save_full_parts_position)
+	
 	
 	filesperday=int(1440/dtime)
 	density=total_emited_mass/total_release_parcels
@@ -113,18 +121,24 @@ def lattin_main(pathfile):
 	if runID=="" or runID==None:
 		runID=program_name()+"_outputs/"
 	
-	lat,lon= grid_point (resolution, numPdX, numPdY,lon_lower_left,lat_lower_left)
+	
+		
+	#lon_lower_left=lon_lower_left-resolution/2
+	#lat_lower_left=lat_lower_left - resolution/2
+	
+	
+	lat,lon, cenlon= grid_point (resolution, numPdX, numPdY,lon_lower_left,lat_lower_left)
 	area=calc_A(resolution, lat, lon)
 	lat_plot,lon_plot= grid_plot_final(lat, lon)
-	
 
+	
 	if calendar!="365d":
 		calendar="366d"
 
 
 	
 	if tracking_heat:
-		trk_rh_check,rh_threshold, pblcheck, dqcheck, pbl_method,var_heat_track,dqthreshold,filter_pbl_parcels,dvarheatthreshold,heat_linear_adjustment,heat_tracking_method, heat_custom_limits_highs, errors, errors_found = heat_tracking_parms(heat_tracking_method,
+		trk_rh_check,rh_threshold, pblcheck, dqcheck, pbl_method,var_heat_track,dqthreshold,filter_pbl_parcels,dvarheatthreshold,heat_linear_adjustment,heat_tracking_method, heat_custom_limits_highs, errors, errors_found, save_heat_parts_position = heat_tracking_parms(heat_tracking_method,
 							trk_rh_check,
 							rh_threshold,
 							pblcheck,
@@ -136,7 +150,8 @@ def lattin_main(pathfile):
 							dvarheatthreshold,
 							heat_linear_adjustment,
 							dtime,
-							heat_custom_limits_highs
+							heat_custom_limits_highs,
+							save_heat_parts_position,
 							)
 		
 		if errors_found:
@@ -157,9 +172,10 @@ def lattin_main(pathfile):
 		trk_rh_check="False"
 		heat_linear_adjustment="False"
 		dqcheck="False"
+		save_heat_parts_position = "False"
 			
 	if tracking_moisture:
-		filter_dqdt_parcels, dqdt_threshold, mindq_gain, dqpbl_method, moisture_linear_adjustment, dqpblcheck, trkdq_rh_check, dqrh_threshold, moisture_tracking_method, filter_pbl_dq_parcels, 	moist_custom_limits_highs, precip_minrh,  errors, errors_found = moisture_tracking_parms(moisture_tracking_method, filter_dqdt_parcels, dqdt_threshold, mindq_gain, dqpbl_method, moisture_linear_adjustment,dqpblcheck, trkdq_rh_check, dqrh_threshold, dtime, filter_pbl_dq_parcels, moist_custom_limits_highs, precip_minrh)
+		filter_dqdt_parcels, dqdt_threshold, mindq_gain, dqpbl_method, moisture_linear_adjustment, dqpblcheck, trkdq_rh_check, dqrh_threshold, moisture_tracking_method, filter_pbl_dq_parcels, 	moist_custom_limits_highs, precip_minrh,  errors, errors_found, save_moist_parts_position = moisture_tracking_parms(moisture_tracking_method, filter_dqdt_parcels, dqdt_threshold, mindq_gain, dqpbl_method, moisture_linear_adjustment,dqpblcheck, trkdq_rh_check, dqrh_threshold, dtime, filter_pbl_dq_parcels, moist_custom_limits_highs, precip_minrh, save_moist_parts_position)
 	
 	
 		if errors_found:
@@ -179,7 +195,7 @@ def lattin_main(pathfile):
 		filter_dqdt_parcels="False"
 		trkdq_rh_check="False"
 		moisture_linear_adjustment="False"
-	
+		save_moist_parts_position = "False"
 	
 	if not tracking_heat and not tracking_moisture:
 		if rank==0:
@@ -195,6 +211,9 @@ def lattin_main(pathfile):
 	heat_linear_adjustment=str2boolean(heat_linear_adjustment)
 	moisture_linear_adjustment=str2boolean(moisture_linear_adjustment)
 	
+	save_heat_parts_position = str2boolean(save_heat_parts_position)
+	save_moist_parts_position = str2boolean(save_moist_parts_position)
+	
 	errors, errors_found = checking_input_parameters(size,
 												  lag_times[-1],
 												  totaltime, 
@@ -208,6 +227,7 @@ def lattin_main(pathfile):
 												  lat_plot[:,0],
 												  lon_plot[0,:],
 												  ndays,
+												  cenlon,
 												  )
 	if errors_found:
 		if rank==0:
@@ -229,9 +249,7 @@ def lattin_main(pathfile):
 	elif model in ("FLEXPART-WRF"):
 		type_file=1
 
-	
 
-	
 	if mode=="backward":
 		track_days=np.arange(-1,-1*len(lag_times),-1)
 	elif mode=="forward":
@@ -248,11 +266,16 @@ def lattin_main(pathfile):
 
 	
 	if rank==0:
-		printting_run_information(verbose, raw_partposit_path, output_path, list_year, list_month, list_day, list_hour, list_min, ndays, model, mode, totaltime, dtime, var_heat_track,file_mask, heat_tracking_method, moisture_tracking_method, tracking_heat, tracking_moisture, density, dvarheatthreshold, pbl_method,pblcheck, dqcheck,dqthreshold, trk_rh_check, rh_threshold, filter_pbl_parcels, filter_dqdt_parcels, dqdt_threshold, dqpblcheck,mindq_gain, dqpbl_method, trkdq_rh_check, dqrh_threshold, heat_linear_adjustment, moisture_linear_adjustment,heat_custom_limits_highs, filter_pbl_dq_parcels, moist_custom_limits_highs,precip_minrh, calendar)
+		printting_run_information(verbose, raw_partposit_path, output_path, list_year, list_month, list_day, list_hour, list_min, ndays, model, mode, totaltime, dtime, var_heat_track,file_mask, heat_tracking_method, moisture_tracking_method, tracking_heat, tracking_moisture, density, dvarheatthreshold, pbl_method,pblcheck, dqcheck,dqthreshold, trk_rh_check, rh_threshold, filter_pbl_parcels, filter_dqdt_parcels, dqdt_threshold, dqpblcheck,mindq_gain, dqpbl_method, trkdq_rh_check, dqrh_threshold, heat_linear_adjustment, moisture_linear_adjustment,heat_custom_limits_highs, filter_pbl_dq_parcels, moist_custom_limits_highs,precip_minrh, calendar, runID, save_heat_parts_position, save_moist_parts_position, save_full_parts_position, cenlon)
 	
 	if rank==0:
 		print("\n   -> "+program_name() + " is running with", size, "CPUs\n")
 		
+	
+	
+
+	
+	
 	
 	for year, month, day, hour, minn in zip(list_year, list_month, list_day, list_hour, list_min):
 		
@@ -297,9 +320,11 @@ def lattin_main(pathfile):
 			meantimes=np.append(meantimes, ntimes[i] + (ntimes[i+1]-ntimes[i])/2)
 		
 		
+		trackingtime_steps=np.arange(dtime, totaltime + 2*dtime, dtime)
+
 		if rank==0:
 			print("     !Getting data from raw partposit files")
-		tensor_org = get_vars_from_partposit(verbose,partpositfiles ,file_mask, maskname,maskvar_lon, maskvar_lat,lat, lon,rank,size, comm, type_file,
+		tensor_org = get_vars_from_partposit(verbose,partpositfiles ,file_mask, maskname,maskvar_lon, maskvar_lat,lat, lon, rank,size, comm, type_file,
                lon_left_lower_corner,lat_left_lower_corner, lon_right_upper_corner,lat_right_upper_corner, model, mask_value, file_gz, var_heat_track)
 		
 		
@@ -313,54 +338,61 @@ def lattin_main(pathfile):
 			print("\n     => Number of parcels within the target region:", parcels_count)
 		
 		
-		if rank==0:
-			#Processing heat tracking #######################################
-			if tracking_heat:
-				if verbose:
-					print("\n     + PROCCESSING HEAT") 
-				array_day_heat, tensor_heat, counter_part_heat, no_heatuptakes_parts=processing_heat_track(tensor_org, pblcheck, filter_pbl_parcels, pbl_method, heat_custom_limits_highs, trk_rh_check, rh_threshold, dqcheck, dqthreshold, dvarheatthreshold, var_heat_track, lag_times, area, density, dtime, heat_linear_adjustment, lon,lat, numPdY,numPdX, 0)
+		#if rank==0:
+		#Processing heat tracking #######################################
+		if tracking_heat:
+			if verbose and rank==0:
+				print("\n     + PROCCESSING HEAT") 
+			if mode=="backward":
+				array_day_heat, tensor_heat, counter_part_heat, no_heatuptakes_parts=processing_heat_track_backward(tensor_org, pblcheck, filter_pbl_parcels, pbl_method, heat_custom_limits_highs, trk_rh_check, rh_threshold, dqcheck, dqthreshold, dvarheatthreshold, var_heat_track, lag_times, area, density, dtime, heat_linear_adjustment, lon,lat, numPdY,numPdX, cenlon, 0, rank,size, comm)
 			
 				if filter_pbl_parcels:
-					if verbose:
+					if verbose and rank==0:
 						print("      !Number of filter parcels within the PBL or custom highs at time t0:", counter_part_heat, "({:.2f}".format(100 * (counter_part_heat) / (parcels_count))+"%)")
 						print("      !Number of parcels without heat uptake in the trajectory:", no_heatuptakes_parts, "({:.2f}".format(100 * (no_heatuptakes_parts) / (counter_part_heat)) + "%)" )
 				
 					save_heat_stats=True
 				else:
 					save_heat_stats=True
-					print("      !Number of parcels without heat uptake in the trajectory:", no_heatuptakes_parts, "({:.2f}".format(100 * (no_heatuptakes_parts) / (counter_part_heat)) + "%)" )
-			else:
-				save_heat_stats=False
-				counter_part_heat=None
-				no_heatuptakes_parts=None
-				array_day_heat=np.empty((len(track_days), lat.shape[0], lat.shape[1]))
-				tensor_heat=np.empty_like(tensor_org[1:,:,:])
-			#Processing moisture tracking #######################################
-			if tracking_moisture:
-				if verbose:
-					print("\n     + PROCCESSING MOISTURE")
-				array_day_moist, tensor_moist, counter_precip_part, no_evap_uptakes, attributed_precip, CR = processing_moisture_track(tensor_org, filter_dqdt_parcels, dqdt_threshold, 	filter_pbl_dq_parcels,moist_custom_limits_highs, dqpblcheck, 	dqpbl_method, trkdq_rh_check, dqrh_threshold, mindq_gain, lag_times, area, density, dtime,moisture_linear_adjustment,  precip_minrh, lon,lat, numPdY,numPdX, 1)
+					if rank==0:
+						print("      !Number of parcels without heat uptake in the trajectory:", no_heatuptakes_parts, "({:.2f}".format(100 * (no_heatuptakes_parts) / (counter_part_heat)) + "%)" )
+		else:
+			save_heat_stats=False
+			counter_part_heat=None
+			no_heatuptakes_parts=None
+			array_day_heat=np.empty((len(track_days), lat.shape[0], lat.shape[1]))
+			tensor_heat=np.empty_like(tensor_org[1:,:,:])
+		#Processing moisture tracking #######################################
+		if tracking_moisture:
+			if verbose and rank==0:
+				print("\n     + PROCCESSING MOISTURE")
+			if mode=="backward":
+				array_day_moist, tensor_moist, counter_precip_part, no_evap_uptakes, attributed_precip, CR, lwvrt = processing_moisture_track_backward(tensor_org, filter_dqdt_parcels, dqdt_threshold, 	filter_pbl_dq_parcels,moist_custom_limits_highs, dqpblcheck, 	dqpbl_method, trkdq_rh_check, dqrh_threshold, mindq_gain, lag_times, area, density, dtime,moisture_linear_adjustment,  precip_minrh, lon,lat, numPdY,numPdX, cenlon, 1, moisture_tracking_method, trackingtime_steps, rank,size, comm)
 				if filter_dqdt_parcels==True or filter_pbl_dq_parcels==True:
-					if verbose:
+					if verbose and rank==0:
 						print("      !Number of precipitating parcels within the target region at time t0:", counter_precip_part, "({:.2f}".format(100 * (counter_precip_part) / (parcels_count))+"%)")
 						
 						print("      !Number of parcels without moisture uptake in the trajectory:", no_evap_uptakes, "({:.2f}".format(100 * (no_evap_uptakes) / (counter_precip_part))+"%)")
+						if moisture_linear_adjustment:
+							print("      !Lagrangian mean water vapour residence time: ", str(lwvrt)[0:5], "days")
 						
 					save_moist_stats=True
 				else:
 					save_moist_stats=True
-					print("      !Number of parcels without moisture uptake in the trajectory:", no_evap_uptakes, "({:.2f}".format(100 * (no_evap_uptakes) / (counter_precip_part))+"%)")
+					if rank==0:
+						print("      !Number of parcels without moisture uptake in the trajectory:", no_evap_uptakes, "({:.2f}".format(100 * (no_evap_uptakes) / (counter_precip_part))+"%)")
+			
+		else:
+			array_day_moist=np.empty((len(track_days), lat.shape[0], lat.shape[1]))
+			tensor_moist=np.empty_like(tensor_org[:-1,:,:])
+			CR = np.empty((len(track_days), lat.shape[0], lat.shape[1]))
+			save_moist_stats=False
+			save_attrib=False
+			counter_precip_part=None
+			no_evap_uptakes=None
+			lwvrt=None
 				
-			else:
-				array_day_moist=np.empty((len(track_days), lat.shape[0], lat.shape[1]))
-				tensor_moist=np.empty_like(tensor_org[:-1,:,:])
-				CR = np.empty((len(track_days), lat.shape[0], lat.shape[1]))
-				save_moist_stats=False
-				save_attrib=False
-				counter_precip_part=None
-				no_evap_uptakes=None
-				
-				
+		if rank==0:		
 			if verbose:
 				print("\n     + SAVING TO")
 				print("       !Output File:", output_path+"/"+filename_out+".nc")
@@ -384,12 +416,16 @@ def lattin_main(pathfile):
 							moisture_tracking_method=moisture_tracking_method,
 							heat_tracking_method=heat_tracking_method,
 							moisture_linear_adjustment=moisture_linear_adjustment,
-							filename=output_path+"/"+filename_out
+							filename=output_path+"/"+filename_out,
+							save_heat_parts_position = save_heat_parts_position,
+							save_moist_parts_position = save_moist_parts_position,
+							save_full_parts_position = save_full_parts_position,
 							)
 			
 			if verbose:
 				print("\n     + SAVING STATS TO")
 				print("       !Stats File:", output_path+"/"+stats_fame)
+			partial_runtime = time.time() - partial_start_time
 			saving_data(parcels_count,
 				counter_part_heat,
 				no_heatuptakes_parts,
@@ -399,14 +435,21 @@ def lattin_main(pathfile):
 				output_path+"/"+stats_fame,
 				save_moist_stats,
 				save_heat_stats,
+				np.round(partial_runtime, 2),
+				mode,
+				heat_tracking_method,
+				moisture_tracking_method,
+				lwvrt,
+				moisture_linear_adjustment
 				)
 			
-			partial_runtime = time.time() - partial_start_time	
 			if verbose:
 				print("\n     --------------------------------------------------------- ")
 				print("     "+program_name() +" Version " +str(get_currentversion()) + " has successfully finished this date")
 				print("     Partial Runtime: %.2f seconds." % np.round(partial_runtime, 2))
 				print("     --------------------------------------------------------- ")
+			
+		time.sleep(0.05)
 	if rank==0:
 			
 		runtime = time.time() - start_time	
