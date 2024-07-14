@@ -176,7 +176,7 @@ lon_left_lower_corner      = value                       -> Domain limits for re
 lat_left_lower_corner      = value
 lon_right_upper_corner     = value
 lat_right_upper_corner     = value
-
+save_full_parts_position   = True / False                -> To save raw parcel trajectories
 ==========================================================================================
     - MASK FILE DETAILS -
 ==========================================================================================
@@ -237,7 +237,7 @@ dqthreshold                = value                        -> Allowed changes in 
 
 heat_linear_adjustment     = 'True'/'False'               -> Apply linear adjusment to detected uptakes
 
-
+save_heat_parts_position   = True / False                 -> To save processed parcels trajectories (heat)
 ==========================================================================================
     - SPECIFIC FOR MOISTURE TRACKING -
 ==========================================================================================
@@ -273,7 +273,7 @@ dqrh_threshold              = value                        -> Allowed relative h
                                                               Only needed if trkdq_rh_check=True
 mindq_gain                  = value                        -> Minimun change in specific humidity to be considered an uptake 
 moisture_linear_adjustment  = 'True'/'False'               -> Apply linear adjusment to detected uptakes
-
+save_moisture_parts_position  = True / False               -> To save processed parcels trajectories (moisture)
 ===========================================================================================================
                                         - CLOSE CONFIGURATION FILE -
 ===========================================================================================================
