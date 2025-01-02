@@ -328,7 +328,7 @@ lt.lattin_main(input_file)
 
 * On a HPC with Linux:
 
-1 - Create a bash script (run_lattin.sh). This example is valid for FINESTARRAE III cluster on Galician Supercomputing Center.
+1 - Create a bash script (run_lattin.sh). This example is valid for FINESTARRAE III cluster at the Galician Supercomputing Center.
   
   ```
 #!/bin/bash -l
