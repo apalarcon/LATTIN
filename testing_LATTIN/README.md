@@ -64,13 +64,6 @@ mpirun -n 10 python run_testing_latting.py input_heat.cfg
   lattin_backward_201507051800.nc
   ```
 
-### NOTE
-The full analysis for the moisture and heat sources for these extreme events can be found in 
-
-Pérez-Alarcón, A.; Coll-Hidalgo, P.; Fernández-Alvarez, J.C.; Nieto, R.; Gimeno, L. (2023). LATTIN: A Python-based tool for Lagrangian atmospheric moisture and heat
-tracking. Environmental Modelling and Software (Under Review).
-
-
 ## EXAMPLE: Reading ```gz``` compressed  parposit files
 
 1 - Download  raw input data from Zenodo repository
