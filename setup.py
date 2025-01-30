@@ -41,7 +41,7 @@ setuptools.setup(
     name="lattin",
     version=version_,
     developer="Albenis Pérez-Alarcón",
-    CoDevelopers ="Patricia Coll-Hidalgo, José C. Fernández-Alvarez, Raquel Nieto, and Luis Gimeno"
+    CoDevelopers ="Patricia Coll-Hidalgo, José C. Fernández-Alvarez, Raquel Nieto, and Luis Gimeno",
     author_email="albenis.pérez.alarcon@uvigo.es",
     description="LATTIN is a Python-based tool for Lagrangian atmospheric moisture and heat tracking ",
     long_description=long_description,
@@ -55,7 +55,8 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    install_requires=["numpy","mpi4py","time","struct","datetime","netCDF4","scipy","functools","pathlib","gzip","shutil","imp", "matplotlib", "sys", 'os', "fnmatch","math"],
+    #install_requires=["numpy","mpi4py","time","struct","datetime","netCDF4","scipy","functools","pathlib","gzip","shutil","imp", "matplotlib", "sys", "os", "fnmatch","math"],
+    install_requires=["numpy", "mpi4py", "netCDF4", "scipy", "matplotlib"],
     include_package_data=True,
     package_data={"":['*.so','VERSION', "constants.py",'*.f90',"_version.py","lattin_functions.py", "LAST_UPDATE"]},
 
