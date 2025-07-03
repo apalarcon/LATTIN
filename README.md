@@ -242,16 +242,16 @@ save_heat_parts_position   = True / False                 -> To save processed p
     - SPECIFIC FOR MOISTURE TRACKING -
 ==========================================================================================
 tracking_moisture           = 'True' /'False'             -> Activate moisture tracking
-moisture_tracking_method    =  "SOD08"                    -> Misture tracking method [SOD08, SJ05, FAS19, JK22, APA22, CUSTOM]
-                                                             If you select one of this method[SOD08, SJ05, FAS19, JK22, APA22],
+moisture_tracking_method    =  "SOD08"                    -> Misture tracking method [SOD08, SJ05, FAS19, JK22, APA22, APA25,CUSTOM]
+                                                             If you select one of this method[SOD08, SJ05, FAS19, JK22, APA22, APA25],
                                                              you do not to specify the next parameters.
                                                              WARNING: The default values only work for
                                                              time_step=360 minutes
 
 
-filter_dqdt_parcels         = 'True' /'True'              -> Only track precipitating parcesl within the target region
-filter_pbl_dq_parcels       = 'True'/'False'              -> Filter parcels within the target region within the PBL
-moist_custom_limits_highs   = [lower_limit, upper_limit]  -> Custom limits for filtering parcel within the target region [m]
+filter_dqdt_parcels         = 'True' /'False'              -> Only track precipitating parcesl within the target region
+filter_pbl_dq_parcels       = 'True'/'False'               -> Filter parcels within the target region within the PBL
+moist_custom_limits_highs   = [lower_limit, upper_limit]   -> Custom limits for filtering parcel within the target region [m]
                                                              Set moist_custom_limits_highs = [0,0] to use PBL highs for filtering.
                                                              Only it works if filter_pbl_dq_parcels=True
 
@@ -259,7 +259,7 @@ dqdt_threshold              = value                        -> Change in specific
                                                               event occurred within the target region.
                                                               Only needed if filter_dqdt_parcels=True
 
-precip_minrh                = 80                           -> Minumim relative humidity to account for precipitation  [%]             
+precip_minrh                = value [float]                -> Minumim relative humidity to account for precipitation  [%]             
                                                               Set precip_minrh=0 to do not apply
 
 dqpblcheck                  = value                        -> checking PBL condition along the parcels trajectories
@@ -271,9 +271,34 @@ dqpbl_method                = 'maxval'                     -> PBL method for PBL
 trkdq_rh_check              = 'True'/'False'               -> Check relative humidity 
 dqrh_threshold              = value                        -> Allowed relative humidity changes
                                                               Only needed if trkdq_rh_check=True
-mindq_gain                  = value                        -> Minimun change in specific humidity to be considered an uptake 
+mindq_gain                  = value [float]                -> Minimun change in specific humidity to be considered an uptake 
+check_RH_route_precip       = 'True' /'False'              -> To evaluate RH during moisture diagnostic                                                           
+precip_minrh_en_route       = value [float]                -> Minumim relative humidity to account for precipitation in route [%]  
+mindq_loss                  = value [float]                -> Minimum change in specific humidity to account for moisture loss [kg/kg]
+
+
 moisture_linear_adjustment  = 'True'/'False'               -> Apply linear adjusment to detected uptakes
 save_moisture_parts_position  = True / False               -> To save processed parcels trajectories (moisture)
+
+------------------------ Bias correction approach------------------------------------
+moist_bias_correction       = True / False                 -> To apply bias correction to Lagrangian precipitation estimate and moiture sources
+precip_fname_prefix         = value [str]                  -> Prefix of the precipitation filename
+precip_date_format          = value [str]                  -> Format of the date in the name of the precipitation file
+                                                              * "yyyymmddHM"  
+                                                              * 'yyyy-mm-dd H:M'
+                                                              * 'yyyymmddHM'
+                                                              * 'yyyy-mm-dd_H'
+                                                              * 'yyyymmdd_H'
+                                                              * "mmdd_H"
+                                                              * "mmddH"
+                                                              * "yyyymmdd_HM"
+
+precip_path                 = value                         -> Path to the precipitation file (netcdf format).
+                                                               It should contains the accumulated preciptation over a time period equal to `time_step`
+precip_lat                  = value                         -> Name of the latitude variable in the precipitation file
+precip_lon                  = value                         -> Name of the longitude variable in the precipitation file
+precip_var                  = value                         -> Name of the precipitation variable in the precipitation file
+
 ===========================================================================================================
                                         - CLOSE CONFIGURATION FILE -
 ===========================================================================================================
@@ -395,6 +420,7 @@ This software is published under the GPLv3 license. This means:
 9. The software author or license can not be held liable for any damages inflicted by the software.
 
 # References
+* Bakels, L., Blaschek, M., Dütsch, M., Plach, A., Lechner, V., Brack, G., ... & Stohl, A. (2025). LARA: a Lagrangian Reanalysis based on ERA5 spanning from 1940 to 2023. Earth System Science Data Discussion. https://doi.org/10.5194/essd-2025-26.
 * Brioude, J., Arnold, D., Stohl, A., Cassiani, M., Morton, D., Seibert, P., et al. 2013. The Lagrangian particle dispersion model FLEXPART-WRF version 3.1. Geosci. Model Dev., 6(6), 1889-1904. https://doi.org/10.5194/gmd-6-1889-2013.
 * Keune, J., Schumacher, D.L., Miralles, D.G. 2022. A unified framework to estimate the origins of atmospheric moisture and heat using Lagrangian models. Geoscientific Model Development, 15(5), 1875-1898. Geosci. Model Dev., 15, 1875–1898. https://doi.org/10.5194/gmd-15-1875-2022.
 * Papritz, L., & Röthlisberger, M. (2023). A novel temperature anomaly source diagnostic: Method and application to the 2021 heatwave in the Pacific Northwest. Geophysical Research Letters, 50(23), e2023GL105641. https://doi.org/10.1029/2023GL105641.

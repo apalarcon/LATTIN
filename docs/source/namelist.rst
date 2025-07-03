@@ -110,16 +110,16 @@ Input configuration file
         - SPECIFIC FOR MOISTURE TRACKING -
     ==========================================================================================
     tracking_moisture           = 'True' /'False'             -> Activate moisture tracking
-    moisture_tracking_method    =  "SOD08"                    -> Misture tracking method [SOD08, SJ05, FAS19, JK22, APA22, CUSTOM]
-                                                                If you select one of this method[SOD08, SJ05, FAS19, JK22, APA22],
+    moisture_tracking_method    =  "SOD08"                    -> Misture tracking method [SOD08, SJ05, FAS19, JK22, APA22, APA25,CUSTOM]
+                                                                If you select one of this method[SOD08, SJ05, FAS19, JK22, APA22, APA25],
                                                                 you do not to specify the next parameters.
                                                                 WARNING: The default values only work for
                                                                 time_step=360 minutes
 
 
-    filter_dqdt_parcels         = 'True' /'True'              -> Only track precipitating parcesl within the target region
-    filter_pbl_dq_parcels       = 'True'/'False'              -> Filter parcels within the target region within the PBL
-    moist_custom_limits_highs   = [lower_limit, upper_limit]  -> Custom limits for filtering parcel within the target region [m]
+    filter_dqdt_parcels         = 'True' /'False'              -> Only track precipitating parcesl within the target region
+    filter_pbl_dq_parcels       = 'True'/'False'               -> Filter parcels within the target region within the PBL
+    moist_custom_limits_highs   = [lower_limit, upper_limit]   -> Custom limits for filtering parcel within the target region [m]
                                                                 Set moist_custom_limits_highs = [0,0] to use PBL highs for filtering.
                                                                 Only it works if filter_pbl_dq_parcels=True
 
@@ -127,7 +127,7 @@ Input configuration file
                                                                 event occurred within the target region.
                                                                 Only needed if filter_dqdt_parcels=True
 
-    precip_minrh                = 80                           -> Minumim relative humidity to account for precipitation  [%]             
+    precip_minrh                = value [float]                -> Minumim relative humidity to account for precipitation  [%]             
                                                                 Set precip_minrh=0 to do not apply
 
     dqpblcheck                  = value                        -> checking PBL condition along the parcels trajectories
@@ -139,9 +139,33 @@ Input configuration file
     trkdq_rh_check              = 'True'/'False'               -> Check relative humidity 
     dqrh_threshold              = value                        -> Allowed relative humidity changes
                                                                 Only needed if trkdq_rh_check=True
-    mindq_gain                  = value                        -> Minimun change in specific humidity to be considered an uptake 
+    mindq_gain                  = value [float]                -> Minimun change in specific humidity to be considered an uptake 
+    check_RH_route_precip       = 'True' /'False'              -> To evaluate RH during moisture diagnostic                                                           
+    precip_minrh_en_route       = value [float]                -> Minumim relative humidity to account for precipitation in route [%]  
+    mindq_loss                  = value [float]                -> Minimum change in specific humidity to account for moisture loss [kg/kg]
+
+
     moisture_linear_adjustment  = 'True'/'False'               -> Apply linear adjusment to detected uptakes
     save_moisture_parts_position  = True / False               -> To save processed parcels trajectories (moisture)
+
+    ------------------------ Bias correction approach------------------------------------
+    moist_bias_correction       = True / False                 -> To apply bias correction to Lagrangian precipitation estimate and moiture sources
+    precip_fname_prefix         = value [str]                  -> Prefix of the precipitation filename
+    precip_date_format          = value [str]                  -> Format of the date in the name of the precipitation file
+                                                                * "yyyymmddHM"  
+                                                                * 'yyyy-mm-dd H:M'
+                                                                * 'yyyymmddHM'
+                                                                * 'yyyy-mm-dd_H'
+                                                                * 'yyyymmdd_H'
+                                                                * "mmdd_H"
+                                                                * "mmddH"
+                                                                * "yyyymmdd_HM"
+
+    precip_path                 = value                         -> Path to the precipitation file (netcdf format).
+                                                                It should contains the accumulated preciptation over a time period equal to `time_step`
+    precip_lat                  = value                         -> Name of the latitude variable in the precipitation file
+    precip_lon                  = value                         -> Name of the longitude variable in the precipitation file
+    precip_var                  = value                         -> Name of the precipitation variable in the precipitation file
     ===========================================================================================================
                                             - CLOSE CONFIGURATION FILE -
     ===========================================================================================================
