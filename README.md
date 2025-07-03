@@ -293,11 +293,20 @@ Please note that we provide examplea of LATTIN namelist input file in the ```tes
    * FAS19: <a href="https://doi.org/10.5194/hess-23-2525-2019" target="blank"> Freme and Sodemann (2019) </a>
    * JK22:  <a href="https://doi.org/10.5194/gmd-15-1875-2022" target="blank">  Keune et al. (2022) </a>
    * APA22: <a href="https://doi.org/10.1175/JHM-D-21-0117.1" target="blank"> Pérez-Alarcón et al. (2022) </a>
+   * APA25  <a href="https://doi.org/10.1016/j.atmosres.2024.107822" target="blank"> Pérez-Alarcón et al. (2025) </a>
 
+### Temperature anomaly tracking
+   * RP23:  <a href="https://doi.org/10.1038/s41561-023-01126-1" target="blank"> Röthlisberger and Papritz (2023) </a>
+   * PR23:  <a href="https://doi.org/10.1029/2023GL105641" target="blank"> Papritz and Röthlisberger (2023) </a>
+
+### Dry Intrusion analysis
+   * Following <a href="https://doi.org/10.1175/JCLI-D-16-0782.1" target="blank"> Raveh-Rubin (2017) </a>
 
 # Input data
 
-LATTIN can read files from  FLEXPARTv9+ (Piso et al., 2019) and  FLEXPART-WRFv3.3.2 (Brioude et al., 2013) outputs in binary file format.
+LATTIN can read files
+* from  FLEXPARTv9+ (Piso et al., 2019) and  FLEXPART-WRFv3.3.2 (Brioude et al., 2013) outputs in binary file format.
+* from the global Lagrangian Reanalysis (LARA; <a href="https://doi.org/10.5194/essd-2025-26" target="blank"> Bakels et al., 2025 </a>)
 
 Mask of target region for moisture and heat tracking in netCDF format
 
@@ -387,11 +396,15 @@ This software is published under the GPLv3 license. This means:
 
 # References
 * Brioude, J., Arnold, D., Stohl, A., Cassiani, M., Morton, D., Seibert, P., et al. 2013. The Lagrangian particle dispersion model FLEXPART-WRF version 3.1. Geosci. Model Dev., 6(6), 1889-1904. https://doi.org/10.5194/gmd-6-1889-2013.
-* Keune, J., Schumacher, D.L., Miralles, D.G. 2022. A unified framework to estimate the origins of atmospheric moisture and heat using Lagrangian models. Geoscientific Model Development, 15(5), 1875-1898. Geosci. Model Dev., 15, 1875–1898. https://doi.org/10.5194/gmd-15-1875-2022
+* Keune, J., Schumacher, D.L., Miralles, D.G. 2022. A unified framework to estimate the origins of atmospheric moisture and heat using Lagrangian models. Geoscientific Model Development, 15(5), 1875-1898. Geosci. Model Dev., 15, 1875–1898. https://doi.org/10.5194/gmd-15-1875-2022.
+* Papritz, L., & Röthlisberger, M. (2023). A novel temperature anomaly source diagnostic: Method and application to the 2021 heatwave in the Pacific Northwest. Geophysical Research Letters, 50(23), e2023GL105641. https://doi.org/10.1029/2023GL105641.
 * Pérez-Alarcón, A., Sorí, R., Fernández-Alvarez, J.C., Nieto, R., Gimeno, L. 2022. Where does the moisture for North Atlantic tropical cyclones come from? J. Hydrometeorol., 23(3), 457–472. https://doi.org/10.1175/JHM-D-21-0117.1 
-* Pisso, I., Sollum, E., Grythe, H., Kristiansen, N. I., Cassiani, M., Eckhardt, S., et al. 2019. The Lagrangian particle dispersion model FLEXPART version 10.4. Geosci. Model Dev., 12(12), 4955-4997. https://doi.org/10.5194/gmd-12-4955-2019
+* Pisso, I., Sollum, E., Grythe, H., Kristiansen, N. I., Cassiani, M., Eckhardt, S., et al. 2019. The Lagrangian particle dispersion model FLEXPART version 10.4. Geosci. Model Dev., 12(12), 4955-4997. https://doi.org/10.5194/gmd-12-4955-2019.
+* Raveh-Rubin, S. (2017). Dry intrusions: Lagrangian climatology and dynamical impact on the planetary boundary layer. Journal of Climate, 30(17), 6661-6682.  https://doi.org/10.1175/JCLI-D-16-0782.1.
+* Röthlisberger, M., & Papritz, L. (2023). Quantifying the physical processes leading to atmospheric hot extremes at a global scale. Nature Geoscience, 16(3), 210-216. https://doi.org/10.1038/s41561-023-01126-1.
 * Schumacher, D.L., Keune, J., Van Heerwaarden, C.C., Vilà-Guerau de Arellano, J., Teuling, A.J.,  Miralles, D.G. 2019. Amplification of mega-heatwaves through heat torrents fuelled by upwind drought. Nat. Geosci., 12, 712–717. https://doi.org/10.1038/s41561-019-0431-6.
 * Schumacher, D. L., Keune, J.,  Miralles, D. G. 2020. Atmospheric heat and moisture transport to energy‐and water‐limited ecosystems. Ann. NY Acad. Sci., 1472, 123–138. https://doi.org/10.1111/nyas.14357
 * Sodemann H, Schwierz C, Wernli H. 2008. Interannual variability of Greenland winter precipitation sources: Lagrangian moisture diagnostic and North Atlantic Oscillation influence. J. Geophys. Res.-Atmos., 113,D03107. https://doi.org/10.1029/2007JD008503. 
 * Stohl, A., James, P. 2005. A Lagrangian analysis of the atmospheric branch of the global water cycle. Part II: Moisture transports between Earth’s ocean basins and river catchments. J. Hydrometeorol. 6(6), 961-984. https://doi.org/10.1175/JHM470.1
 
+ 
