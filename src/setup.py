@@ -52,10 +52,9 @@ else:
 
 
 
-# ... your other code to read README.md, VERSION, etc.
 
 # Read the requirements from the file
-requirements = parse_requirements('requirements.txt')
+install_requires_ = parse_requirements('requirements.txt')
 
 
 
@@ -82,7 +81,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.8',
-    install_requires=install_requires,
+    install_requires=install_requires_,
     include_package_data=True,
     package_data={"":['*.so','VERSION', "constants.py",'*.f90',"_version.py","lattin_functions.py", "LAST_UPDATE", "dry_intrusion_functions.py","lattin_rp_functions.py","lara_reanalysis.py"]},
 
