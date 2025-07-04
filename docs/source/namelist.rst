@@ -91,7 +91,7 @@ Input configuration file
                                                                     Set heat_custom_limits_highs = [0,0] to use PBL highs for filtering.
                                                                     Only it works if filter_pbl_parcels=True
 
-    pblcheck                        =  int value                   -> checking PBL condition along the parcels trajectories
+    pblcheck                        = int value                    -> checking PBL condition along the parcels trajectories
                                                                     0: no PBL check, use everything
                                                                     1: at least one location within the PBL
                                                                     2: both locations within the PBL

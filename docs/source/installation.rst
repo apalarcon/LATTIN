@@ -20,7 +20,7 @@ The main Python packages that must be installed are the following:
 - `struct`
 - `datetime`
 - `functools`
-- `pathlib `
+- `pathlib`
 - `gzip`
 - `shutil`
 - `math`
@@ -91,7 +91,7 @@ You must check that all the packages are installed and that there is no error me
 - Verify you have installed all packages requiered for LATTIN (see LATTIN requirements section). If you use an Anaconda environment, please be sure you have activated the environment.
 
 .. code-block:: bash
-
+    cd src
     sh run install_lattin.sh
 
 .. note::

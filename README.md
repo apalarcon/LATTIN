@@ -109,6 +109,10 @@ git clone https://github.com/apalarcon/LATTIN.git
 
 2 - Verify you have installed all packages requiered for LATTIN (see LATTIN requirements section). If you use an Anaconda environment, please be sure you have activated the environment.
 
+```
+cd  src
+```
+
 3 - run install_lattin.sh.
 
 ### Third Method
@@ -120,11 +124,11 @@ git clone https://github.com/apalarcon/LATTIN.git
   ```
 2 - Verify you have installed all packages requiered for LATTIN (see LATTIN requirements section). If you use an Anaconda environment, please be sure you have activated the environment
 
-3 - Enter the lattin/ directory and run  buid_lattin_so.sh,  which will compile LATTIN subroutines in FORTRAN 90.
+3 - Enter the src/lattin/ directory and run  buid_lattin_so.sh,  which will compile LATTIN subroutines in FORTRAN 90.
 
 4 - Copy the lattin directory to your Anaconda instalation
 ```
-cp -r lattin path_to_anaconda_installation/.../site-packages/
+cp -r src/lattin path_to_anaconda_installation/.../site-packages/
 ````
 
 ### NOTE
@@ -233,7 +237,7 @@ heat_custom_limits_highs        = [lower_limit, upper_limit]  -> Custom limits f
                                                                   Set heat_custom_limits_highs = [0,0] to use PBL highs for filtering.
                                                                   Only it works if filter_pbl_parcels=True
 
-pblcheck                        =  int value                   -> checking PBL condition along the parcels trajectories
+pblcheck                        = int value                    -> checking PBL condition along the parcels trajectories
                                                                   0: no PBL check, use everything
                                                                   1: at least one location within the PBL
                                                                   2: both locations within the PBL
