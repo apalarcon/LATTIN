@@ -7,6 +7,20 @@ import subprocess
 import sysconfig
 import sys
 
+
+
+def parse_requirements(filename):
+    """Load requirements from a pip requirements file."""
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+    # Remove whitespace, comments, and empty lines
+    requirements = [
+        line.strip() for line in lines
+        if line.strip() and not line.startswith('#')
+    ]
+    return requirements
+
+
 with open("../README.md", "r") as fh:
     long_description = fh.read()
 
@@ -37,6 +51,14 @@ else:
 	print("-----------------------------------------------------------------------")
 
 
+
+# ... your other code to read README.md, VERSION, etc.
+
+# Read the requirements from the file
+requirements = parse_requirements('requirements.txt')
+
+
+
 setuptools.setup(
     name="lattin",
     version=version_,
@@ -50,13 +72,18 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     classifiers=[
         "Development Status :: Alpha",
-        "Programming Language :: Python :: 3+",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.6',
-    install_requires=["numpy","mpi4py","struct","netCDF4","scipy","functools","pathlib","gzip","shutil","imp", "matplotlib", "sys", 'os', "fnmatch","math"],
+    python_requires='>=3.8',
+    install_requires=install_requires,
     include_package_data=True,
-    package_data={"":['*.so','VERSION', "constants.py",'*.f90',"_version.py","lattin_functions.py", "LAST_UPDATE"]},
+    package_data={"":['*.so','VERSION', "constants.py",'*.f90',"_version.py","lattin_functions.py", "LAST_UPDATE", "dry_intrusion_functions.py","lattin_rp_functions.py","lara_reanalysis.py"]},
 
 )
