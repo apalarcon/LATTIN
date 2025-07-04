@@ -16,23 +16,33 @@ To run LATTIN, you need
 
 The main Python packages that must be installed are the following:
 
-- `netCDF4`
-- `numpy` 
-- `scipy` 
-- `mpi4py`
 - `time`
 - `struct`
 - `datetime`
 - `functools`
-- `pathlib` 
+- `pathlib `
 - `gzip`
 - `shutil`
-- `math` 
+- `math`
 - `fnmatch`
 - `sys`
 - `os`
-- `matplotlib`
 - `imp`
+- `aiohttp==3.9.5`
+- `dask==2023.9.2`
+- `mpi4py==3.1.4`
+- `netcdf4==1.7.2`
+- `numpy==1.26.4`
+- `pandas==2.2.3`
+- `psutil==7.0.0`
+- `requests==2.32.2`
+- `scipy==1.12.0`
+- `setuptools==65.5.0`
+- `tenacity==9.1.2`
+- `tqdm==4.67.1`
+- `xarray==2023.6.0` 
+- `zarr==3.0.5`
+- `matplotlib==3.10.3`
 - `FORTRAN 90 Compiler`
 
 
