@@ -13,3 +13,4 @@ tqdm==4.67.1
 xarray==2023.6.0 
 zarr==3.0.5
 matplotlib==3.10.3
+numpy==1.26.4

@@ -62,7 +62,7 @@ setuptools.setup(
     name="lattin",
     version=version_,
     developer="Albenis Pérez-Alarcón",
-    CoDevelopers ="Raquel Nieto, and Luis Gimeno"
+    CoDevelopers ="Raquel Nieto, and Luis Gimeno",
     author_email="albenis.pérez.alarcon@uvigo.es",
     description="LATTIN is a Python-based tool for Lagrangian atmospheric moisture and heat tracking ",
     long_description=long_description,
@@ -77,12 +77,13 @@ setuptools.setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.8',
     install_requires=install_requires_,
     include_package_data=True,
-    package_data={"":['*.so','VERSION', "constants.py",'*.f90',"_version.py","lattin_functions.py", "LAST_UPDATE", "dry_intrusion_functions.py","lattin_rp_functions.py","lara_reanalysis.py"]},
+    package_data={"":['*.so','VERSION', "constants.py",'*.f90',"_version.py","lattin_functions.py", "LAST_UPDATE", "dry_intrusion_functions.py","lattin_rp_functions.py","lara_reanalysis.py","functions_forward.py","functions_flex11"]},
 
 )
