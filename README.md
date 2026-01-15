@@ -420,7 +420,7 @@ save_Tanom_parts_position         = 'True' / 'False'              -> To save pro
 # Input data
 
 LATTIN can read files
-* from  FLEXPARTv9+ (Piso et al., 2019) and  FLEXPART-WRFv3.3.2 (Brioude et al., 2013) outputs in binary file format.
+* from  FLEXPARTv9+ (Piso et al., 2019), FLEXPARTv11 (Bakels et al., 2024) and  FLEXPART-WRFv3.3.2 (Brioude et al., 2013) outputs in binary file format.
 * from the global Lagrangian Reanalysis (LARA; <a href="https://doi.org/10.5194/essd-2025-26" target="blank"> Bakels et al., 2025 </a>)
 
 Mask of target region for moisture and heat tracking in netCDF format
@@ -511,6 +511,7 @@ This software is published under the GPLv3 license. This means:
 
 # References
 * Bakels, L., Blaschek, M., Dütsch, M., Plach, A., Lechner, V., Brack, G., ... & Stohl, A. (2025). LARA: a Lagrangian Reanalysis based on ERA5 spanning from 1940 to 2023. Earth System Science Data, 17, 4569–4585, https://doi.org/10.5194/essd-17-4569-2025.
+* Bakels, L., Duetsch, M., Tatsii, D., Tipka, A., Seibert, P., Thompson, R., Blaschek, M., Plach, A., Bucci, S., Vojta, M., Cassiani, M., Henne, S., Marie D., M., Maurer, C., Lechner, V., Eckhardt, S., Groot-Zwaaftink, C., Kaufmann, P., Baier, 
 * Brioude, J., Arnold, D., Stohl, A., Cassiani, M., Morton, D., Seibert, P., et al. 2013. The Lagrangian particle dispersion model FLEXPART-WRF version 3.1. Geosci. Model Dev., 6(6), 1889-1904. https://doi.org/10.5194/gmd-6-1889-2013.
 * Keune, J., Schumacher, D.L., Miralles, D.G. 2022. A unified framework to estimate the origins of atmospheric moisture and heat using Lagrangian models. Geoscientific Model Development, 15(5), 1875-1898. Geosci. Model Dev., 15, 1875–1898. https://doi.org/10.5194/gmd-15-1875-2022.
 * Papritz, L., & Röthlisberger, M. (2023). A novel temperature anomaly source diagnostic: Method and application to the 2021 heatwave in the Pacific Northwest. Geophysical Research Letters, 50(23), e2023GL105641. https://doi.org/10.1029/2023GL105641.
