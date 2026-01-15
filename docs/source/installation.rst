@@ -118,3 +118,16 @@ or
 Contact your system administrator
 
 
+If you have a problem compiling the FORTRAN package in Python Python 3.12+, the error is caused by the shift in how Python and NumPy handle compilation in newer versions. 
+
+The Problem:
+
+- Python 3.12+ removed the distutils package.
+
+- f2py (part of NumPy) now defaults to using Meson as the build backend instead of distutils.
+
+Try these steps to solve it:
+
+* Install `meson` and  `ninja`   (`conda install meson ninja`)
+
+* Install `gcc_linux-64` and `gfortran_linux-64` (`conda install -c conda-forge gcc_linux-64 gfortran_linux-64`)
