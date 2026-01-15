@@ -131,9 +131,11 @@ Try these steps to solve it:
 * Install `meson` and  `ninja`   
 
 .. code-block:: bash
+
     conda install meson ninja
 
 * Install `gcc_linux-64` and `gfortran_linux-64`
 
 .. code-block:: bash
+    
     conda install -c conda-forge gcc_linux-64 gfortran_linux-64
