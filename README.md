@@ -156,7 +156,7 @@ or
 
 * Contact your system administrator
 
-If you have a problem compiling the FORTRAN package in Python Python 3.12+, the error is caused by the shift in how Python and NumPy handle compilation in newer versions. 
+If you have a problem compiling the FORTRAN package in Python 3.12+, the error is caused by the shift in how Python and NumPy handle compilation in newer versions. 
 
 The Problem:
 
