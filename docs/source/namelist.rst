@@ -14,6 +14,7 @@ Input configuration file
         - PATHS -
     ==========================================================================================
     raw_partposit_path            = "path"                      -> Directory containing input data
+    basedir_lara                  = 'path'                      -> Directory to read or save LARA reanalysis files
     file_gz                       = 'True' / 'False'            -> Checking if model data is compresssed in gz format
     output_path                   = "path"                      -> Directory to save LATTIN outputs
 
@@ -22,6 +23,9 @@ Input configuration file
         - MODEL DETAILS -
     ==========================================================================================
     model                           = 'FLEXPART'/'FLEXPART-WRF'  -> Lagrangian model
+                                      'FLEXPART11'/'LARA' 
+    check_lara_files                = 'True'/'False'             -> To check if LARA files exists
+    lara_from_https                 = 'True'/'False'             -> To download LARA files if they are missing.
     total_emited_mass               = value                      -> Total emited mass in model simulation
     total_release_parcels           = value                      -> Total number of released parcels in model simulation
 

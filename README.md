@@ -17,7 +17,7 @@ LATTIN is a Python-based tool for Lagrangian atmospheric moisture and heat track
 
 [![License: GPLv3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
- [![Current Version: ](https://img.shields.io/badge/Current_Version-1.0.4-blue)](https://anaconda.org/tramo-ephyslab/lattin)
+ [![Current Version: ](https://img.shields.io/badge/Current_Version-1.1.10-blue)](https://anaconda.org/tramo-ephyslab/lattin)
 
 
 If you use LATTIN, please cite it as follows:
@@ -52,7 +52,7 @@ or
 - fnmatch
 - sys
 - os
-- imp
+- importlib
 - aiohttp==3.9.5
 - dask==2023.9.2
 - mpi4py==3.1.4
@@ -160,14 +160,18 @@ runID                         =  "Experimental"             -> Run name
       - PATHS -
 ==========================================================================================
 raw_partposit_path            = "path"                      -> Directory containing input data
+basedir_lara                  = 'path'                      -> Directory to read or save LARA reanalysis files
 file_gz                       = 'True' / 'False'            -> Checking if model data is compresssed in gz format
 output_path                   = "path"                      -> Directory to save LATTIN outputs
-
 
 ==========================================================================================
     - MODEL DETAILS -
 ==========================================================================================
 model                           = 'FLEXPART'/'FLEXPART-WRF'  -> Lagrangian model
+                                  'FLEXPART11'/'LARA' 
+check_lara_files                = 'True'/'False'             -> To check if LARA files exists
+lara_from_https                 = 'True'/'False'             -> To download LARA files if they are missing.
+          
 total_emited_mass               = value                      -> Total emited mass in model simulation
 total_release_parcels           = value                      -> Total number of released parcels in model simulation
 
