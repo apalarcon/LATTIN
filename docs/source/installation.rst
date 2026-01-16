@@ -16,23 +16,33 @@ To run LATTIN, you need
 
 The main Python packages that must be installed are the following:
 
-- `netCDF4`
-- `numpy` 
-- `scipy` 
-- `mpi4py`
 - `time`
 - `struct`
 - `datetime`
 - `functools`
-- `pathlib` 
+- `pathlib`
 - `gzip`
 - `shutil`
-- `math` 
+- `math`
 - `fnmatch`
 - `sys`
 - `os`
-- `matplotlib`
 - `imp`
+- `aiohttp==3.9.5`
+- `dask==2023.9.2`
+- `mpi4py==3.1.4`
+- `netcdf4==1.7.2`
+- `numpy==1.26.4`
+- `pandas==2.2.3`
+- `psutil==7.0.0`
+- `requests==2.32.2`
+- `scipy==1.12.0`
+- `setuptools==65.5.0`
+- `tenacity==9.1.2`
+- `tqdm==4.67.1`
+- `xarray==2023.6.0` 
+- `zarr==3.0.5`
+- `matplotlib==3.10.3`
 - `FORTRAN 90 Compiler`
 
 
@@ -81,7 +91,7 @@ You must check that all the packages are installed and that there is no error me
 - Verify you have installed all packages requiered for LATTIN (see LATTIN requirements section). If you use an Anaconda environment, please be sure you have activated the environment.
 
 .. code-block:: bash
-
+    cd src
     sh run install_lattin.sh
 
 .. note::
@@ -108,3 +118,24 @@ or
 Contact your system administrator
 
 
+If you have a problem compiling the FORTRAN package in Python 3.12+, the error is caused by the shift in how Python and NumPy handle compilation in newer versions. 
+
+The Problem:
+
+- Python 3.12+ removed the distutils package.
+
+- f2py (part of NumPy) now defaults to using Meson as the build backend instead of distutils.
+
+Try these steps to solve it:
+
+* Install `meson` and  `ninja`   
+
+.. code-block:: bash
+
+    conda install meson ninja
+
+* Install `gcc_linux-64` and `gfortran_linux-64`
+
+.. code-block:: bash
+    
+    conda install -c conda-forge gcc_linux-64 gfortran_linux-64

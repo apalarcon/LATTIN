@@ -45,7 +45,7 @@ Create a bash script (**run_lattin.sh**). This example is valid for FINESTARRAE 
    conda activate envname
 
 
-   srun -n $SLURM_NTASKS  --mpi=pmi2 python run_lattin.py test_case.cfg
+   srun -n $SLURM_NTASKS  python run_lattin.py test_case.cfg
 
 
 .. code-block:: bash

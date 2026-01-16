@@ -28,6 +28,7 @@ from .fmodules import *
 from .constants import *
 from ._version import get_versions 
 from .lattin_functions import *
+from .lattin_rp_functions import *
 
 	
 

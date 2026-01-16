@@ -1,7 +1,7 @@
 API reference
 =====================
 
-LATTIN 1.0.4 
+LATTIN 1.1.10 
 --------------
 
 .. module:: lattin
@@ -9,7 +9,7 @@ LATTIN 1.0.4
    :platform: Linux
    :synopsis: LATTIN
    :moduleauthor: Albenis Pérez-Alarcón <albenis.perez.alarcon@uvigo.es>
-   :version: 1.0.4
+   :version: 1.1.10
    :deprecated: No
    :private: No
 

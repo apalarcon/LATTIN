@@ -1,7 +1,7 @@
 
 LATTIN: Lagrangian Atmospheric moisTure and heaT trackINg
 =================================
-The Lagrangian Atmospheric moisTure and heaT trackINg (LATTINv1.0.4) is a software developed in Python and Fortran
+The Lagrangian Atmospheric moisTure and heaT trackINg (LATTINv1.1.0) is a software developed in Python and Fortran
 for the study of moisture and heat sources. It has been developed within the 
 SETESTRELO project at the EPhysLab (Environmental Physics Laboratory) at the University of Vigo. 
 
@@ -32,7 +32,9 @@ values have been obtained for Δt = 6 h.
 +------------+-----------------------+-----------------+-------------------+-----------+-------------------+----------------+----------------------------+
 | APA22      |  Δq < -0.1            | Δq > 0          |        -          | no        |      Δq < 0       |     -          | Pérez-Alarcón et al (2022) |
 +------------+-----------------------+-----------------+-------------------+-----------+-------------------+----------------+----------------------------+
-
+| APA25      |  Δq < 0               | Δq > 0          |     < 20          | no        |      Δq < 0       |     >65%       | Pérez-Alarcón et al (2022) 
+|            |  RH > 655%            |                 |                   |           |                   |                |                            |
++------------+-----------------------+-----------------+-------------------+-----------+-------------------+----------------+----------------------------+
 
 Heat tracking methods
 -------------------------
@@ -80,6 +82,10 @@ https://doi.org/10.5194/gmd-15-1875-2022
 
 Pérez-Alarcón A, Sorí R, Fernández-Alvarez JC, Nieto R, Gimeno L (2022). Where does the moisture for North Atlantic tropical 
 cyclones come from?. J. Hydrometeorol., 23:457–472. https://doi.org/10.1175/JHM-D-21-0117.1.
+
+Pérez-Alarcón, A.; Vázquez, M.; Trigo, R.M.; Nieto, R.; Gimeno, L. (2024). Towards an understanding of uncertainties in the 
+Lagrangian analysis of moisture sources for tropical cyclone precipitation through a study case. Atmospheric Research, 314, 107822. 
+https://doi.org/10.1016/j.atmosres.2024.107822
 
 Schumacher, D.L., Keune, J., Van Heerwaarden, C.C., Vilà-Guerau de Arellano, J., Teuling, A.J., Miralles, D.G. (2019). Amplification 
 of mega-heatwaves through heat torrents fuelled by upwind drought. Nat. Geosci., 12, 712–717. https://doi.org/10.1038/s41561-019-0431-6.

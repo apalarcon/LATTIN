@@ -1,75 +1,58 @@
-subroutine compute_grid_integrated_heat(result,tensor, lon,lat, numPdY, numPdX, nlen, npart)
-
-    real *8, intent(in):: lat(numPdY+1,numPdX+1)
-    real *8, intent(in) :: lon(numPdY+1,numPdX+1)
-    real *8, intent(in) :: tensor(nlen,npart,6)
-    real *8, intent(out) :: result(numPdY,numPdX)
-    integer :: i,j,k,n, nlen, npart, numPdY, numPdX
-  
-  
+subroutine compute_grid_integrated_heat(result, tensor, lon, lat, numPdY, numPdX, nlen, npart)
+   implicit none
+   integer :: i, j, k, l, nlen, npart, numPdY, numPdX
+   real(8), intent(in) :: tensor(nlen, npart, 6)
+   real(8), intent(in) :: lon(numPdY+1, numPdX+1)
+   real(8), intent(in) :: lat(numPdY+1, numPdX+1)
+   real(8), intent(out) :: result(numPdY, numPdX)
  
-   do i=1,numPdY
-        do j=1,numPdX
-           result(i,j)=0.0
-        enddo
-    enddo
-    
-    do i=1,nlen
-        do j=1,npart
-            do k=1, numPdY
-                do n=1, numPdX
-                    if (tensor(i,j,1)/=int(-999.9) .and. tensor(i,j,2)/=int(-999.9)) then
-                        
-                        if (tensor(i,j,1) .gt. lon(k,n)  .and. tensor(i,j,1) .lt. & 
-                         lon(k+1,n+1) .and.  tensor(i,j,2) .gt. lat(k, n) .and. tensor(i,j,2) .lt. lat(k+1,n+1)) then
-                         result(k,n)=result(k,n)+tensor(i,j,4)*tensor(i,j,6)
-                         !write(*,*)tensor(i,j,4),tensor(i,j,5)
-                        endif 
-                    endif
-                enddo
-            enddo
-        enddo
-    enddo
-    
-    
-end subroutine
-
-
-subroutine compute_grid_integrated_moist(result,tensor, lon,lat, numPdY, numPdX, nlen, npart)
-
-    real *8, intent(in):: lat(numPdY+1,numPdX+1)
-    real *8, intent(in) :: lon(numPdY+1,numPdX+1)
-    real *8, intent(in) :: tensor(nlen,npart,6)
-    real *8, intent(out) :: result(numPdY,numPdX)
-    integer :: i,j,k,n, nlen, npart, numPdY, numPdX
-  
-  
+   result(:,:) = 0.0
  
-   do i=1,numPdY
-        do j=1,numPdX
-           result(i,j)=0.0
-        enddo
-    enddo
-    
-    do i=1,nlen
-        do j=1,npart
-            do k=1, numPdY
-                do n=1, numPdX
-                    if (tensor(i,j,1)/=int(-999.9) .and. tensor(i,j,2)/=int(-999.9)) then
-                        
-                        if (tensor(i,j,1) .gt. lon(k,n)  .and. tensor(i,j,1) .lt. & 
-                         lon(k+1,n+1) .and.  tensor(i,j,2) .gt. lat(k, n) .and. tensor(i,j,2) .lt. lat(k+1,n+1)) then
-                         result(k,n)=result(k,n)+tensor(i,j,3)*tensor(i,j,6)
-                         !write(*,*)tensor(i,j,4),tensor(i,j,5)
-                        endif 
-                    endif
-                enddo
-            enddo
-        enddo
-    enddo
-    
-    
-end subroutine
+   do i = 1, nlen
+     do j = 1, npart
+       if (tensor(i, j, 1) /= -999.9 .and. tensor(i, j, 2) /= -999.9 ) then
+         do k = 1, numPdY
+           do l = 1, numPdX
+             if (tensor(i, j, 2) > lat(k, l) .and. tensor(i, j, 2) <= lat(k+1, l) .and. &
+                 tensor(i, j, 1) > lon(k, l) .and. tensor(i, j, 1) <= lon(k, l+1)) then
+               result(k, l) = result(k, l) + tensor(i, j, 4)*tensor(i, j, 6)
+             end if
+           end do
+         end do
+       end if
+     end do
+   end do
+ end subroutine
+
+
+
+
+subroutine compute_grid_integrated_moist(result, tensor, lon, lat, numPdY, numPdX, nlen, npart)
+   implicit none
+   integer :: i, j, k, l, nlen, npart, numPdY, numPdX
+   real(8), intent(in) :: tensor(nlen, npart, 6)
+   real(8), intent(in) :: lon(numPdY+1, numPdX+1)
+   real(8), intent(in) :: lat(numPdY+1, numPdX+1)
+   real(8), intent(out) :: result(numPdY, numPdX)
+ 
+   result(:,:) = 0.0
+ 
+   do i = 1, nlen
+     do j = 1, npart
+       if (tensor(i, j, 1) /= -999.9 .and. tensor(i, j, 2) /= -999.9 ) then
+         do k = 1, numPdY
+           do l = 1, numPdX
+             if (tensor(i, j, 2) > lat(k, l) .and. tensor(i, j, 2) <= lat(k+1, l) .and. &
+                 tensor(i, j, 1) > lon(k, l) .and. tensor(i, j, 1) <= lon(k, l+1)) then
+               result(k, l) = result(k, l) + tensor(i, j, 3)*tensor(i, j, 6)
+             end if
+           end do
+         end do
+       end if
+     end do
+   end do
+ end subroutine
+
 
 
 subroutine determined_id(vector, value_mascara,value_mask,len_value_mascara)
@@ -90,7 +73,7 @@ subroutine determined_id(vector, value_mascara,value_mask,len_value_mascara)
 end subroutine
 
 
-subroutine read_binary_file(output_,filename, nparts,x_l,y_l, x_r,y_r)
+subroutine read_binary_file(output,filename, nparts,x_l,y_l, x_r,y_r)
 
     integer,parameter :: rk=kind(1.0)
     !real(rk)         :: b1
@@ -98,11 +81,11 @@ subroutine read_binary_file(output_,filename, nparts,x_l,y_l, x_r,y_r)
     integer(kind=4)  :: nparts, cant
     !integer bytes,aux_bytes
     !real *8  :: matrix(nparts,13)
-    real *8 :: output(nparts,11)
+    real *8, intent(out):: output(nparts,11)
     !real, parameter :: g0 = 9.780327 !m/s**2
     !real, parameter :: cp=1005.7   !J/kgK
     !real, parameter :: pi = 3.1415927
-    real *8, intent(out) :: output_(nparts,11)
+    !real *8, intent(out) :: output_(nparts,11)
     character(500) :: filename
     real, intent(in) :: x_l,y_l, x_r,y_r
 
@@ -110,13 +93,27 @@ subroutine read_binary_file(output_,filename, nparts,x_l,y_l, x_r,y_r)
    
     integer itime, j
 
-    real xlon,ylat, ztra1, topo,pvi,qvi,rhoi,hmixi,tri,tti, xmass
-    integer itramem, npoint, ios
+    !real xlon,ylat, ztra1, topo,pvi,qvi,rhoi,hmixi,tri,tti, xmass
+    integer itramem,  ios !,npoint
+    logical::limit_domain
 
-   
+
+    limit_domain=.False.
+    if (x_l .gt. -180 .or. x_r .lt. 180 .or. y_l .gt. -90 .or. y_r .lt. 90) then
+      limit_domain=.True.
+    end if
+
+
+
     unitpartout=1
     
-    open(unitpartout,file=filename,form='unformatted',IOSTAT=ios)
+    output(:,:)=-999.
+
+    open(unit=unitpartout, &
+     file=filename, &
+     form='unformatted', &
+     access='sequential', &
+     iostat=ios)
 
     read(unitpartout) itime
  
@@ -131,12 +128,14 @@ subroutine read_binary_file(output_,filename, nparts,x_l,y_l, x_r,y_r)
        output(i,7)=rhoi  !  parcel density
        output(i,8)=hmixi ! pbl high
        output(i,9)=tri  ! tropopause high
-       output(i,10)=tti  !  pacel temperature 
+       output(i,10)=tti  !  pacel temperature
        output(i,11)=xmass !parcel mass
        
 
        !write(*,*)npoint, xlon,ylat,ztra1, itramem,topo,pvi,qvi,rhoi,hmixi,tri,tti, xmass
    end do
+
+
    close(unitpartout)
    
       
@@ -156,31 +155,37 @@ subroutine read_binary_file(output_,filename, nparts,x_l,y_l, x_r,y_r)
     !              - 0.0000058*(DSIN( 2*matrix(:,3)*pi/180))**2)*matrix(:,4))
     
     
-    output_(:,:)=-999
- 
 
-    cant=1
-    do j=1, nparts-1
-      if ( output(j,2) .ge. x_l-1 .and. output(j,2) .le. x_r+1 .and. &
-         output(j,3) .ge. y_l-1 .and. output(j,3) .le. y_r+1) then
-         output_(cant,:)=output(j,:)
-         cant=cant+1
-       endif
-    enddo
-  
-  
+
+    if (limit_domain) then
+    !output_(:,:)=-999
+
+
+      cant=1
+      do j=1, nparts
+        if ( output(j,2) .ge. x_l-1 .and. output(j,2) .le. x_r+1 .and. &
+          output(j,3) .ge. y_l-1 .and. output(j,3) .le. y_r+1) then
+          !output_(cant,:)=output(j,:)
+          !continue
+          cant=cant+1
+        else
+          output(j,:)=-999. !output(j,:)
+
+        endif
+      enddo
+     end if
 
 return
 end subroutine 
 
 
-subroutine readbinid(output_,filename, nparts,x_l,y_l, x_r,y_r, parcels, fparts)
+subroutine readbinid(output,filename, nparts,x_l,y_l, x_r,y_r, parcels, fparts)
 
     !integer,parameter :: rk=kind(1.0)
     integer          :: i
     integer(kind=4)  :: nparts, fparts
-    real *8 :: output(fparts,11)
-    real *8, intent(out) :: output_(fparts,11)
+    real *8, intent(out) :: output(fparts,11)
+    !real *8, intent(out) :: output_(fparts,11)
     character(500) :: filename
     real, intent(in) :: x_l,y_l, x_r,y_r
     integer, intent(in) :: parcels(fparts)
@@ -189,10 +194,15 @@ subroutine readbinid(output_,filename, nparts,x_l,y_l, x_r,y_r, parcels, fparts)
 
     real xlon,ylat, ztra1, topo,pvi,qvi,rhoi,hmixi,tri,tti, xmass
     integer itramem, npoint, ios
-    logical :: found
+    logical :: found,limit_domain
 
+
+    limit_domain=.False.
+    if (x_l .gt. -180 .or. x_r .lt. 180 .or. y_l .gt. -90 .or. y_r .lt. 90) then
+      limit_domain=.True.
+    end if
     
-    output(:,:)=-999.9
+    output(:,:)=-999.
     unitpartout=1
 
     
@@ -231,17 +241,23 @@ subroutine readbinid(output_,filename, nparts,x_l,y_l, x_r,y_r, parcels, fparts)
    end do
    close(unitpartout)
    output(:,1)=parcels
-   output_(:,:)=-999.9
- 
+
+   if (limit_domain) then
+
+      !output_(:,:)=-999
+
+      do j=1, fparts
+        if ( output(j,2) .ge. x_l-1 .and. output(j,2) .le. x_r+1 .and. &
+            output(j,3) .ge. y_l-1 .and. output(j,3) .le. y_r+1) then
+            !output_(j,:)=output(j,:)
+            continue
+        else
+            output(j,:) = -999.
 
 
-   do j=1, fparts
-     if ( output(j,2) .ge. x_l-1 .and. output(j,2) .le. x_r+1 .and. &
-        output(j,3) .ge. y_l-1 .and. output(j,3) .le. y_r+1) then
-        output_(j,:)=output(j,:)
-     endif
-   enddo
-  
+        endif
+      enddo
+   end if
 return
 end subroutine 
 
@@ -259,3 +275,118 @@ subroutine len_file(bytes, filename)
     inquire(file=filename,exist=foundit,size=x,iostat=ios,iomsg=message)
     bytes=x
 end subroutine
+
+
+subroutine compute_grid_integrated_temperature_anom(result, tensor, lon, lat, numPdY, numPdX, npart)
+   implicit none
+   integer :: j, k, l, npart, numPdY, numPdX
+   real(8), intent(in) :: tensor(npart, 3)
+   real(8), intent(in) :: lon(numPdY+1, numPdX+1)
+   real(8), intent(in) :: lat(numPdY+1, numPdX+1)
+   real(8), intent(out) :: result(numPdY, numPdX)
+   real(8) :: conts(numPdY, numPdX)
+   real(8) :: check(numPdY, numPdX)
+ 
+   result(:,:) = 0.0
+   conts(:,:)=0
+   check(:,:)=0
+ 
+   !do i = 1, nlen
+   do j = 1, npart
+       if (tensor(j, 1) /= -999.0 .and. tensor(j, 2) /= -999.0 .and. tensor(j, 3) /= -999.0 ) then
+         do k = 1, numPdY
+           do l = 1, numPdX
+             if (tensor(j, 2) > lat(k, l) .and. tensor(j, 2) <= lat(k+1, l) .and. &
+                 tensor(j, 1) > lon(k, l) .and. tensor(j, 1) <= lon(k, l+1)) then
+               result(k, l) = result(k, l) + tensor(j, 3)
+               conts(k,l) = conts(k,l) + 1
+               check(k,l)=1
+             end if
+           end do
+         end do
+       end if
+     end do
+    !end do
+    where (conts == 0.0)
+     conts = 1.0
+    end where
+    where (check == 0.0)
+     result = -999.
+    end where
+    result(:,:) = result(:,:)/conts(:,:)
+ end subroutine
+
+
+subroutine compute_temperature_anom_genesis_properties(result, tensor, lon, lat, numPdY, numPdX, npart)
+   implicit none
+   integer :: j, k, l, npart, numPdY, numPdX
+   real(8), intent(in) :: tensor(npart, 3)
+   real(8), intent(in) :: lon(numPdY+1, numPdX+1)
+   real(8), intent(in) :: lat(numPdY+1, numPdX+1)
+   real(8), intent(out) :: result(numPdY, numPdX)
+   real(8) :: conts(numPdY, numPdX)
+   real(8) :: check(numPdY, numPdX)
+   result(:,:) = 0.0
+   conts(:,:)=0
+   check(:,:)=0
+   
+
+   do j = 1, npart
+       if (tensor(j, 1) /= -999.0 .and. tensor(j, 2) /= -999.0 ) then
+         do k = 1, numPdY
+           do l = 1, numPdX
+             if (tensor( j, 2) > lat(k, l) .and. tensor(j, 2) <= lat(k+1, l) .and. &
+                 tensor( j, 1) > lon(k, l) .and. tensor(j, 1) <= lon(k, l+1)) then
+               result(k, l) = result(k, l) + tensor( j, 3)
+               conts(k,l) = conts(k,l) + 1
+               check(k,l)=1
+             end if
+           end do
+         end do
+       end if
+   end do
+    where (conts == 0.0)
+     conts = 1.0
+    end where
+    where (check == 0.0)
+     result = -999.
+    end where
+
+
+    result(:,:) = result(:,:)/conts(:,:)
+ end subroutine
+
+
+
+subroutine compute_temperature_anomalies_sources(result, tensor, lon, lat, numPdY, numPdX, nlen, npart)
+   implicit none
+   integer :: i, j, k, l, nlen, npart, numPdY, numPdX
+   real(8), intent(in) :: tensor(nlen, npart, 4)
+   real(8), intent(in) :: lon(numPdY+1, numPdX+1)
+   real(8), intent(in) :: lat(numPdY+1, numPdX+1)
+   real(8), intent(out) :: result(numPdY, numPdX)
+   real(8) :: conts(numPdY, numPdX)
+   result(:,:) = 0.0
+   conts(:,:)=0 
+   do i = 1, nlen
+     do j = 1, npart
+       if (tensor(i, j, 1) /= -999.0 .and. tensor(i, j, 2) /= -999.0 ) then
+         do k = 1, numPdY
+           do l = 1, numPdX
+             if (tensor(i, j, 2) > lat(k, l) .and. tensor(i, j, 2) <= lat(k+1, l) .and. &
+                 tensor(i, j, 1) > lon(k, l) .and. tensor(i, j, 1) <= lon(k, l+1)) then
+               result(k, l) = result(k, l) + tensor(i, j, 3)*tensor(i, j, 4)
+               if (tensor(i,j,4)==1) then
+                 conts(k,l) = conts(k,l)+1
+               end if
+             end if
+           end do
+         end do
+       end if
+     end do
+   end do
+   where (conts == 0.0)
+     conts = 1.0
+    end where
+    result(:,:) = result(:,:)/conts(:,:)
+ end subroutine

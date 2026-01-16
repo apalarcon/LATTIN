@@ -6,6 +6,16 @@ Releases
 
 GitHub:  https://github.com/apalarcon/LATTIN
 
+v.1.1.10 (2026-01-15)
+~~~~~~~~~~~~~~~~~~~~~
+
+This version includes:
+
+- a Lagrangian precipitation estimate
+- a moisture source bias-correction approach
+- a temperature anomaly decomposition method to quantify the contribution of diabatic, advective and adiabatic processes to temperature extremes. 
+- compatibility to read particle trajectories from FLEXPARTv11 and LARA reanalysis. 
+
 
 v.1.0.4 (2024-07-14)
 ~~~~~~~~~~~~~~~~~~~~
