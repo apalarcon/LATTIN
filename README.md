@@ -528,7 +528,7 @@ This software is published under the GPLv3 license. This means:
 
 # References
 * Bakels, L., Blaschek, M., Dütsch, M., Plach, A., Lechner, V., Brack, G., ... & Stohl, A. (2025). LARA: a Lagrangian Reanalysis based on ERA5 spanning from 1940 to 2023. Earth System Science Data, 17, 4569–4585, https://doi.org/10.5194/essd-17-4569-2025.
-* Bakels, L., Duetsch, M., Tatsii, D., Tipka, A., Seibert, P., Thompson, R., Blaschek, M., Plach, A., Bucci, S., Vojta, M., Cassiani, M., Henne, S., Marie D., M., Maurer, C., Lechner, V., Eckhardt, S., Groot-Zwaaftink, C., Kaufmann, P., Baier, 
+* Bakels, L., Tatsii, D., Tipka, A., Thompson, R., Dütsch, M., Blaschek, M., ... & Stohl, A. (2024). FLEXPART version 11: Improved accuracy, efficiency, and flexibility. Geoscientific Model Development, 17(21), 7595-7627. https://doi.org/10.5194/gmd-17-7595-2024.
 * Brioude, J., Arnold, D., Stohl, A., Cassiani, M., Morton, D., Seibert, P., et al. 2013. The Lagrangian particle dispersion model FLEXPART-WRF version 3.1. Geosci. Model Dev., 6(6), 1889-1904. https://doi.org/10.5194/gmd-6-1889-2013.
 * Keune, J., Schumacher, D.L., Miralles, D.G. 2022. A unified framework to estimate the origins of atmospheric moisture and heat using Lagrangian models. Geoscientific Model Development, 15(5), 1875-1898. Geosci. Model Dev., 15, 1875–1898. https://doi.org/10.5194/gmd-15-1875-2022.
 * Papritz, L., & Röthlisberger, M. (2023). A novel temperature anomaly source diagnostic: Method and application to the 2021 heatwave in the Pacific Northwest. Geophysical Research Letters, 50(23), e2023GL105641. https://doi.org/10.1029/2023GL105641.
