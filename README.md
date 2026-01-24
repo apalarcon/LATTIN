@@ -367,7 +367,7 @@ tracking_Tanom                    = 'True' / 'False'              -> Activating 
 Tanom_tracking_method             = value [str]                   -> Temperature anomaly tracking method: ['RP23','PR23']
 path_clim_temperature             = Path [str]                    -> Path to netCDF files containing climatological temperature and other variables if needed
 climT_fname_prefix                = value [str]                   -> Prefix of the name of the climatological netCDf files
-climT_date_format                 = value [str]                   -> Format of the date in the name of the precipitation file
+climT_date_format                 = value [str]                   -> Format of the date in the name of the climatological temperature data file
                                                                     * "yyyymmddHM"  
                                                                     * 'yyyy-mm-dd H:M'
                                                                     * 'yyyymmddHM'
@@ -382,11 +382,7 @@ Tlon_var_name                     = value [str]                   -> Longitude v
 climTvar_name                     = value [str]                   -> Climatological air temperature variable name
 dTdp_var_name                     = value [str]                   -> dTdp variable name
 dTdt_var_name                     = value [str]                   -> dTdt variable name
-psfc_var_name                     = value [str]                   -> Surface pressure variable name
-Tvar_name                         = value [str]                   -> Air temperature variable name 
-Tplves_var_name                   = value [str]                   -> Pressure levels variable name 
-interpolate_parcel_temperature    = 'True'/ 'False'               -> To interpotate air temperature to parcel trajectories
-interpolate_sfc                   = 'True'/ 'False'               -> To interpotate surface pressure to parcel trajectories
+Tplves_var_name                   = value [str]                   -> Pressure levels variable name in the climatological temperature files
 Tanom_threshold                   = value list[float]             -> Temperature anomaly threshold for filtering air parcels trajectories [K]
 analysis_levels                   = value list                    -> Atmopsheric levels to perform the analysis
                                                                      sfc: for surface
@@ -400,6 +396,25 @@ dp_upper                          = value [float]                 -> To filter a
 Tanom_linear_adjustment           = 'True' / 'False'              -> Apply linear adjusment to temperature changes along parcel trajectories
                                                                      It is only required for PR23 method.
 save_Tanom_parts_position         = 'True' / 'False'              -> To save processed parcels trajectories (temperature anomaly tracking) 
+
+interpolate_parcel_temperature    = 'True'/ 'False'               -> To interpotate air temperature to parcel trajectories
+interpolate_sfc                   = 'True'/ 'False'               -> To interpotate surface pressure to parcel trajectories
+path_to_meteodata                 = value [str]                   -> Path to meteorological data
+meteodata_fname_prefix            = value [str]                   -> Prefix of the name of the meteorologocal netCDf files
+meteodata_date_format             = value [str]                   -> Format of the date in the name of the meteorological data files
+                                                                    * "yyyymmddHM"  
+                                                                    * 'yyyy-mm-dd H:M'
+                                                                    * 'yyyymmddHM'
+                                                                    * 'yyyy-mm-dd_H'
+                                                                    * 'yyyymmdd_H'
+                                                                    * "mmdd_H"
+                                                                    * "mmddH"
+                                                                    * "yyyymmdd_HM"
+meteolat_var_name                 = value [str]                   -> Latitude variable name in the meteorological data files
+meteolon_var_name                 = value [str]                   -> Longitude variable name in the meteorological data files
+psfc_var_name                     = value [str]                   -> Surface pressure variable name
+Tvar_name                         = value [str]                   -> Air temperature variable name 
+meteo_plves_var_name              = value [str]                   -> Pressure levels variable name in the meteorological files
 
 ===========================================================================================================
                                         - CLOSE CONFIGURATION FILE -

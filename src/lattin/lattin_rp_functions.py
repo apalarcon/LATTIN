@@ -79,6 +79,12 @@ def Tanom_tracking_parms(
     interpolate_parcel_temperature,
     interpolate_sfc,
     Tvar_name,
+    path_to_meteodata,
+    meteodata_fname_prefix,
+    meteodata_date_format,
+    meteolat_var_name,
+    meteolon_var_name,
+    meteo_plves_var_name
 ):
     """
     This function checks the parameters of the TEMPERATURE ANOMALY TRACKING module
@@ -171,6 +177,12 @@ def Tanom_tracking_parms(
     dp_upper = dp_upper
     Tanom_linear_adjustment = Tanom_linear_adjustment
     Tanom_threshold = Tanom_threshold
+    path_to_meteodata=path_to_meteodata
+    meteodata_fname_prefix=meteodata_fname_prefix
+    meteodata_date_format=meteodata_date_format
+    meteolat_var_name=meteolat_var_name
+    meteolon_var_name=meteolon_var_name
+    meteo_plves_var_name=meteo_plves_var_name
 
     if not analysis_levels:
         analysis_levels = ["pbl", 500]
@@ -202,18 +214,14 @@ def Tanom_tracking_parms(
     else:
         interpolate_parcel_temperature = str2boolean(interpolate_parcel_temperature)
 
-        if Tvar_name == "" or Tvar_name == None:
-            errors = errors + "(**) ERROR: Tvar_name" + Tanom_message
-            errors_found = True
+
 
     if interpolate_sfc == None or interpolate_sfc == "":
         interpolate_sfc = False
     else:
         interpolate_sfc = str2boolean(interpolate_sfc)
 
-        if psfc_var_name == "" or psfc_var_name == None:
-            errors = errors + "(**) ERROR: psfc_var_name " + Tanom_message
-            errors_found = True
+
 
     Tanom_parms = [
         "path_clim_temperature",
@@ -279,6 +287,38 @@ def Tanom_tracking_parms(
             )
             errors_found = True
 
+    if interpolate_sfc or interpolate_parcel_temperature:
+
+        for param in ['path_to_meteodata','meteodata_fname_prefix','meteolat_var_name','meteolon_var_name']:
+            if vars()[param] == "" or vars()[param] == None:
+                errors = errors + "(**) ERROR: " + param + Tanom_message
+                errors_found = True
+
+        if interpolate_sfc:
+            if psfc_var_name == "" or psfc_var_name == None:
+                errors = errors + "(**) ERROR: psfc_var_name " + Tanom_message
+                errors_found = True
+
+        if  interpolate_parcel_temperature:
+            if Tvar_name == "" or Tvar_name == None:
+                errors = errors + "(**) ERROR: Tvar_name" + Tanom_message
+                errors_found = True
+
+            if meteo_plves_var_name == "" or meteo_plves_var_name == None:
+                errors = errors + "(**) ERROR: meteo_plves_var_name" + Tanom_message
+                errors_found = True
+
+
+
+        if not meteodata_date_format == "" or not meteodata_date_format == None:
+            meteodata_date_format, epsfc, emessage = get_date_format(
+                meteodata_date_format, "meteodata_date_format"
+            )
+            if epsfc:
+                errors = errors + "(**) ERROR: " + emessage
+                errors_found = True
+
+
     return (
         save_Tanom_parts_position,
         analysis_levels,
@@ -289,6 +329,7 @@ def Tanom_tracking_parms(
         climT_date_format,
         interpolate_parcel_temperature,
         interpolate_sfc,
+        meteodata_date_format,
         errors,
         errors_found,
     )
@@ -342,6 +383,9 @@ def interpolate_temperature_field_regulargrid(
     dT_dp,
     dT_dt,
     surface_pressure,
+    meteo_latitude,
+    meteo_longitude,
+    meteo_plves,
     interpolate_parcel_temperature,
     interpolate_sfc,
     temperature_field,
@@ -369,8 +413,19 @@ def interpolate_temperature_field_regulargrid(
     lon_sort_idx = np.argsort(Tlongitude)
     Tlongitude = Tlongitude[lon_sort_idx]
 
+    meteo_lat_sort_idx = np.argsort(meteo_latitude)
+    meteo_latitude = meteo_latitude[meteo_lat_sort_idx]
+
+    meteo_lon_sort_idx = np.argsort(meteo_longitude)
+    meteo_longitude = meteo_longitude[meteo_lon_sort_idx]
+
+
     pres_sort_idx = np.argsort(Tpressure_levels)
     Tpressure_levels = Tpressure_levels[pres_sort_idx]
+
+    meteo_plves_sort_idx = np.argsort(meteo_plves)
+    meteo_plves = meteo_plves[meteo_plves_sort_idx]
+
 
     # --- 2. Sort the large 3D data fields axis by axis to avoid copies ---
     # This is the most critical change to prevent OOM errors.
@@ -378,8 +433,8 @@ def interpolate_temperature_field_regulargrid(
 
     # List of all large 3D fields to be sorted
     fields_to_sort = [climTemperature_field, dT_dp, dT_dt]
-    if interpolate_parcel_temperature:
-        fields_to_sort.append(temperature_field)
+    #if interpolate_parcel_temperature:
+    #    fields_to_sort.append(temperature_field)
 
     for field in fields_to_sort:
         # Sort along the last axis (longitude)
@@ -392,8 +447,8 @@ def interpolate_temperature_field_regulargrid(
 
     # Sort the smaller 2D surface pressure field
     if interpolate_sfc:
-        surface_pressure[:] = surface_pressure[:, lon_sort_idx]
-        surface_pressure[:] = surface_pressure[lat_sort_idx, :]
+        surface_pressure[:] = surface_pressure[:, meteo_lon_sort_idx]
+        surface_pressure[:] = surface_pressure[meteo_lat_sort_idx, :]
 
     # print("      -> Sorting complete.")
     gc.collect()
@@ -428,7 +483,7 @@ def interpolate_temperature_field_regulargrid(
 
     if interpolate_sfc:
         psfc_interpolator = RegularGridInterpolator(
-            (Tlatitude, Tlongitude),
+            (meteo_latitude, meteo_longitude),
             surface_pressure,
             method=interpo_method,
             bounds_error=False,
@@ -438,8 +493,16 @@ def interpolate_temperature_field_regulargrid(
         gc.collect()
 
     if interpolate_parcel_temperature:
+        # Sort along the last axis (longitude)
+        temperature_field[:] = temperature_field[:, :, meteo_lon_sort_idx]
+        # Sort along the middle axis (latitude)
+        temperature_field[:] = temperature_field[:, meteo_lat_sort_idx, :]
+        # Sort along the first axis (pressure)
+        temperature_field[:] = temperature_field[meteo_plves_sort_idx, :, :]
+
+
         temperature_interpolator = RegularGridInterpolator(
-            (Tpressure_levels, Tlatitude, Tlongitude),
+            (Tpressure_levels, meteo_latitude, meteo_longitude),
             temperature_field,
             method=interpo_method,
             bounds_error=False,
@@ -504,6 +567,27 @@ def generate_climT_filenames(climT_fname_prefix, climT_date_format, track_times)
     for itime in track_times:
         fnames.append(
             f"{climT_fname_prefix}" + itime.strftime(climT_date_format) + ".nc"
+        )
+    return fnames
+
+
+
+def  generate_meteo_filenames(meteodata_fname_prefix, meteodata_date_format, track_times):
+    """
+    Generates a list of filenames for the climate temperature files.
+
+    Parameters:
+        meteodata_fname_prefix (str): Prefix of the filename.
+        psfc_date_format (str): Date format string for strftime.
+        track_times (list): List of datetime objects.
+
+    Returns:
+        list: List of filenames for the climate temperature files.
+    """
+    fnames = []
+    for itime in track_times:
+        fnames.append(
+            f"{meteodata_fname_prefix}" + itime.strftime(meteodata_date_format) + ".nc"
         )
     return fnames
 
@@ -584,6 +668,76 @@ def checking_Tclimatological_files(
     return errors, find_error
 
 
+
+
+def checking_meteo_files(
+    path_to_meteodata,
+    meteo_filenames,
+    meteolat_var_name,
+    meteolon_var_name,
+    psfc_var_name,
+    Tvar_name,
+    interpolate_sfc,
+    interpolate_parcel_temperature,
+    meteo_plves_var_name
+):
+
+    """
+    Checks the presence of specified variables in climatological NetCDF files.
+
+    Parameters:
+        path_psfc (str): Directory path containing the files.
+        climT_filenames (list): List of climate temperature NetCDF filenames.
+        plat_var_name (str): Latitude variable name in the files.
+        plon_var_name (str): Longitude variable name in the files.
+        psfc_var_name (str): Surface pressure variable name, included if interpolate_sfc is True.
+        interpolate_sfc (bool): Indicates if surface pressure should be interpolated.
+
+    Returns:
+        tuple: A string containing error messages (if any), and a boolean indicating if any errors were found.
+    """
+
+    variable_names = [
+        meteolat_var_name,
+        meteolon_var_name,
+    ]
+
+    if interpolate_sfc:
+        variable_names = np.append(variable_names, psfc_var_name)
+    if interpolate_parcel_temperature:
+        variable_names = np.append(variable_names, Tvar_name)
+        variable_names = np.append(variable_names,meteo_plves_var_name)
+
+    errors = ""
+    find_error = False
+    for pfilename in meteo_filenames:
+        try:
+            nc = Dataset(f"{path_to_meteodata}/{pfilename}")
+            for varname in variable_names:
+                if not varname in nc.variables.keys():
+                    errors = (
+                        errors
+                        + f"     (**) ERROR: variable {varname} is not in file: "
+                        + pfilename
+                        + "\n"
+                    )
+                    find_error = True
+
+            nc.close()
+        except:
+            errors = (
+                errors
+                + "     (**) ERROR: No such file or directory: "
+                + pfilename
+                + "\n"
+            )
+            find_error = True
+
+    return errors, find_error
+
+
+
+
 def read_climT_file(
     path_clim_temperature,
     climT_filename,
@@ -594,10 +748,7 @@ def read_climT_file(
     dTdp_var_name,
     dTdt_var_name,
     Tplves_var_name,
-    psfc_var_name,
     start_date,
-    interpolate_parcel_temperature,
-    interpolate_sfc,
 ):
     """
     Reads climate temperature data from a NetCDF file and returns temperature-related variables.
@@ -626,15 +777,15 @@ def read_climT_file(
     lon = nc.variables[Tlon_var_name][:]
     plv = nc.variables[Tplves_var_name][:]
 
-    if interpolate_sfc:
-        psfc = nc.variables[psfc_var_name][:]
-    else:
-        psfc = 0
+    #if interpolate_sfc:
+    #    psfc = nc.variables[psfc_var_name][:]
+    #else:
+    #    psfc = 0
 
-    if interpolate_parcel_temperature:
-        T = nc.variables[Tvar_name][:]
-    else:
-        T = 0
+    #if interpolate_parcel_temperature:
+    #    T = nc.variables[Tvar_name][:]
+    #else:
+    #    T = 0
 
     nc.close()
     lon = np.where(lon >= 180, lon - 360, lon)
@@ -642,10 +793,49 @@ def read_climT_file(
     if len(str(int(plv.max()))) < 5:
         plv = plv * 100
 
+    #if len(str(int(psfc.max()))) < 5:
+    #    psfc = psfc * 100
+
+    return climT, dT_dp, dT_dt, lat, lon, plv
+
+
+
+def read_meteo_files(psfc_var_name, Tvar_name,
+                        path_to_meteodata,
+                        meteolat_var_name,
+                        meteolon_var_name,
+                        meteo_plves_var_name,
+                        meteo_filename,
+                        interpolate_parcel_temperature,
+                        interpolate_sfc):
+
+    nc = Dataset(f"{path_to_meteodata}/{meteo_filename}", "r")
+    lat = nc.variables[meteolat_var_name][:]
+    lon = nc.variables[meteolon_var_name][:]
+
+
+
+    if interpolate_sfc:
+        psfc = nc.variables[psfc_var_name][:]
+    else:
+        psfc = 0
+
+    if interpolate_parcel_temperature:
+        T = nc.variables[Tvar_name][:]
+        plevs = nc.variables[meteo_plves_var_name][:]
+    else:
+        T = 0
+    nc.close()
+
+    lon = np.where(lon >= 180, lon - 360, lon)
+
     if len(str(int(psfc.max()))) < 5:
         psfc = psfc * 100
 
-    return climT, T, dT_dp, dT_dt, psfc, lat, lon, plv
+    if len(psfc.shape)>2:
+        psfc=psfc[0,:]
+
+    return psfc, T, lat, lon, plevs
 
 
 def parallel_interpolation(
@@ -660,6 +850,11 @@ def parallel_interpolation(
     dTdt_var_name,
     Tplves_var_name,
     psfc_var_name,
+    path_to_meteodata,
+    meteo_filenames,
+    meteolat_var_name,
+    meteolon_var_name,
+    meteo_plves_var_name,
     start_date,
     track_times,
     interpolate_parcel_temperature,
@@ -706,10 +901,8 @@ def parallel_interpolation(
         # Read climate data for the current trajectory
         (
             climTemperature_field,
-            temperature_field,
             dT_dp,
             dT_dt,
-            surface_pressure,
             Tlatitude,
             Tlongitude,
             Tpressure_levels,
@@ -723,12 +916,30 @@ def parallel_interpolation(
             dTdp_var_name,
             dTdt_var_name,
             Tplves_var_name,
-            psfc_var_name,
             start_date,
-            interpolate_parcel_temperature,
-            interpolate_sfc,
+
         )
 
+        if interpolate_sfc or interpolate_parcel_temperature:
+            (surface_pressure,
+            temperature_field,
+            meteo_latitude,
+            meteo_longitude,
+            meteo_plves) = read_meteo_files(psfc_var_name, Tvar_name,
+                        path_to_meteodata,
+                        meteolat_var_name,
+                        meteolon_var_name,
+                        meteo_plves_var_name,
+                        meteo_filenames[i],
+                        interpolate_parcel_temperature,
+                        interpolate_sfc)
+
+        else:
+            surface_pressure=0
+            temperature_field=0
+            meteo_latitude=Tlatitude
+            meteo_longitude=Tlongitude
+            meteo_plves=Tpressure_levels
         # Perform interpolation
         # print(f"             .... Rank {rank}: Interpolating track {localfnames[i]} -> ({track_times[i]})")
         for chunk_idx in range(num_chunks):
@@ -758,6 +969,9 @@ def parallel_interpolation(
                     dT_dp,
                     dT_dt,
                     surface_pressure,
+                    meteo_latitude,
+                    meteo_longitude,
+                    meteo_plves,
                     interpolate_parcel_temperature,
                     interpolate_sfc,
                     temperature_field,
@@ -903,6 +1117,11 @@ def interpolate_to_parcel_trajectories(
     dTdt_var_name,
     Tplves_var_name,
     psfc_var_name,
+    path_to_meteodata,
+    meteo_filenames,
+    meteolat_var_name,
+    meteolon_var_name,
+    meteo_plves_var_name,
     comm,
     rank,
     size,
@@ -912,6 +1131,12 @@ def interpolate_to_parcel_trajectories(
     interpolate_parcel_temperature,
     interpolate_sfc,
 ):
+
+
+
+
+
+
 
     # tensor_org[tensor_org==-999.9]=-999.
     # airtrajs_org = np.full((tensor_org.shape[0],tensor_org.shape[1],tensor_org.shape[2]+5), -999.)
@@ -989,6 +1214,11 @@ def interpolate_to_parcel_trajectories(
         dTdt_var_name,
         Tplves_var_name,
         psfc_var_name,
+        path_to_meteodata,
+        meteo_filenames,
+        meteolat_var_name,
+        meteolon_var_name,
+        meteo_plves_var_name,
         start_date,
         track_times,
         interpolate_parcel_temperature,

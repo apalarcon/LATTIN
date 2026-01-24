@@ -161,13 +161,21 @@ def lattin_main(pathfile):
     dp_sfc = check_paths(content, "dp_sfc")
     dp_upper = check_paths(content, "dp_upper")
     Tanom_linear_adjustment = check_paths(content, "Tanom_linear_adjustment")
-    psfc_var_name = check_paths(content, "psfc_var_name")
     Tanom_threshold = check_paths(content, "Tanom_threshold")
+
+    interpolate_sfc = check_paths(content, "interpolate_sfc")
+    Tvar_name = check_paths(content, "Tvar_name")
     interpolate_parcel_temperature = check_paths(
         content, "interpolate_parcel_temperature"
     )
-    interpolate_sfc = check_paths(content, "interpolate_sfc")
-    Tvar_name = check_paths(content, "Tvar_name")
+    path_to_meteodata = check_paths(content,"path_to_meteodata")
+    meteodata_fname_prefix=check_paths(content,"meteodata_fname_prefix")
+    meteodata_date_format=check_paths(content,"meteodata_date_format")
+    meteolat_var_name=check_paths(content,"meteolat_var_name")
+    meteolon_var_name=check_paths(content,"meteolon_var_name")
+    psfc_var_name=check_paths(content,"psfc_var_name")
+    meteo_plves_var_name=check_paths(content,"meteo_plves_var_name")
+
 
     # Reading details for moisture tracking
     tracking_moisture = check_paths(content, "tracking_moisture")
@@ -379,6 +387,7 @@ def lattin_main(pathfile):
             climT_date_format,
             interpolate_parcel_temperature,
             interpolate_sfc,
+            meteodata_date_format,
             errors,
             errors_found,
         ) = Tanom_tracking_parms(
@@ -402,6 +411,12 @@ def lattin_main(pathfile):
             interpolate_parcel_temperature,
             interpolate_sfc,
             Tvar_name,
+            path_to_meteodata,
+            meteodata_fname_prefix,
+            meteodata_date_format,
+            meteolat_var_name,
+            meteolon_var_name,
+            meteo_plves_var_name
         )
 
         if errors_found:
@@ -927,6 +942,12 @@ def lattin_main(pathfile):
         climT_filenames = generate_climT_filenames(
             climT_fname_prefix, climT_date_format, ntimes
         )
+
+
+        meteo_filenames=generate_meteo_filenames(
+            meteodata_fname_prefix, meteodata_date_format, ntimes
+        )
+
         if tracking_Tanom:
             pferrors_T, find_error_T = checking_Tclimatological_files(
                 path_clim_temperature,
@@ -938,8 +959,8 @@ def lattin_main(pathfile):
                 dTdt_var_name,
                 psfc_var_name,
                 Tvar_name,
-                interpolate_parcel_temperature,
-                interpolate_sfc,
+                False,
+                False
             )
 
             if find_error_T:
@@ -964,33 +985,71 @@ def lattin_main(pathfile):
                         "\n     Checking climatological 3D temperature files for temperature anomaly analysis: PASSED\n"
                     )
 
+            if interpolate_sfc or interpolate_parcel_temperature:
+
+
+                pferrors_p, find_error_p = checking_meteo_files(
+                path_to_meteodata,
+                meteo_filenames,
+                meteolat_var_name,
+                meteolon_var_name,
+                psfc_var_name,
+                Tvar_name,
+                interpolate_sfc,
+                interpolate_parcel_temperature,
+                meteo_plves_var_name)
+
+                if find_error_p:
+                    if rank == 0:
+                        print(
+                            "     Checking meteo data files for temperature anomaly analysis: Files not found. PLEASE TAKE ACTION!!!!\n"
+                        )
+                        time.sleep(0.5)
+                        print(pferrors_T)
+                        print(
+                            "======================================================================================================="
+                        )
+                        print(program_name() + " fatal error")
+                        print("Bye:)")
+                        print(
+                            "======================================================================================================="
+                        )
+                    raise SystemExit()
+            else:
+                if rank == 0:
+                    print(
+                        "\n     Checking meteo data files for temperature anomaly analysis: PASSED\n"
+                    )
+
+
         if model in ["FLEXPART", "FLEXPART-WRF"]:
             if rank == 0:
                 print("\n     !Getting data from raw partposit files")
             tensor_org = get_vars_from_partposit(
-                verbose,
-                partpositfiles,
-                file_mask,
-                maskname,
-                maskvar_lon,
-                maskvar_lat,
-                lat,
-                lon,
-                rank,
-                size,
-                comm,
-                type_file,
-                lon_left_lower_corner,
-                lat_left_lower_corner,
-                lon_right_upper_corner,
-                lat_right_upper_corner,
-                model,
-                mask_value,
-                file_gz,
-                var_heat_track,
-                mode,
+                 verbose,
+                 partpositfiles,
+                 file_mask,
+                 maskname,
+                 maskvar_lon,
+                 maskvar_lat,
+                 lat,
+                 lon,
+                 rank,
+                 size,
+                 comm,
+                 type_file,
+                 lon_left_lower_corner,
+                 lat_left_lower_corner,
+                 lon_right_upper_corner,
+                 lat_right_upper_corner,
+                 model,
+                 mask_value,
+                 file_gz,
+                 var_heat_track,
+                 mode,
 
             )
+            #tensor_org = np.load("NWPaux_airtrajsT.npy")
         elif model in ["FLEXPART11"]:
             if rank == 0:
                 print("\n     !Getting data from raw partoutput files")
@@ -1016,6 +1075,7 @@ def lattin_main(pathfile):
                 mode,
                 listdates,
             )
+
             comm.Barrier()
             #quit()
         elif model == "LARA":
@@ -1165,6 +1225,11 @@ def lattin_main(pathfile):
                     dTdt_var_name,
                     Tplves_var_name,
                     psfc_var_name,
+                    path_to_meteodata,
+                    meteo_filenames,
+                    meteolat_var_name,
+                    meteolon_var_name,
+                    meteo_plves_var_name,
                     comm,
                     rank,
                     size,
@@ -1173,6 +1238,7 @@ def lattin_main(pathfile):
                     tensor_org,
                     interpolate_parcel_temperature,
                     interpolate_sfc,
+
                 )
                 gc.collect()
 
