@@ -1,4 +1,10 @@
-Run Date: 2001-03-02 12:00:00
-Number of parcels within the target region: 1884
-Number of precipitating parcels within the target region at time t0: 308 (16.35%)
-!Number of parcels without moisture uptake in the trajectory: 13 (4.22%)
++ Tool:  LATTIN (version: 1.1.10)
++ Run Date: 2001-03-02 12:00:00
++ Run Mode: backward in time 
++ Number of parcels within the target region: 1884
++ Moisture tracking method: SOD08
+Number of filtered parcels within the target region at time t0: 308 (16.35%)
+Number of parcels without moisture uptake in the trajectory: 1 (0.32%)
+Lagrangian mean water vapour residence time: 2.481 days
+-----------------------------------------------------------------------------------------------------------------------------
++ Computing time: 21.36 seconds

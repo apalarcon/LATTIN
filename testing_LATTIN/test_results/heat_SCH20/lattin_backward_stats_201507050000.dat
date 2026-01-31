@@ -1,4 +1,9 @@
-Run Date: 2015-07-05 00:00:00
-Number of parcels within the target region: 1867
-Number of filter parcels within the PBL at time t0 for heat tracking: 350 (18.75%)
-Number of parcels without heat uptake in the trajectory: 43 (12.29%)
++ Tool:  LATTIN (version: 1.1.10)
++ Run Date: 2015-07-05 00:00:00
++ Run Mode: backward in time 
++ Number of parcels within the target region: 1867
++ Heat tracking method: SCH20
+Number of filtered parcels at time t0 for heat tracking: 350 (18.75%)
+Number of parcels without heat uptake in the trajectory: 79 (22.57%)
+-----------------------------------------------------------------------------------------------------------------------------
++ Computing time: 20.71 seconds
