@@ -825,6 +825,7 @@ def read_meteo_files(psfc_var_name, Tvar_name,
         plevs = nc.variables[meteo_plves_var_name][:]
     else:
         T = 0
+        plevs=0
     nc.close()
 
     lon = np.where(lon >= 180, lon - 360, lon)
