@@ -423,8 +423,9 @@ def interpolate_temperature_field_regulargrid(
     pres_sort_idx = np.argsort(Tpressure_levels)
     Tpressure_levels = Tpressure_levels[pres_sort_idx]
 
-    meteo_plves_sort_idx = np.argsort(meteo_plves)
-    meteo_plves = meteo_plves[meteo_plves_sort_idx]
+    if interpolate_parcel_temperature:
+        meteo_plves_sort_idx = np.argsort(meteo_plves)
+        meteo_plves = meteo_plves[meteo_plves_sort_idx]
 
 
     # --- 2. Sort the large 3D data fields axis by axis to avoid copies ---
@@ -825,7 +826,7 @@ def read_meteo_files(psfc_var_name, Tvar_name,
         plevs = nc.variables[meteo_plves_var_name][:]
     else:
         T = 0
-        plevs=0
+        plevs=[0]
     nc.close()
 
     lon = np.where(lon >= 180, lon - 360, lon)
