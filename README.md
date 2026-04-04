@@ -31,6 +31,8 @@ This version includes:
 
 If you use LATTIN, please cite it as follows:
 
+Pérez-Alarcón, A., Nieto, R., Gimeno, L. (2026). Version (1.1.10) — LATTIN: A Python-based tool for Lagrangian atmospheric moisture and heat tracking. Software Impacts, 28, 100834. https://doi.org/10.1016/j.simpa.2026.100834
+
 Pérez-Alarcón, A.; Fernández-Alvarez, J.C.; Nieto, R.; Gimeno, L. (2024). LATTIN: A Python-based tool for Lagrangian atmospheric moisture and heat tracking. Software Impacts, 20, 100638. https://doi.org/10.1016/j.simpa.2024.100638
 
 # What do I need to get and run LATTIN?
