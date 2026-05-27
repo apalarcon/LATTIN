@@ -35,7 +35,7 @@ The main Python packages that must be installed are the following:
 - `numpy==1.26.4`
 - `pandas==2.2.3`
 - `psutil==7.0.0`
-- `requests==2.32.2`
+- `requests==2.34.2`
 - `scipy==1.12.0`
 - `setuptools==82.0.1`
 - `tenacity==9.1.2`
