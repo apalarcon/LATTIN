@@ -64,7 +64,7 @@ or
 - sys
 - os
 - importlib
-- aiohttp==3.9.5
+- aiohttp==3.13.5
 - dask==2023.9.2
 - mpi4py==3.1.4
 - netcdf4==1.7.2
@@ -73,7 +73,7 @@ or
 - psutil==7.0.0
 - requests==2.32.2
 - scipy==1.12.0
-- setuptools==65.5.0
+- setuptools==82.0.1
 - tenacity==9.1.2
 - tqdm==4.67.1
 - xarray==2023.6.0 
