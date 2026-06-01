@@ -3789,26 +3789,9 @@ def parallel_heat_process_backward(
 ############ SPECIFIC FUNCTIONS FOR MOISTURE TRACKING  ################################
 
 
-def is_precipitating_parcel(parts_dq, dqdt_threshold, parts_rh, minrh,is_non_precip):
-    check_precipdq = np.empty(len(parts_dq))
-    check_preciprh = np.empty(len(parts_dq))
-
-    if is_non_precip:
-        check_precipdq[parts_dq < dqdt_threshold] = False
-        check_precipdq[parts_dq >= dqdt_threshold] = True
-
-        check_preciprh[parts_rh < minrh] = True
-        check_preciprh[parts_rh >= minrh] = False
-    else:
-        check_precipdq[parts_dq < dqdt_threshold] = True
-        check_precipdq[parts_dq >= dqdt_threshold] = False
-
-        check_preciprh[parts_rh < minrh] = False
-        check_preciprh[parts_rh >= minrh] = True
-
-    check_precip = np.logical_and(check_precipdq, check_preciprh)
-
-    return check_precip
+def is_precipitating_parcel(parts_dq, dqdt_threshold, parts_rh, minrh, is_non_precip):
+    is_precip = (parts_dq < dqdt_threshold) & (parts_rh >= minrh)
+    return ~is_precip if is_non_precip else is_precip
 
 
 def compute_var_integarated_day_moist(
@@ -4288,12 +4271,14 @@ def processing_moisture_track_backward(
     part_uptakes_bias = dmatrix[0, :, 12]
 
     if moisture_linear_adjustment:
+        if only_non_precip:
+            lwvrt = "not computed"
+        else:
+            aux_lwvrt = lwvrt_[lwvrt_ > 0]
 
-        aux_lwvrt = lwvrt_[lwvrt_ > 0]
+            lmrt = aux_lwvrt / (1440)
 
-        lmrt = aux_lwvrt / (1440)
-
-        lwvrt = np.mean(lmrt[np.isfinite(lmrt)])
+            lwvrt = np.mean(lmrt[np.isfinite(lmrt)])
     else:
         lwvrt = "not computed"
 
