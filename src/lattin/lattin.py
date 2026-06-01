@@ -29,6 +29,10 @@ from lattin.dry_intrusion_functions import (
 
 from lattin.functions_forward import processing_moisture_track_forward
 from lattin.functions_flex11 import generate_flexpart11_filename, checking_raw_flex11_partposti_files, get_vars_from_partoutput
+###
+from lattin.hpt_reading_functions  import generate_hpt_filename, checking_raw_hpt_partposti_files, get_vars_from_hpt
+from lattin.hysplit_reading_functions  import generate_hysplit_filename, checking_raw_hysplit_partposti_files, get_vars_from_hysplit
+###
 import tempfile
 import shutil
 import gc
@@ -88,6 +92,7 @@ def lattin_main(pathfile):
     file_gz = check_paths(content, "file_gz")
     check_lara_files = check_paths(content, "check_lara_files")
     lara_from_https = check_paths(content, "lara_from_https")
+    file_extension = check_paths(content, "file_extension")
 
     # Reading model details
     model = check_paths(content, "model")
@@ -161,6 +166,7 @@ def lattin_main(pathfile):
     dp_sfc = check_paths(content, "dp_sfc")
     dp_upper = check_paths(content, "dp_upper")
     Tanom_linear_adjustment = check_paths(content, "Tanom_linear_adjustment")
+    psfc_var_name = check_paths(content, "psfc_var_name")
     Tanom_threshold = check_paths(content, "Tanom_threshold")
 
     interpolate_sfc = check_paths(content, "interpolate_sfc")
@@ -195,6 +201,7 @@ def lattin_main(pathfile):
     check_RH_route_precip = check_paths(content, "check_RH_route_precip")
     precip_minrh_en_route = check_paths(content, "precip_minrh_en_route")
     save_moist_parts_position = check_paths(content, "save_moisture_parts_position")
+    only_non_precip= check_paths(content, "only_non_precip_parcels")
 
     ####Reading parameters for bias correcting moisture sources
     moist_bias_correction = check_paths(content, "moist_bias_correction")
@@ -232,6 +239,7 @@ def lattin_main(pathfile):
         check_lara_files,
         lara_from_https,
         DI_moisture_tracking,
+        only_non_precip
     ) = check_init_parms(
         verbose,
         file_gz,
@@ -243,6 +251,7 @@ def lattin_main(pathfile):
         tracking_heat,
         check_lara_files,
         lara_from_https,
+        only_non_precip
     )
     if not isinstance(analysis_levels, list):
         analysis_levels = [analysis_levels]
@@ -612,6 +621,7 @@ def lattin_main(pathfile):
     check_RH_route_precip = str2boolean(check_RH_route_precip)
     DI_moisture_tracking = str2boolean(DI_moisture_tracking)
     DI_save_raw_parcels = str2boolean(DI_save_raw_parcels)
+    only_non_precip = str2boolean(only_non_precip)
 
     errors, errors_found = checking_input_parameters(
         size,
@@ -688,6 +698,8 @@ def lattin_main(pathfile):
             ndays,
             model,
             mode,
+            total_emited_mass,
+            total_release_parcels,
             totaltime,
             dtime,
             var_heat_track,
@@ -752,6 +764,7 @@ def lattin_main(pathfile):
             check_lara_files,
             interpolate_parcel_temperature,
             path_clim_temperature,
+            only_non_precip
         )
 
     if moist_bias_correction:
@@ -840,6 +853,62 @@ def lattin_main(pathfile):
                 if rank == 0:
                     print("     Checking raw partposit files: PASSED\n")
 
+        elif model in ["HPT"]:
+
+            partpositfiles, listdates = generate_hpt_filename(mode, dtime, totaltime, date, raw_partposit_path, calendar, file_extension)
+
+            pferrors, find_error = checking_raw_hpt_partposti_files(partpositfiles, listdates, file_extension)
+
+
+            if find_error:
+                if rank == 0:
+                    print(
+                        f"     Checking raw {model} particles output: Files not found. PLEASE TAKE ACTION!!!!\n"
+                    )
+                    time.sleep(0.5)
+                    print(pferrors)
+                    print(
+                        "======================================================================================================="
+                    )
+                    print(program_name() + " fatal error")
+                    print("Bye:)")
+                    print(
+                        "======================================================================================================="
+                    )
+                raise SystemExit()
+            else:
+                if rank == 0:
+                    print(f"     Checking raw {model} particles output files: PASSED\n")
+
+        elif model in ["HYSPLIT"]:
+
+            partpositfiles, listdates = generate_hysplit_filename(mode, dtime, totaltime, date, raw_partposit_path, calendar, file_extension)
+
+
+            pferrors, find_error, df_subset = checking_raw_hysplit_partposti_files(partpositfiles, listdates, file_extension)
+
+
+
+            if find_error:
+                if rank == 0:
+                    print(
+                        f"     Checking raw {model} output: Files not found. PLEASE TAKE ACTION!!!!\n"
+                    )
+                    time.sleep(0.5)
+                    print(pferrors)
+                    print(
+                        "======================================================================================================="
+                    )
+                    print(program_name() + " fatal error")
+                    print("Bye:)")
+                    print(
+                        "======================================================================================================="
+                    )
+                raise SystemExit()
+            else:
+                if rank == 0:
+                    print(f"     Checking raw {model} output files: PASSED\n")
+
         elif model in ['FLEXPART11']:
             partpositfiles, listdates = generate_flexpart11_filename(
             mode, dtime, totaltime, date, raw_partposit_path, file_gz, calendar
@@ -921,6 +990,7 @@ def lattin_main(pathfile):
 
         ntimes = []
         for i in range(0, len(listdates)):
+
             auxt = datetime(
                 int(str(int(listdates[i]))[0:4]),
                 int(str(int(listdates[i]))[4:6]),
@@ -1050,6 +1120,58 @@ def lattin_main(pathfile):
 
             )
             #tensor_org = np.load("NWPaux_airtrajsT.npy")
+        elif model in ['HPT']:
+            tensor_org = get_vars_from_hpt(
+                verbose,
+                partpositfiles,
+                file_mask,
+                maskname,
+                maskvar_lon,
+                maskvar_lat,
+                lat,
+                lon,
+                rank,
+                size,
+                comm,
+                lon_left_lower_corner,
+                lat_left_lower_corner,
+                lon_right_upper_corner,
+                lat_right_upper_corner,
+                model,
+                mask_value,
+                var_heat_track,
+                mode,
+                listdates,
+                file_extension
+            )
+            comm.Barrier()
+        elif model in ['HYSPLIT']:
+            tensor_org = get_vars_from_hysplit(
+                verbose,
+                df_subset,
+                file_mask,
+                maskname,
+                maskvar_lon,
+                maskvar_lat,
+                lat,
+                lon,
+                rank,
+                size,
+                comm,
+                lon_left_lower_corner,
+                lat_left_lower_corner,
+                lon_right_upper_corner,
+                lat_right_upper_corner,
+                model,
+                mask_value,
+                var_heat_track,
+                mode,
+                listdates,
+            )
+
+            comm.Barrier()
+
+
         elif model in ["FLEXPART11"]:
             if rank == 0:
                 print("\n     !Getting data from raw partoutput files")
@@ -1471,6 +1593,7 @@ def lattin_main(pathfile):
                     mask_value,
                     maskvar_lat,
                     maskvar_lon,
+                    only_non_precip,
                     rank,
                     size,
                     comm,
@@ -1479,7 +1602,7 @@ def lattin_main(pathfile):
                 if filter_dqdt_parcels == True or filter_pbl_dq_parcels == True:
                     if verbose and rank == 0:
                         print(
-                            "      !Number of precipitating parcels within the target region at time t0:",
+                            "      !Number of filtering parcels within the target region at time t0:",
                             counter_precip_part,
                             "({:.2f}".format(
                                 100 * (counter_precip_part) / (parcels_count)
