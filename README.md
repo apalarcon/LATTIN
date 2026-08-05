@@ -71,7 +71,7 @@ or
 - psutil==7.0.0
 - requests==2.34.2
 - scipy==1.12.0
-- setuptools==82.0.1
+- setuptools==83.0.0
 - tenacity==9.1.2
 - tqdm==4.67.1
 - xarray==2023.6.0 
