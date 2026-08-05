@@ -84,6 +84,6 @@ setuptools.setup(
     python_requires='>=3.8',
     install_requires=install_requires_,
     include_package_data=True,
-    package_data={"":['*.so','VERSION', "constants.py",'*.f90',"_version.py","lattin_functions.py", "LAST_UPDATE", "dry_intrusion_functions.py","lattin_rp_functions.py","lara_reanalysis.py","functions_forward.py","functions_flex11"]},
+    package_data={"":['*.so','VERSION', "constants.py",'*.f90',"_version.py","lattin_functions.py", "LAST_UPDATE", "dry_intrusion_functions.py","lattin_rp_functions.py","lara_reanalysis.py","functions_forward.py","functions_flex11","hpt_reading_functions","hysplit_reading_functions"]},
 
 )

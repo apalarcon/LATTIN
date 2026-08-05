@@ -1,7 +1,7 @@
 License
 ============ 
 
-Copyright 2025 Pérez-Alarcón et al. (2024)
+Copyright 2025 Pérez-Alarcón et al. (2024, 2026)
 
 This software is published under the GPLv3 license. This means:
 

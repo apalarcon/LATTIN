@@ -17,15 +17,13 @@ LATTIN is a Python-based tool for Lagrangian atmospheric moisture and heat track
 
 [![License: GPLv3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
- [![Current Version: ](https://img.shields.io/badge/Current_Version-1.1.10-blue)](https://anaconda.org/tramo-ephyslab/lattin)
+ [![Current Version: ](https://img.shields.io/badge/Current_Version-1.1.11-blue)](https://anaconda.org/tramo-ephyslab/lattin)
 
 
 This version includes:
 
-- a Lagrangian precipitation estimate
-- a moisture source bias-correction approach
-- a temperature anomaly decomposition method to quantify the contribution of diabatic, advective and adiabatic processes to temperature extremes. 
-- compatibility to read particle trajectories from FLEXPARTv11 and LARA reanalysis. 
+- Functions for reading HYSPLIT (trajectory mode) data
+- Update requirements to solve security issues
 
 
 
@@ -64,7 +62,7 @@ or
 - sys
 - os
 - importlib
-- aiohttp==3.13.5
+- aiohttp==3.14.3
 - dask==2023.9.2
 - mpi4py==3.1.4
 - netcdf4==1.7.2
@@ -79,6 +77,8 @@ or
 - xarray==2023.6.0 
 - zarr==3.0.5
 - matplotlib==3.10.3
+- meson==1.11.1
+- ninja==1.13.0
 - FORTRAN 90 Compiler
 ```
 # Installation

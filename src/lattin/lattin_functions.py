@@ -272,6 +272,7 @@ def check_init_parms(
     tracking_heat,
     check_lara_files,
     lara_from_https,
+    only_non_precip
 ):
     """
     Checks and sets default values for the initialization parameters.
@@ -334,6 +335,9 @@ def check_init_parms(
     if lara_from_https:
         check_lara_files = False
 
+    if only_non_precip=="" or only_non_precip == None:
+        only_non_precip=False
+
     return (
         verbose,
         file_gz,
@@ -346,6 +350,7 @@ def check_init_parms(
         check_lara_files,
         lara_from_https,
         DI_moisture_tracking,
+        only_non_precip
     )
 
 
@@ -749,8 +754,8 @@ def checking_input_parameters(
         errors = errors + "(**) ERROR: No such file or directory: " + file_mask + "\n"
         errors_found = True
 
-    if not model in ["FLEXPART", "FLEXPART-WRF", "LARA", "FLEXPART11"]:
-        errors = errors + "(**) ERROR: Model must be FLEXPART, FLEXPART11, FLEXPART-WRF or LARA\n"
+    if not model in ["FLEXPART", "FLEXPART-WRF", "LARA", "FLEXPART11", "HPT",'HYSPLIT']:
+        errors = errors + "(**) ERROR: Model must be FLEXPART, FLEXPART11, FLEXPART-WRF, LARA, HYSPLIT or HPT\n"
         errors_found = True
 
     if not mode in ("backward","forward"):
@@ -893,6 +898,8 @@ def printting_run_information(
     ndays,
     model,
     mode,
+    total_emited_mass,
+    total_release_parcels,
     totaltime,
     dtime,
     var_heat_track,
@@ -957,6 +964,7 @@ def printting_run_information(
     check_lara_files,
     interpolate_parcel_temperature,
     path_clim_temperature,
+    only_non_precip
 ):
 
     #print("-------------------------------------------------------------------------------------------------------------\n")
@@ -986,6 +994,8 @@ def printting_run_information(
 		print("   -> Tracking mode                              :", mode, "in time")
 		print("   -> Time step                                  :", dtime, "minutes")
 		print("   -> Tracking time                              :", totaltime, "minutes", "(" +str(totaltime/1440) + " days)")
+		print("   -> Total emitted mass                         :", total_emited_mass, "kg")
+		print("   -> Total released parcels                     :", total_release_parcels,"parcels")
 		print("   -> Heat tracking                              :", tracking_heat)
 		print("   -> Moisture tracking                          :", tracking_moisture)
 		print("   -> Temperature anomaly tracking               :", tracking_Tanom)
@@ -1064,7 +1074,9 @@ def printting_run_information(
 
 				print("    + Filter precipitating parcels               :", filter_dqdt_parcels)
 				if filter_dqdt_parcels:
+					print("    + Tracking only non-precip parcels           :", only_non_precip)
 					print("    + dq/dt threshold                            :", "<", dqdt_threshold, "kg/kg")
+
 			print("    + Filter parcels within PBL                  :", filter_pbl_dq_parcels)
 			
 			if moist_custom_limits_highs[0]==0 and moist_custom_limits_highs[1]==0:
@@ -1099,8 +1111,8 @@ def printting_run_information(
 				
 			print("    + Lower and upper limits for filter parcels  :", moist_custom_limits_highs, 'meters', mfilterhigh)
 			print("    + Bias-correct moisture sources              :", moist_bias_correction)
-			
-			
+
+
 			print("    + Saving moisture parcels data               :", save_moist_parts_position)
 
 		if DI_analysis:
@@ -3307,7 +3319,7 @@ def calc_pres(rho_kgm3, q_kgkg, T_K):
 
 def calc_pottemp(p_Pa, q_kgkg, T_K):
     basic_theta = False
-    if np.all(q_kgkg < 0):
+    if np.all(q_kgkg < 0) or np.any(np.isnan(q_kgkg)):
         basic_theta = True
 
     if basic_theta:
@@ -3777,19 +3789,9 @@ def parallel_heat_process_backward(
 ############ SPECIFIC FUNCTIONS FOR MOISTURE TRACKING  ################################
 
 
-def is_precipitating_parcel(parts_dq, dqdt_threshold, parts_rh, minrh):
-    check_precipdq = np.empty(len(parts_dq))
-    check_preciprh = np.empty(len(parts_dq))
-
-    check_precipdq[parts_dq < dqdt_threshold] = True
-    check_precipdq[parts_dq >= dqdt_threshold] = False
-
-    check_preciprh[parts_rh < minrh] = False
-    check_preciprh[parts_rh >= minrh] = True
-
-    check_precip = np.logical_and(check_precipdq, check_preciprh)
-
-    return check_precip
+def is_precipitating_parcel(parts_dq, dqdt_threshold, parts_rh, minrh, is_non_precip):
+    is_precip = (parts_dq < dqdt_threshold) & (parts_rh >= minrh)
+    return ~is_precip if is_non_precip else is_precip
 
 
 def compute_var_integarated_day_moist(
@@ -4015,12 +4017,15 @@ def processing_moisture_track_backward(
     maskval,
     masklat,
     masklon,
+    only_non_precip,
     rank,
     size,
     comm,
 ):
     # filtering parcels using t=0  and t-6#
     # tensor_moist_=np.copy(tensor_org)
+
+
 
     if filter_dqdt_parcels:
 
@@ -4031,6 +4036,7 @@ def processing_moisture_track_backward(
             dqdt_threshold,
             (tensor_org[-1, :, 12] + tensor_org[-2, :, 12]) / 2,
             precip_minrh,
+            only_non_precip
         )
         # check_precip=is_precipitating_parcel(tmp_matrix, dqdt_threshold,  tensor_org[-1,:,12], precip_minrh)
 
@@ -4265,12 +4271,14 @@ def processing_moisture_track_backward(
     part_uptakes_bias = dmatrix[0, :, 12]
 
     if moisture_linear_adjustment:
+        if only_non_precip:
+            lwvrt = "not computed"
+        else:
+            aux_lwvrt = lwvrt_[lwvrt_ > 0]
 
-        aux_lwvrt = lwvrt_[lwvrt_ > 0]
+            lmrt = aux_lwvrt / (1440)
 
-        lmrt = aux_lwvrt / (1440)
-
-        lwvrt = np.mean(lmrt[np.isfinite(lmrt)])
+            lwvrt = np.mean(lmrt[np.isfinite(lmrt)])
     else:
         lwvrt = "not computed"
 

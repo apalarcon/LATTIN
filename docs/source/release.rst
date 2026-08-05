@@ -6,6 +6,15 @@ Releases
 
 GitHub:  https://github.com/apalarcon/LATTIN
 
+v1.1.11 (2026-05-31)
+--------------------
+
+This version includes:
+
+- Functions for reading HYSPLIT (trajectory mode) data
+- Update requirements to solve security issues
+
+
 v.1.1.10 (2026-01-15)
 ~~~~~~~~~~~~~~~~~~~~~
 
