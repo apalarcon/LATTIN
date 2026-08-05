@@ -28,7 +28,7 @@ The main Python packages that must be installed are the following:
 - `sys`
 - `os`
 - `imp`
-- `aiohttp==3.13.5`
+- `aiohttp==3.14.3`
 - `dask==2023.9.2`
 - `mpi4py==3.1.4`
 - `netcdf4==1.7.2`
